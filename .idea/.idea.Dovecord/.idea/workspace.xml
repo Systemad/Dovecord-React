@@ -8,10 +8,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe858974-9c55-4b25-a22e-7aaf58cac824" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Dovecord/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Dovecord/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="fe858974-9c55-4b25-a22e-7aaf58cac824" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -82,8 +79,15 @@
       <workItem from="1636675287761" duration="1490000" />
       <workItem from="1636849029302" duration="5029000" />
       <workItem from="1636932211682" duration="2342000" />
-      <workItem from="1636938590069" duration="725000" />
+      <workItem from="1636938590069" duration="945000" />
     </task>
+    <task id="LOCAL−00001" summary="Add readme and gitignore">
+      <created>1636939334260</created>
+      <option name="number" value="LOCAL−00001" />
+      <option name="presentableId" value="LOCAL−00001" />
+      <updated>1636939334260</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -102,5 +106,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Add readme and gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add readme and gitignore" />
   </component>
 </project>

@@ -8,22 +8,20 @@ using Microsoft.Identity.Web.Resource;
 
 namespace WebUI.Controllers.v1;
 
-[Authorize]
+//[Authorize]
 [ApiController]
-[RequiredScope("API.Access")]
+//[RequiredScope("API.Access")]
 [Route("api/[controller]")]
 [ApiVersion("1.0")]
 public class ChannelController : ControllerBase
 {
     private readonly ILogger<ChannelController> _logger;
-    private IChannelService _channelService;
     private readonly IMediator _mediator;
     
-    public ChannelController(ILogger<ChannelController> logger, IMediator mediator, IChannelService channelService)
+    public ChannelController(ILogger<ChannelController> logger, IMediator mediator)
     {
         _logger = logger;
         _mediator = mediator;
-        _channelService = channelService;
     }   
     
     [HttpGet("channels")]
@@ -41,7 +39,8 @@ public class ChannelController : ControllerBase
         var result = await _mediator.Send(query);
         return result != null ? Ok(result) : NotFound();
     }
-        
+    
+    /*
     [HttpPost("{name}")]
     public async Task<IActionResult> CreateChannel([FromRoute]string name)
     {
@@ -80,4 +79,5 @@ public class ChannelController : ControllerBase
         await _channelService.UpdateChannelAsync(channel);
         return Ok();
     }
+    */
 }

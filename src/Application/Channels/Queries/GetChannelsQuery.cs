@@ -14,12 +14,12 @@ public class GetChannelsQuery : IRequest<List<TextChannel>>
 
 public class GetChannelsQueryHandler : IRequestHandler<GetChannelsQuery, List<TextChannel>>
 {
-    private readonly DoveDbContext _context;
+    //private readonly DoveDbContext _context;
     private readonly IMapper _mapper;
 
-    public GetChannelsQueryHandler(DoveDbContext context, IMapper mapper)
+    public GetChannelsQueryHandler(/*DoveDbContext context*/ IMapper mapper)
     {
-        _context = context;
+        //_context = context;
         _mapper = mapper;
     }
 
@@ -31,6 +31,23 @@ public class GetChannelsQueryHandler : IRequestHandler<GetChannelsQuery, List<Te
             
             .ToListAsync(cancellationToken: cancellationToken);
         */
-        return await _context.TextChannels.ToListAsync(cancellationToken: cancellationToken);
+        var channel1 = new TextChannel
+        {
+            Id = Guid.NewGuid(),
+            Name = "channel2"
+        };
+        var channel2 = new TextChannel
+        {
+            Id = Guid.NewGuid(),
+            Name = "Chnnel2"
+        };
+        var channelist = new List<TextChannel>
+        {
+            channel1,
+            channel2
+        };
+
+        return channelist;
+        //return await _context.TextChannels.ToListAsync(cancellationToken: cancellationToken);
     }
 }

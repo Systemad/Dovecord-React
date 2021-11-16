@@ -1,7 +1,9 @@
 ﻿using System.Security.Claims;
-using Dovecord.Server.Hubs;
+using Application.Interfaces;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Identity.Web.Resource;
 
 namespace WebUI.Hubs;
 

@@ -1,11 +1,9 @@
-﻿using Dovecord.Shared;
+﻿using Domain.Entities;
 
-namespace Dovecord.Server.Hubs;
+namespace WebUI.Hubs;
 
 public interface IChatClient
 {
-    Task UserLoggedOn(Actor actor);
-
     Task SendUserList(List<User> users);
 
     Task UserTyping(ActorAction action);
@@ -15,8 +13,4 @@ public interface IChatClient
     Task DeleteMessageReceived(string id);
 
     Task AddToChannel(Guid channelId, Guid userId);
-    //Task SendConnectedUsers(IEnumerable<string> users);
-
-
-    //Task CommandSignalReceived(ActorCommand command);
 }

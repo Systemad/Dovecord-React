@@ -1,38 +1,51 @@
+using Application.Channels.Queries;
+using Application.Interfaces;
+using Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 namespace WebUI.Controllers.v1;
 
 [Authorize]
 [ApiController]
+[RequiredScope("API.Access")]
 [Route("api/[controller]")]
 [ApiVersion("1.0")]
 public class ChannelController : ControllerBase
 {
     private readonly ILogger<ChannelController> _logger;
     private IChannelService _channelService;
-
-    static readonly string[] scopeRequiredByApi = new[] { "API.Access" };
-     
-    public ChannelController(ILogger<ChannelController> logger, IChannelService channelService)
+    private readonly IMediator _mediator;
+    
+    public ChannelController(ILogger<ChannelController> logger, IMediator mediator, IChannelService channelService)
     {
         _logger = logger;
+        _mediator = mediator;
         _channelService = channelService;
     }   
     
     [HttpGet("channels")]
-    public async Task<List<Channel>> GetChannels()
+    public async Task<IActionResult> GetChannels()
     {
-        HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
-        var channels = await _channelService.GetChannels();
-        return channels;
+        var query = new GetChannelsQuery();
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+    
+    [HttpGet("channels/{id:guid}")]
+    public async Task<IActionResult> GetChannelById(Guid id)
+    {
+        var query = new GetChannelByIdQuery(id);
+        var result = await _mediator.Send(query);
+        return result != null ? Ok(result) : NotFound();
     }
         
     [HttpPost("{name}")]
     public async Task<IActionResult> CreateChannel([FromRoute]string name)
     {
-        HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
-        var channel = new Channel
+        var channel = new TextChannel
         {
             Id = Guid.NewGuid(),
             Name = name,
@@ -44,7 +57,6 @@ public class ChannelController : ControllerBase
     [HttpDelete("{channelId:guid}")]
     public async Task<IActionResult> DeleteChannelById(Guid channelId)
     {
-        HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
         //var o = await _chatService.UserOwnsMessageAsync(messageId, HttpContext.GetUserId());
 
         //if (!ownsmessage)
@@ -55,9 +67,8 @@ public class ChannelController : ControllerBase
     }
     
     [HttpPut]
-    public async Task<IActionResult> UpdateChannel([FromBody] Channel? channel)
+    public async Task<IActionResult> UpdateChannel([FromBody] TextChannel? channel)
     {
-        HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
         if (channel is null)
             return BadRequest();
             

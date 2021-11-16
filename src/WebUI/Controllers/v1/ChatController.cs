@@ -1,11 +1,16 @@
+using Application.Interfaces;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
+using WebUI.Services;
 
 // TODO: Refactor controller implementation i.e add error codes etc
 namespace WebUI.Controllers.v1;
 
 [Authorize]
 [ApiController]
+[RequiredScope("API.Access")]
 [Route("api/[controller]")]
 [ApiVersion("1.0")]
 public class ChatController : ControllerBase
@@ -24,10 +29,9 @@ public class ChatController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> SaveMessageToChannel([FromBody] ChannelMessage? message)
     {
-        HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
-            
         if (message is null)
-            return BadRequest("Message is null");
+            return BadRequest();
+        
         await _chatService.SaveMessageToChannelAsync(message);
         return Ok();
     }
@@ -35,7 +39,6 @@ public class ChatController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> UpdateMessage([FromBody] ChannelMessage? message)
     {
-        HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
         if (message is null)
             return BadRequest("Message is null");
             

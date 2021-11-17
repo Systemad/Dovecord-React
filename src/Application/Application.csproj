@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Channels\Commands" />
+      <Folder Include="Features" />
     </ItemGroup>
 
     <ItemGroup>

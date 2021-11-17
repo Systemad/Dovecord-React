@@ -17,7 +17,7 @@ public class ChannelService : IChannelService
 
     public async Task<List<ChannelMessage>> GetMessagesByChannelIdAsync(Guid id)
     {
-        return await _context.ChannelMessages.Where(a => a.ChannelId == id).ToListAsync();
+        return await _context.ChannelMessages.Where(a => a.TextChannelId == id).ToListAsync();
     }
 
     public async Task<List<TextChannel>> GetChannels()

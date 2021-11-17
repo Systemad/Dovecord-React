@@ -9,10 +9,16 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<DoveDbCont
         
     public DoveDbContext CreateDbContext(string[] args)
     {
+        /*
+        IConfigurationRoot configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("/../Server/appsettings.json", true)
+            .Build(); 
+            */
         IConfigurationRoot configuration = 
             new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile(@Directory.GetCurrentDirectory() + "/../Server/appsettings.json")
+                .AddJsonFile(@Directory.GetCurrentDirectory() + "/../WebUI/appsettings.json")
                 .Build();
         
         var builder = new DbContextOptionsBuilder(); 

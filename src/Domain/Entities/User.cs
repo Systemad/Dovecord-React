@@ -3,12 +3,20 @@ namespace Domain.Entities;
 
 public class User
 {
+    /*
+    public User()
+    {
+        Users = new Collection<User>();
+    }
+    */
+        
     public Guid Id { get; set; }
-    public string? Username { get; set; }
+    public string Username { get; set; }
+    public virtual ICollection<User> Users { get; set; }
     public bool Online { get; set; }
-    
-    public Guid MessageId { get; set; }
-    public ChannelMessage Message { get; set; } = null!;
-
-    public IList<ChannelMessage> Messages { get; set; } = new List<ChannelMessage>();
+    //public bool Admin { get; set; }
+    //public string AvatarUrl { get; set; }
+        
+    //TODO: Add color?, and imageURL (string)
+    //public Color Color { get; set; } Add other info
 }

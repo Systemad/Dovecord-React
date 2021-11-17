@@ -41,7 +41,7 @@ public class DoveDbContext : DbContext
             IsEdit = false,
             Username = "danova",
             UserId = Guid.Parse("ca0f4479-5992-4a00-a3d5-d73ae1daff6f"),
-            ChannelId = channelguid
+            TextChannelId = channelguid
         });
     }
 }

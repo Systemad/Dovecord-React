@@ -1,17 +1,13 @@
-using Application.Channels.Queries;
-using Application.Interfaces;
-using Domain.Entities;
+using Application.Features.Channels;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Web.Resource;
 
 namespace WebUI.Controllers.v1;
 
 //[Authorize]
 [ApiController]
 //[RequiredScope("API.Access")]
-[Route("api/[controller]")]
+[Route("api/channels")]
 [ApiVersion("1.0")]
 public class ChannelController : ControllerBase
 {
@@ -24,18 +20,20 @@ public class ChannelController : ControllerBase
         _mediator = mediator;
     }   
     
-    [HttpGet("channels")]
+    /*
+    [HttpGet]
     public async Task<IActionResult> GetChannels()
     {
         var query = new GetChannelsQuery();
         var result = await _mediator.Send(query);
         return Ok(result);
     }
+    */
     
-    [HttpGet("channels/{id:guid}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetChannelById(Guid id)
     {
-        var query = new GetChannelByIdQuery(id);
+        var query = new Details.Query(id);
         var result = await _mediator.Send(query);
         return result != null ? Ok(result) : NotFound();
     }

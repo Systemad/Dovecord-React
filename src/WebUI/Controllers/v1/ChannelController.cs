@@ -20,15 +20,14 @@ public class ChannelController : ControllerBase
         _mediator = mediator;
     }   
     
-    /*
+    
     [HttpGet]
     public async Task<IActionResult> GetChannels()
     {
-        var query = new GetChannelsQuery();
+        var query = new List.Query();
         var result = await _mediator.Send(query);
         return Ok(result);
     }
-    */
     
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetChannelById(Guid id)

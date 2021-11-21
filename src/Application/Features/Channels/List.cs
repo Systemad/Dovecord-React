@@ -24,5 +24,4 @@ public class List
             return channels;
         }
     }
-
 }

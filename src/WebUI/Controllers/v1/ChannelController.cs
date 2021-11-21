@@ -1,4 +1,5 @@
 using Application.Features.Channels;
+using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,6 @@ public class ChannelController : ControllerBase
         _mediator = mediator;
     }   
     
-    
     [HttpGet]
     public async Task<IActionResult> GetChannels()
     {
@@ -37,31 +37,20 @@ public class ChannelController : ControllerBase
         return result != null ? Ok(result) : NotFound();
     }
     
-    /*
-    [HttpPost("{name}")]
-    public async Task<IActionResult> CreateChannel([FromRoute]string name)
+    
+    [HttpPost]
+    public async Task<IActionResult> Create(Create.Command textChannel)
     {
-        var channel = new TextChannel
-        {
-            Id = Guid.NewGuid(),
-            Name = name,
-        };
-        await _channelService.CreateChannelAsync(channel);
-        return Ok(channel);
+        var response = await _mediator.Send(textChannel);
+        return Ok(response);
     }
     
     [HttpDelete("{channelId:guid}")]
-    public async Task<IActionResult> DeleteChannelById(Guid channelId)
+    public Task Delete(Guid channelId, CancellationToken cancellationToken)
     {
-        //var o = await _chatService.UserOwnsMessageAsync(messageId, HttpContext.GetUserId());
-
-        //if (!ownsmessage)
-        //    return BadRequest(new {error = "User does not own message"});
-
-        var channeldeleted = await _channelService.DeleteChannelAsync(channelId);
-        return channeldeleted ? NoContent() : NotFound();
+        return _mediator.Send(new Delete.Command(channelId), cancellationToken);
     }
-    
+    /*
     [HttpPut]
     public async Task<IActionResult> UpdateChannel([FromBody] TextChannel? channel)
     {

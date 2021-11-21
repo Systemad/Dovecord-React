@@ -12,7 +12,5 @@ public class TextChannel
         
     public Guid Id { get; set; }
     public string Name { get; set; }
-    
-    [JsonIgnore]
     public virtual ICollection<ChannelMessage> ChannelMessages { get; set; }
 }

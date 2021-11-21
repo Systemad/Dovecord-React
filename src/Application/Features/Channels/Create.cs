@@ -8,16 +8,7 @@ namespace Application.Features.Channels;
 
 public class Create
 {
-
-    public record Command(TextChannel TextChannel) : IRequest<TextChannel>;
-
-    public class CommandValidator : AbstractValidator<TextChannel>
-    {
-        public CommandValidator()
-        {
-            RuleFor(x => x.Name).NotNull().NotEmpty();
-        }
-    }
+    public record Command(string Name) : IRequest<TextChannel>;
 
     public class QueryHandler : IRequestHandler<Command, TextChannel>
     {
@@ -31,16 +22,16 @@ public class Create
         public async Task<TextChannel> Handle(Command request, CancellationToken cancellationToken)
         {
             
-            var channel = await _context.TextChannels.FirstAsync(x => x.Name == request.TextChannel.Name, cancellationToken);
+            //var channel = await _context.TextChannels.FirstAsync(x => x.Name == request.Name, cancellationToken);
             
             //if (channel is not null)
             //    return new ArgumentNullException();
-            
             var newchannel = new TextChannel
             {
                 Id = Guid.NewGuid(),
-                Name = request.TextChannel.Name,
+                Name = request.Name
             };
+            await _context.AddAsync(newchannel, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
             return newchannel;
         }

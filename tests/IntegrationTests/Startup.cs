@@ -1,5 +1,10 @@
+using Microsoft.Extensions.DependencyInjection;
 using Application;
 using Infrastructure;
+using Infrastructure.Persistance;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,16 +18,20 @@ builder.Services.AddRouting(options =>
 });
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddSwaggerGen();
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+/*
+builder.Services.AddDbContext<DoveDbContext>(options =>
 {
-    
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    options.UseSqlite(builder.Configuration.GetConnectionString("DatabaseConnection"),
+        b => b.MigrationsAssembly(typeof(DoveDbContext).Assembly.FullName));
+});
+*/
+
+builder.Services.AddSwaggerGen();
+
+var app = builder.Build();
+app.UseHsts();
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

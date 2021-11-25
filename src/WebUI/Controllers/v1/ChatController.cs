@@ -1,5 +1,7 @@
+using Application.Features.Messages;
 using Application.Interfaces;
 using Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
@@ -8,47 +10,36 @@ using WebUI.Services;
 // TODO: Refactor controller implementation i.e add error codes etc
 namespace WebUI.Controllers.v1;
 
-[Authorize]
+//[Authorize]
 [ApiController]
-[RequiredScope("API.Access")]
+//[RequiredScope("API.Access")]
 [Route("api/[controller]")]
 [ApiVersion("1.0")]
 public class ChatController : ControllerBase
 {
     private readonly ILogger<ChatController> _logger;
-    private IChatService _chatService;
+    private readonly IMediator _mediator;
 
     static readonly string[] scopeRequiredByApi = new[] { "API.Access" };
      
-    public ChatController(ILogger<ChatController> logger, IChatService chatService)
+    public ChatController(ILogger<ChatController> logger, IChatService chatService, IMediator mediator)
     {
         _logger = logger;
-        _chatService = chatService;
+        _mediator = mediator;
     }
 
     [HttpPost]
-    public async Task<IActionResult> SaveMessageToChannel([FromBody] ChannelMessage? message)
+    public async Task<IActionResult> SaveMessageToChannel([FromBody] Create.Command message)
     {
-        if (message is null)
-            return BadRequest();
-        
-        await _chatService.SaveMessageToChannelAsync(message);
+        await _mediator.Send(message);
         return Ok();
     }
     
     [HttpPut]
-    public async Task<IActionResult> UpdateMessage([FromBody] ChannelMessage? message)
+    public async Task<IActionResult> UpdateMessage([FromBody]Edit.Model command)
     {
-        if (message is null)
-            return BadRequest("Message is null");
-            
-        var ownsmessage = await _chatService.UserOwnsMessageAsync(message.Id, HttpContext.GetUserId());
-
-        if (!ownsmessage)
-            return BadRequest(new {error = "User does not own message"});
-            
-        await _chatService.UpdateMessageAsync(message);
-        return Ok();
+        await _mediator.Send(command);
+        return NoContent();
     }
         
     [HttpGet("{channelId:guid}")]
@@ -56,20 +47,15 @@ public class ChatController : ControllerBase
     //[ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetMessagesFromChannelId(Guid channelId)
     {
-        HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
-        return Ok(await _chatService.GetMessagesByChannelIdAsync(channelId));
+        var query = new List.Query(channelId);
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
         
     [HttpDelete("{messageId:guid}")]
     public async Task<IActionResult> DeleteMessageById(Guid messageId)
     {
-        HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
-        var ownsmessage = await _chatService.UserOwnsMessageAsync(messageId, HttpContext.GetUserId());
-
-        if (!ownsmessage)
-            return BadRequest(new {error = "User does not own message"});
-            
-        var messagedeleted = await _chatService.DeleteMessageByIdAsync(messageId);
-        return messagedeleted ? NoContent() : NotFound();
+        await _mediator.Send(new Delete.Command(messageId));
+        return NoContent();
     }
 }

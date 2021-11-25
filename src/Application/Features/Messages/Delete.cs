@@ -1,12 +1,10 @@
-using System.Net;
 using Application.Common.Exceptions;
 using Domain.Entities;
-using Infrastructure.Errors;
 using Infrastructure.Persistance;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Features.Channels;
+namespace Application.Features.Messages;
 
 public class Delete
 {
@@ -22,15 +20,15 @@ public class Delete
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            var channel = await _context.TextChannels.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+            var message = await _context.ChannelMessages.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
-            if (channel is null)
+            if (message is null)
             {
                 throw new NotFoundException(nameof(TextChannel), request.Id);
                 //throw new RestException(HttpStatusCode.NotFound, new {TextChannel = "not found"});    
             }
             
-            _context.TextChannels.Remove(channel);
+            _context.ChannelMessages.Remove(message);
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

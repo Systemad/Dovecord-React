@@ -1,36 +1,35 @@
-using System.Net;
 using Application.Common.Exceptions;
 using Domain.Entities;
-using Infrastructure.Errors;
 using Infrastructure.Persistance;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Channels;
 
-public class Delete
+public class Edit
 {
-    public record Command(Guid Id) : IRequest;
+    public record Model(Guid Id, string Name) : IRequest;
     
-    public class QueryHandler : IRequestHandler<Command>
+    public class QueryHandler : IRequestHandler<Model>
     {
         private DoveDbContext _context;
+
         public QueryHandler(DoveDbContext context)
         {
             _context = context;
         }
 
-        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(Model request, CancellationToken cancellationToken)
         {
-            var channel = await _context.TextChannels.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-
+            var channel = await _context.TextChannels.Where(x => x.Id == request.Id)
+                .AsTracking().SingleOrDefaultAsync(cancellationToken);
+            
             if (channel is null)
             {
                 throw new NotFoundException(nameof(TextChannel), request.Id);
-                //throw new RestException(HttpStatusCode.NotFound, new {TextChannel = "not found"});    
             }
-            
-            _context.TextChannels.Remove(channel);
+
+            channel.Name = request.Name;
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

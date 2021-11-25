@@ -37,7 +37,6 @@ public class ChannelController : ControllerBase
         return result != null ? Ok(result) : NotFound();
     }
     
-    
     [HttpPost]
     public async Task<IActionResult> Create(Create.Command textChannel)
     {
@@ -45,25 +44,24 @@ public class ChannelController : ControllerBase
         return Ok(response);
     }
     
-    [HttpDelete("{channelId:guid}")]
-    public Task Delete(Guid channelId, CancellationToken cancellationToken)
+    [HttpDelete("{Id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
     {
-        return _mediator.Send(new Delete.Command(channelId), cancellationToken);
+        await _mediator.Send(new Delete.Command(id));
+        return NoContent();
     }
-    /*
+    
     [HttpPut]
-    public async Task<IActionResult> UpdateChannel([FromBody] TextChannel? channel)
+    public async Task<ActionResult> UpdateChannel([FromBody]Edit.Model command)
     {
-        if (channel is null)
+        /*
+        if (id != command.Id)
+        {
             return BadRequest();
-            
-        //var ownsmessage = await _chatService.UserOwnsMessageAsync(message.Id, HttpContext.GetUserId());
+        }
+        */
 
-        //if (!ownsmessage)
-        //    return BadRequest(new {error = "User does not own message"});
-
-        await _channelService.UpdateChannelAsync(channel);
-        return Ok();
+        await _mediator.Send(command);
+        return NoContent();
     }
-    */
 }

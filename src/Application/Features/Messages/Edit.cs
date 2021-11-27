@@ -8,7 +8,7 @@ namespace Application.Features.Messages;
 
 public class Edit
 {
-    public record Model(Guid Id, ChannelMessage Message) : IRequest;
+    public record Model(Guid Id, Message Message) : IRequest;
     
     public class QueryHandler : IRequestHandler<Model>
     {
@@ -26,7 +26,7 @@ public class Edit
             
             if (channel is null)
             {
-                throw new NotFoundException(nameof(TextChannel), request.Id);
+                throw new NotFoundException(nameof(Channel), request.Id);
             }
 
             channel.Content = request.Message.Content;

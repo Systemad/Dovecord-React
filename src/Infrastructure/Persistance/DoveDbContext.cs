@@ -7,20 +7,22 @@ public class DoveDbContext : DbContext
 {
     public DoveDbContext(DbContextOptions options) : base(options) { }
     public virtual DbSet<User> Users { get; set; }
-    public virtual DbSet<TextChannel> TextChannels { get; set; }
-    public virtual DbSet<ChannelMessage> ChannelMessages { get; set; }
+    public virtual DbSet<Channel> TextChannels { get; set; }
+    public virtual DbSet<Message> ChannelMessages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        Guid channelguid = Guid.NewGuid();
+        Guid channelid = Guid.NewGuid();
+        Guid messageid = Guid.NewGuid();
+        Guid userid = Guid.Parse("ca0f4479-5992-4a00-a3d5-d73ae1daff6f");
             
-        modelBuilder.Entity<TextChannel>().HasData(new TextChannel
+        modelBuilder.Entity<Channel>().HasData(new Channel
         {
-            Id = channelguid,
+            Id = channelid,
             Name = "General"
         });
             
-        modelBuilder.Entity<TextChannel>().HasData(new TextChannel
+        modelBuilder.Entity<Channel>().HasData(new Channel
         {
             Id = Guid.NewGuid(),
             Name = "Random",
@@ -33,15 +35,14 @@ public class DoveDbContext : DbContext
             Online = false
         });
 
-        modelBuilder.Entity<ChannelMessage>().HasData(new ChannelMessage
+        modelBuilder.Entity<Message>().HasData(new Message
         {
-            Id = Guid.NewGuid(),
+            Id = messageid,
             Content = "First ever channel message",
             CreatedAt = DateTime.Now,
             IsEdit = false,
-            Username = "danova",
-            UserId = Guid.Parse("ca0f4479-5992-4a00-a3d5-d73ae1daff6f"),
-            TextChannelId = channelguid
+            UserId = userid,
+            ChannelId = channelid
         });
     }
 }

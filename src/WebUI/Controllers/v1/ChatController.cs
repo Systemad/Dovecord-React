@@ -13,7 +13,7 @@ namespace WebUI.Controllers.v1;
 //[Authorize]
 [ApiController]
 //[RequiredScope("API.Access")]
-[Route("api/[controller]")]
+[Route("api/messages")]
 [ApiVersion("1.0")]
 public class ChatController : ControllerBase
 {
@@ -22,7 +22,7 @@ public class ChatController : ControllerBase
 
     static readonly string[] scopeRequiredByApi = new[] { "API.Access" };
      
-    public ChatController(ILogger<ChatController> logger, IChatService chatService, IMediator mediator)
+    public ChatController(ILogger<ChatController> logger, IMediator mediator)
     {
         _logger = logger;
         _mediator = mediator;
@@ -36,7 +36,7 @@ public class ChatController : ControllerBase
     }
     
     [HttpPut]
-    public async Task<IActionResult> UpdateMessage([FromBody]Edit.Model command)
+    public async Task<IActionResult> UpdateMessage([FromBody] Edit.Model command)
     {
         await _mediator.Send(command);
         return NoContent();

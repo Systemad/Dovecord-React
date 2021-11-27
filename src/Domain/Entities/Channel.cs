@@ -3,14 +3,16 @@ using System.Text.Json.Serialization;
 
 namespace Domain.Entities;
 
-public class TextChannel
+public class Channel
 {
-    public TextChannel()
+    /*
+    public Channel()
     {
         ChannelMessages = new Collection<ChannelMessage>();
     }
+    */
         
     public Guid Id { get; set; }
-    public string Name { get; set; }
-    public virtual ICollection<ChannelMessage> ChannelMessages { get; set; }
+    public string? Name { get; set; }
+    public virtual ICollection<Message> Messages { get; set; }
 }

@@ -25,6 +25,7 @@ public static class BuilderExtensions
                     Url = new Uri("https://example.com/license")
                 }
             });
+            options.CustomSchemaIds(x => x.FullName);
         });
         return services;
     }

@@ -4,9 +4,9 @@ namespace Application.Interfaces;
 
 public interface IChannelService
 {
-    Task<List<TextChannel>> GetChannels();
+    Task<List<Channel>> GetChannels();
     Task<bool> DeleteChannelAsync(Guid id);
-    Task<bool> CreateChannelAsync(TextChannel id);
-    Task<TextChannel> GetChannelByIdAsync(Guid id);
-    Task<bool> UpdateChannelAsync(TextChannel message);
+    Task<bool> CreateChannelAsync(Channel id);
+    Task<Channel> GetChannelByIdAsync(Guid id);
+    Task<bool> UpdateChannelAsync(Channel message);
 }

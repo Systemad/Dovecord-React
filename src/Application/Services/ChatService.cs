@@ -14,9 +14,9 @@ public class ChatService : IChatService
         _context = context;
     }
 
-    public async Task<List<ChannelMessage>> GetMessagesByChannelIdAsync(Guid id)
+    public async Task<List<Message>> GetMessagesByChannelIdAsync(Guid id)
     {
-        return await _context.ChannelMessages.Where(a => a.TextChannelId == id).ToListAsync();
+        return await _context.ChannelMessages.Where(a => a.ChannelId == id).ToListAsync();
     }
 
     public async Task<bool> DeleteMessageByIdAsync(Guid id)
@@ -28,19 +28,19 @@ public class ChatService : IChatService
         return deleted > 0;
     }
 
-    public async Task<bool> SaveMessageToChannelAsync(ChannelMessage message)
+    public async Task<bool> SaveMessageToChannelAsync(Message message)
     {
         await _context.ChannelMessages.AddAsync(message);
         var created = await _context.SaveChangesAsync();
         return created > 0;
     }
 
-    public async Task<ChannelMessage> GetMessageByIdAsync(Guid id)
+    public async Task<Message> GetMessageByIdAsync(Guid id)
     {
         return await _context.ChannelMessages.SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<bool> UpdateMessageAsync(ChannelMessage message)
+    public async Task<bool> UpdateMessageAsync(Message message)
     {
         var messageToUpdate = await _context.ChannelMessages.Where(x => x.Id == message.Id)
             .AsTracking().SingleOrDefaultAsync();

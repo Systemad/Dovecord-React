@@ -24,7 +24,7 @@ public class Delete
 
             if (message is null)
             {
-                throw new NotFoundException(nameof(TextChannel), request.Id);
+                throw new NotFoundException(nameof(Channel), request.Id);
                 //throw new RestException(HttpStatusCode.NotFound, new {TextChannel = "not found"});    
             }
             

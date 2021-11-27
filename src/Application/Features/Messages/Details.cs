@@ -8,10 +8,10 @@ namespace Application.Features.Messages;
 public class Details
 {
 
-    public record Channel(TextChannel TextChannel);
-    public record Query(Guid Id) : IRequest<Channel>;
+    public record TextChannel(Channel Channel);
+    public record Query(Guid Id) : IRequest<TextChannel>;
 
-    public class QueryHandler : IRequestHandler<Query, Channel>
+    public class QueryHandler : IRequestHandler<Query, TextChannel>
     {
         private readonly DoveDbContext _context;
         //private readonly IMapper _mapper;
@@ -22,11 +22,11 @@ public class Details
             //_mapper = mapper;
         }
 
-        public async Task<Channel> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<TextChannel> Handle(Query request, CancellationToken cancellationToken)
         {
             var channel = await _context.TextChannels
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-            return new Channel(channel);
+            return new TextChannel(channel);
             /*
             return channel == null ? null : new TextChannel
             {

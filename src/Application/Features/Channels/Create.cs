@@ -8,9 +8,9 @@ namespace Application.Features.Channels;
 
 public class Create
 {
-    public record Command(string Name) : IRequest<TextChannel>;
+    public record Command(string Name) : IRequest<Channel>;
 
-    public class QueryHandler : IRequestHandler<Command, TextChannel>
+    public class QueryHandler : IRequestHandler<Command, Channel>
     {
         private DoveDbContext _context;
 
@@ -19,14 +19,14 @@ public class Create
             _context = context;
         }
         
-        public async Task<TextChannel> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Channel> Handle(Command request, CancellationToken cancellationToken)
         {
             
             //var channel = await _context.TextChannels.FirstAsync(x => x.Name == request.Name, cancellationToken);
             
             //if (channel is not null)
             //    return new ArgumentNullException();
-            var newchannel = new TextChannel
+            var newchannel = new Channel
             {
                 Id = Guid.NewGuid(),
                 Name = request.Name

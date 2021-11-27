@@ -6,9 +6,9 @@ namespace Application.Features.Messages;
 
 public class Create
 {
-    public record Command(ChannelMessage ChannelMessage) : IRequest<ChannelMessage>;
+    public record Command(Message Message) : IRequest<Message>;
 
-    public class QueryHandler : IRequestHandler<Command, ChannelMessage>
+    public class QueryHandler : IRequestHandler<Command, Message>
     {
         private DoveDbContext _context;
 
@@ -17,18 +17,18 @@ public class Create
             _context = context;
         }
         
-        public async Task<ChannelMessage> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Message> Handle(Command request, CancellationToken cancellationToken)
         {
             
             //var channel = await _context.TextChannels.FirstAsync(x => x.Name == request.Name, cancellationToken);
             
             //if (channel is not null)
             //    return new ArgumentNullException();
-            var newmessage = new ChannelMessage
+            var newmessage = new Message
             {
                 Id = Guid.NewGuid(),
-                UserId = request.ChannelMessage.UserId,
-                Content = request.ChannelMessage.Content,
+                UserId = request.Message.UserId,
+                Content = request.Message.Content,
                 CreatedAt = DateTime.Now
             };
             await _context.AddAsync(newmessage, cancellationToken);

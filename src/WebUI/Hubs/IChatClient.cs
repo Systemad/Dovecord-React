@@ -8,7 +8,7 @@ public interface IChatClient
 
     Task UserTyping(ActorAction action);
 
-    Task MessageReceived(ChannelMessage message);
+    Task MessageReceived(Message message);
 
     Task DeleteMessageReceived(string id);
 

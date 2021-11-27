@@ -8,7 +8,7 @@ namespace WebUI.Controllers.v1;
 [Authorize]
 [ApiController]
 [RequiredScope("API.Access")]
-[Route("api/[controller]")]
+[Route("api/users")]
 public class UserController : ControllerBase
 {
     private IUserService _userService;

@@ -36,7 +36,7 @@ public class ChatHub : Hub<IChatClient>
         await Clients.All.SendUserList(await _userService.GetUsersAsync());
     }
 
-    public async Task PostMessage(ChannelMessage message, Guid channelId)
+    public async Task PostMessage(Message message, Guid channelId)
     {
         await Clients.Group(channelId.ToString()).MessageReceived(message);
     }

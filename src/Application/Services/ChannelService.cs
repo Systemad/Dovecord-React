@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Domain.Entities;
 using Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
+using Channel = Domain.Entities.Channel;
 
 namespace Application.Services;
 
@@ -15,12 +16,12 @@ public class ChannelService : IChannelService
         _context = context;
     }
 
-    public async Task<List<ChannelMessage>> GetMessagesByChannelIdAsync(Guid id)
+    public async Task<List<Message>> GetMessagesByChannelIdAsync(Guid id)
     {
-        return await _context.ChannelMessages.Where(a => a.TextChannelId == id).ToListAsync();
+        return await _context.ChannelMessages.Where(a => a.ChannelId == id).ToListAsync();
     }
 
-    public async Task<List<TextChannel>> GetChannels()
+    public async Task<List<Channel>> GetChannels()
     {
         return await _context.TextChannels.ToListAsync();
     }
@@ -33,7 +34,7 @@ public class ChannelService : IChannelService
         return deleted > 0;
     }
 
-    public async Task<bool> CreateChannelAsync(TextChannel channel)
+    public async Task<bool> CreateChannelAsync(Channel channel)
     {
         var count = await _context.TextChannels.CountAsync();
         if (count > 10)
@@ -45,12 +46,12 @@ public class ChannelService : IChannelService
         return created > 0;
     }
 
-    public async Task<TextChannel> GetChannelByIdAsync(Guid id)
+    public async Task<Channel> GetChannelByIdAsync(Guid id)
     {
         return await _context.TextChannels.SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<bool> UpdateChannelAsync(TextChannel channel)
+    public async Task<bool> UpdateChannelAsync(Channel channel)
     {
         var channelToUpdate = await _context.TextChannels.Where(x => x.Id == channel.Id)
             .AsTracking().SingleOrDefaultAsync();

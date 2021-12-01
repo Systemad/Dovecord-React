@@ -20,7 +20,7 @@ public class Delete
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            var message = await _context.ChannelMessages.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+            var message = await _context.ChannelMessages.FirstOrDefaultAsync(x => x.ChannelMessageId == request.Id, cancellationToken);
 
             if (message is null)
             {

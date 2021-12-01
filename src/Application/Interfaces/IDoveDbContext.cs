@@ -6,6 +6,6 @@ namespace Application.Interfaces;
 public interface IDoveDbContext
 {
     DbSet<Channel> TextChannels { get; }
-    DbSet<Message> ChannelMessages { get; }
+    DbSet<ChannelMessage> ChannelMessages { get; }
     DbSet<User> Users { get; }
 }

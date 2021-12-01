@@ -21,7 +21,7 @@ public class Edit
 
         public async Task<Unit> Handle(Model request, CancellationToken cancellationToken)
         {
-            var channel = await _context.TextChannels.Where(x => x.Id == request.Id)
+            var channel = await _context.Channels.Where(x => x.ChannelId == request.Id)
                 .AsTracking().SingleOrDefaultAsync(cancellationToken);
             
             if (channel is null)

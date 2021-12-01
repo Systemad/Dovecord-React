@@ -23,9 +23,9 @@ public class UserService : IUserService
     {
         var newUser = new User
         {
-            Id = userId,
-            Username = username,
-            Online = true
+            UserId = userId,
+            Name = username,
+            IsOnline = true
         };
             
         await _context.Users.AddAsync(newUser);
@@ -35,15 +35,15 @@ public class UserService : IUserService
 
     public async Task<bool> CheckIfUserExistAsync(Guid userId)
     {
-        var userexist = await _context.Users.AnyAsync(u => u.Id == userId);
+        var userexist = await _context.Users.AnyAsync(u => u.UserId == userId);
         return userexist;
     }
 
     public async Task<bool> UserLoggedOnAsync(Guid userId)
     {
-        var user = await _context.Users.Where(x => x.Id == userId).AsTracking().SingleOrDefaultAsync();
+        var user = await _context.Users.Where(x => x.UserId == userId).AsTracking().SingleOrDefaultAsync();
         //_context.Attach(user);
-        user.Online = true;
+        user.IsOnline = true;
         //_context.Update(user);
         var saved = await _context.SaveChangesAsync();
         return saved > 0;
@@ -51,9 +51,9 @@ public class UserService : IUserService
 
     public async Task<bool> UserLoggedOffAsync(Guid userId)
     {
-        var user = await _context.Users.Where(x => x.Id == userId).AsTracking().SingleOrDefaultAsync();
+        var user = await _context.Users.Where(x => x.UserId == userId).AsTracking().SingleOrDefaultAsync();
         //_context.Attach(user);
-        user.Online = false;
+        user.IsOnline = false;
         //_context.Update(user);
         var saved = await _context.SaveChangesAsync();
         return saved > 0;
@@ -61,6 +61,6 @@ public class UserService : IUserService
 
     public async Task<User> GetUserByIdAsync(Guid id)
     {
-        return await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
+        return await _context.Users.SingleOrDefaultAsync(x => x.UserId == id);
     }
 }

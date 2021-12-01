@@ -7,9 +7,9 @@ namespace Application.Features.Messages;
 
 public class List
 {
-    public record Query(Guid Id) : IRequest<List<Message>>;
+    public record Query(Guid Id) : IRequest<List<ChannelMessage>>;
 
-    public class QueryHandler : IRequestHandler<Query, List<Message>>
+    public class QueryHandler : IRequestHandler<Query, List<ChannelMessage>>
     {
         private DoveDbContext _context;
 
@@ -18,11 +18,20 @@ public class List
             _context = context;
         }
         
-        public async Task<List<Message>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<List<ChannelMessage>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var channels = await _context.ChannelMessages
+            var messages = await _context.Channels
                 .Where(a => a.ChannelId == request.Id)
+                .Include(m => m.ChannelMessages)
+                .FirstOrDefaultAsync(cancellationToken);
+                //.ToListAsync(cancellationToken);
+            
+            
+            // TODO: Wrong
+            var channels = await _context.ChannelMessages
+                .Where(a => a.ChannelMessageId == request.Id)
                 .ToListAsync(cancellationToken);
+            
             return channels;
         }
     }

@@ -4,17 +4,13 @@ using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Persistance;
 
+
 public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<DoveDbContext>
 {
         
     public DoveDbContext CreateDbContext(string[] args)
     {
-        /*
-        IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("/../Server/appsettings.json", true)
-            .Build(); 
-            */
+
         IConfigurationRoot configuration = 
             new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -22,8 +18,8 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<DoveDbCont
                 .Build();
         
         var builder = new DbContextOptionsBuilder(); 
-        var connectionString = configuration.GetConnectionString("DatabaseConnection");
-        builder.UseSqlite(connectionString);
+        var connectionString = configuration.GetConnectionString("postgres");
+        builder.UseNpgsql(connectionString);
             //x => x.MigrationsAssembly(typeof(DesignTimeDbContextFactory).Assembly.FullName));
         return new DoveDbContext(builder.Options); 
     }

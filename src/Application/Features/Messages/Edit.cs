@@ -8,7 +8,7 @@ namespace Application.Features.Messages;
 
 public class Edit
 {
-    public record Model(Guid Id, Message Message) : IRequest;
+    public record Model(Guid Id, ChannelMessage Message) : IRequest;
     
     public class QueryHandler : IRequestHandler<Model>
     {
@@ -21,7 +21,7 @@ public class Edit
 
         public async Task<Unit> Handle(Model request, CancellationToken cancellationToken)
         {
-            var channel = await _context.ChannelMessages.Where(x => x.Id == request.Id)
+            var channel = await _context.ChannelMessages.Where(x => x.ChannelMessageId == request.Id)
                 .AsTracking().SingleOrDefaultAsync(cancellationToken);
             
             if (channel is null)

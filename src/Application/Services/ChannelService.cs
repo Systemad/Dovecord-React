@@ -16,44 +16,48 @@ public class ChannelService : IChannelService
         _context = context;
     }
 
-    public async Task<List<Message>> GetMessagesByChannelIdAsync(Guid id)
+    // TODO: Check
+    public async Task<List<Channel>> GetMessagesByChannelIdAsync(Guid id)
     {
-        return await _context.ChannelMessages.Where(a => a.ChannelId == id).ToListAsync();
+        return await _context.Channels
+            .Where(a => a.ChannelId == id)
+            .Include(m => m.ChannelMessages)
+            .ToListAsync();
     }
 
     public async Task<List<Channel>> GetChannels()
     {
-        return await _context.TextChannels.ToListAsync();
+        return await _context.Channels.ToListAsync();
     }
 
     public async Task<bool> DeleteChannelAsync(Guid id)
     {
         var channel = await GetChannelByIdAsync(id);
-        _context.TextChannels.Remove(channel);
+        _context.Channels.Remove(channel);
         var deleted = await _context.SaveChangesAsync();
         return deleted > 0;
     }
 
     public async Task<bool> CreateChannelAsync(Channel channel)
     {
-        var count = await _context.TextChannels.CountAsync();
+        var count = await _context.Channels.CountAsync();
         if (count > 10)
             return false;
         
         // Add error code
-        await _context.TextChannels.AddAsync(channel);
+        await _context.Channels.AddAsync(channel);
         var created = await _context.SaveChangesAsync();
         return created > 0;
     }
 
     public async Task<Channel> GetChannelByIdAsync(Guid id)
     {
-        return await _context.TextChannels.SingleOrDefaultAsync(x => x.Id == id);
+        return await _context.Channels.SingleOrDefaultAsync(x => x.ChannelId == id);
     }
 
     public async Task<bool> UpdateChannelAsync(Channel channel)
     {
-        var channelToUpdate = await _context.TextChannels.Where(x => x.Id == channel.Id)
+        var channelToUpdate = await _context.Channels.Where(x => x.ChannelId == channel.ChannelId)
             .AsTracking().SingleOrDefaultAsync();
         channelToUpdate.Name = channel.Name;
         var updated = await _context.SaveChangesAsync();

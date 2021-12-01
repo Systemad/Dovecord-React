@@ -28,7 +28,7 @@ public class Create
             //    return new ArgumentNullException();
             var newchannel = new Channel
             {
-                Id = Guid.NewGuid(),
+                ChannelId = Guid.NewGuid(),
                 Name = request.Name
             };
             await _context.AddAsync(newchannel, cancellationToken);

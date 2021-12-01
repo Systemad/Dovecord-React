@@ -20,7 +20,7 @@ public class List
         
         public async Task<List<Channel>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var channels = await _context.TextChannels.ToListAsync(cancellationToken);
+            var channels = await _context.Channels.ToListAsync(cancellationToken);
             return channels;
         }
     }

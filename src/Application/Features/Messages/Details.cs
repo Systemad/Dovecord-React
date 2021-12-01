@@ -24,8 +24,8 @@ public class Details
 
         public async Task<TextChannel> Handle(Query request, CancellationToken cancellationToken)
         {
-            var channel = await _context.TextChannels
-                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+            var channel = await _context.Channels
+                .FirstOrDefaultAsync(x => x.ChannelId == request.Id, cancellationToken);
             return new TextChannel(channel);
             /*
             return channel == null ? null : new TextChannel

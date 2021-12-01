@@ -4,10 +4,10 @@ namespace Application.Interfaces;
 
 public interface IChatService
 {
-    Task<List<Message>> GetMessagesByChannelIdAsync(Guid id);
+    Task<List<Channel>> GetMessagesByChannelIdAsync(Guid id);
     Task<bool> DeleteMessageByIdAsync(Guid id);
-    Task<bool> SaveMessageToChannelAsync(Message id);
-    Task<Message> GetMessageByIdAsync(Guid id);
-    Task<bool> UpdateMessageAsync(Message message);
+    Task<bool> SaveMessageToChannelAsync(ChannelMessage id);
+    Task<ChannelMessage> GetMessageByIdAsync(Guid id);
+    Task<bool> UpdateMessageAsync(ChannelMessage message);
     Task<bool> UserOwnsMessageAsync(Guid postId, string userId);
 }

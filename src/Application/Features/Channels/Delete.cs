@@ -22,7 +22,7 @@ public class Delete
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            var channel = await _context.TextChannels.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+            var channel = await _context.Channels.FirstOrDefaultAsync(x => x.ChannelId == request.Id, cancellationToken);
 
             if (channel is null)
             {
@@ -30,7 +30,7 @@ public class Delete
                 //throw new RestException(HttpStatusCode.NotFound, new {TextChannel = "not found"});    
             }
             
-            _context.TextChannels.Remove(channel);
+            _context.Channels.Remove(channel);
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

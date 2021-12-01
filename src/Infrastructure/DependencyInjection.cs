@@ -12,8 +12,10 @@ public static class DependencyInjection
         services.AddDbContext<DoveDbContext>(options =>
         {
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            options.UseSqlite(configuration.GetConnectionString("DatabaseConnection"),
+            options.UseNpgsql(configuration.GetConnectionString("postgres"),
                 b => b.MigrationsAssembly(typeof(DoveDbContext).Assembly.FullName));
+            //options.UseSqlite(configuration.GetConnectionString("DatabaseConnection"),
+            //    b => b.MigrationsAssembly(typeof(DoveDbContext).Assembly.FullName));
         });
         //services.AddScoped<>()
         return services;

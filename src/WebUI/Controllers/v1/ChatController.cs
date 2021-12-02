@@ -1,11 +1,6 @@
-using Application.Features.Messages;
-using Application.Interfaces;
-using Domain.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Web.Resource;
-using WebUI.Services;
+using WebUI.Domain.Messages.Features;
 
 // TODO: Refactor controller implementation i.e add error codes etc
 namespace WebUI.Controllers.v1;

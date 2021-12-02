@@ -1,7 +1,7 @@
-using Application.Features.Channels;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WebUI.Domain.Channels.Features;
 
 namespace WebUI.Controllers.v1;
 

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 namespace Infrastructure.Persistance;
 
 
+/*
 public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<DoveDbContext>
 {
         
@@ -24,3 +25,4 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<DoveDbCont
         return new DoveDbContext(builder.Options); 
     }
 }
+*/

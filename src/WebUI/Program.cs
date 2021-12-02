@@ -13,7 +13,7 @@ builder.Services.AddRouting(options =>
     options.LowercaseQueryStrings = true;
 });
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.IsProduction());
 builder.Services.AddSwagger();
 
 var app = builder.Build();

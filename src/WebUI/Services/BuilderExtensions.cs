@@ -1,9 +1,44 @@
+using System.Reflection;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using WebUI.Databases;
 
 namespace WebUI.Services;
 
 public static class BuilderExtensions
 {
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration, bool isProduction)
+    {
+
+        if (isProduction)
+        {
+            services.AddDbContext<DoveDbContext>(options =>
+            {
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                options.UseNpgsql(configuration.GetConnectionString("postgres"),
+                    b => b.MigrationsAssembly(typeof(DoveDbContext).Assembly.FullName));
+            });
+        }
+        else
+        {
+            services.AddDbContext<DoveDbContext>(options =>
+            {
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                options.UseInMemoryDatabase($"DovecordTesting");
+            });
+            
+        }
+        return services;
+    }
+    
+    public static IServiceCollection AddApplication(this IServiceCollection services)
+    {
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddMediatR(Assembly.GetExecutingAssembly());
+        return services;
+    } 
+    
     public static IServiceCollection AddSwagger(this IServiceCollection services)
     {
         services.AddSwaggerGen(options =>

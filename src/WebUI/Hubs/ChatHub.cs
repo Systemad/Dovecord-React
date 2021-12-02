@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Application.Interfaces;
 using Domain.Entities;
+using Domain.Messages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;

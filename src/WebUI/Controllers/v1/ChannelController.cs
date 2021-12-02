@@ -38,7 +38,7 @@ public class ChannelController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> Create(Create.Command textChannel)
+    public async Task<IActionResult> Create(Create.CreateChannelCommand textChannel)
     {
         var response = await _mediator.Send(textChannel);
         return Ok(response);
@@ -47,12 +47,12 @@ public class ChannelController : ControllerBase
     [HttpDelete("{Id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        await _mediator.Send(new Delete.Command(id));
+        await _mediator.Send(new Delete.DeleteChannelCommand(id));
         return NoContent();
     }
     
     [HttpPut]
-    public async Task<ActionResult> UpdateChannel([FromBody]Edit.Model command)
+    public async Task<ActionResult> UpdateChannel([FromBody]Edit.UpdateChannelCommand command)
     {
         /*
         if (id != command.Id)

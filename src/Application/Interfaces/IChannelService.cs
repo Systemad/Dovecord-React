@@ -1,3 +1,4 @@
+using Domain.Channels;
 using Domain.Entities;
 
 namespace Application.Interfaces;

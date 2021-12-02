@@ -1,4 +1,6 @@
 ﻿using Domain.Entities;
+using Domain.Messages;
+using Domain.Users;
 
 namespace WebUI.Hubs;
 

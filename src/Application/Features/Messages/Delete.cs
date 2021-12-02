@@ -1,4 +1,5 @@
 using Application.Common.Exceptions;
+using Domain.Channels;
 using Domain.Entities;
 using Infrastructure.Persistance;
 using MediatR;
@@ -8,9 +9,9 @@ namespace Application.Features.Messages;
 
 public class Delete
 {
-    public record Command(Guid Id) : IRequest;
+    public record DeleteMessageCommand(Guid Id) : IRequest;
     
-    public class QueryHandler : IRequestHandler<Command>
+    public class QueryHandler : IRequestHandler<DeleteMessageCommand>
     {
         private DoveDbContext _context;
         public QueryHandler(DoveDbContext context)
@@ -18,13 +19,13 @@ public class Delete
             _context = context;
         }
 
-        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteMessageCommand request, CancellationToken cancellationToken)
         {
-            var message = await _context.ChannelMessages.FirstOrDefaultAsync(x => x.ChannelMessageId == request.Id, cancellationToken);
+            var message = await _context.ChannelMessages.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (message is null)
             {
-                throw new NotFoundException(nameof(Channel), request.Id);
+                throw new NotFoundException("Message", request.Id);
                 //throw new RestException(HttpStatusCode.NotFound, new {TextChannel = "not found"});    
             }
             

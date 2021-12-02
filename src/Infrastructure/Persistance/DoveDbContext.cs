@@ -1,4 +1,7 @@
-﻿using Domain.Entities;
+﻿using Domain.Channels;
+using Domain.Entities;
+using Domain.Messages;
+using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistance
@@ -43,11 +46,11 @@ namespace Infrastructure.Persistance
 
                 entity.HasOne(d => d.Channel)
                     .WithMany(p => p.ChannelMessages)
-                    .HasForeignKey(k => k.ChannelForeignKey);
+                    .HasForeignKey(k => k.ChannelId);
 
                 entity.HasOne(u => u.User)
                     .WithMany(m => m.SentMessages)
-                    .HasForeignKey(k => k.UserForeignKey);
+                    .HasForeignKey(k => k.UserId);
                 /*
                 .HasForeignKey<ChannelMessage>(d => d.MessageId)
                 .OnDelete(DeleteBehavior.ClientSetNull)

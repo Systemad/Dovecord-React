@@ -1,4 +1,5 @@
 using Domain.Entities;
+using Domain.Messages;
 using Infrastructure.Persistance;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ public class List
         public async Task<List<ChannelMessage>> Handle(Query request, CancellationToken cancellationToken)
         {
             var messages = await _context.Channels
-                .Where(a => a.ChannelId == request.Id)
+                .Where(a => a.Id == request.Id)
                 .Include(m => m.ChannelMessages)
                 .FirstOrDefaultAsync(cancellationToken);
                 //.ToListAsync(cancellationToken);
@@ -29,7 +30,7 @@ public class List
             
             // TODO: Wrong
             var channels = await _context.ChannelMessages
-                .Where(a => a.ChannelMessageId == request.Id)
+                .Where(a => a.Id == request.Id)
                 .ToListAsync(cancellationToken);
             
             return channels;

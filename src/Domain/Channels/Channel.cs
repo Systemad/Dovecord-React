@@ -1,8 +1,11 @@
-namespace Domain.Entities;
+using Domain.Entities;
+using Domain.Messages;
+
+namespace Domain.Channels;
 
 public class Channel
 {
-    public Guid ChannelId { get; set; }
+    public Guid Id { get; set; }
     public string? Name { get; set; }
 
     public virtual ICollection<ChannelMessage> ChannelMessages { get; set; }

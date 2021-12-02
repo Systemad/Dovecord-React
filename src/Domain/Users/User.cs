@@ -1,4 +1,6 @@
-namespace Domain.Entities;
+using Domain.Messages;
+
+namespace Domain.Users;
 // TODO: Populate with user info 
 
 public class User

@@ -1,5 +1,8 @@
 using Application.Common.Exceptions;
+using AutoMapper;
+using Domain.Channels;
 using Domain.Entities;
+using Infrastructure.Dtos.Channel;
 using Infrastructure.Persistance;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -8,28 +11,33 @@ namespace Application.Features.Channels;
 
 public class Edit
 {
-    public record Model(Guid Id, string Name) : IRequest;
+    public record UpdateChannelCommand(Guid Id, ChannelManipulationDto ChannelToUpdate) : IRequest;
     
-    public class QueryHandler : IRequestHandler<Model>
+    public class QueryHandler : IRequestHandler<UpdateChannelCommand>
     {
-        private DoveDbContext _context;
-
-        public QueryHandler(DoveDbContext context)
+        private readonly DoveDbContext _context;
+        private readonly IMapper _mapper;
+        
+        public QueryHandler(DoveDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<Unit> Handle(Model request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateChannelCommand request, CancellationToken cancellationToken)
         {
-            var channel = await _context.Channels.Where(x => x.ChannelId == request.Id)
-                .AsTracking().SingleOrDefaultAsync(cancellationToken);
+            var channel = await _context.Channels
+                .Where(x => x.Id == request.Id)
+                .AsTracking()
+                .SingleOrDefaultAsync(cancellationToken);
             
             if (channel is null)
             {
-                throw new NotFoundException(nameof(Channel), request.Id);
+                throw new NotFoundException("Channel", request.Id);
             }
 
-            channel.Name = request.Name;
+            // TODO: Fix entity LastModified etc
+            _mapper.Map(request.ChannelToUpdate, channel);  
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

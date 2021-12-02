@@ -1,4 +1,5 @@
 using Domain.Entities;
+using Domain.Messages;
 using Infrastructure.Persistance;
 using MediatR;
 
@@ -26,7 +27,7 @@ public class Create
             //    return new ArgumentNullException();
             var newmessage = new ChannelMessage
             {
-                ChannelMessageId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 //UserId = request.Message.UserId,
                 Content = request.Message.Content,
                 //CreatedAt = DateTime.Now

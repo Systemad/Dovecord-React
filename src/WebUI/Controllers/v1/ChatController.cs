@@ -36,7 +36,7 @@ public class ChatController : ControllerBase
     }
     
     [HttpPut]
-    public async Task<IActionResult> UpdateMessage([FromBody] Edit.Model command)
+    public async Task<IActionResult> UpdateMessage([FromBody] Edit.UpdateChannelCommand command)
     {
         await _mediator.Send(command);
         return NoContent();
@@ -55,7 +55,7 @@ public class ChatController : ControllerBase
     [HttpDelete("{messageId:guid}")]
     public async Task<IActionResult> DeleteMessageById(Guid messageId)
     {
-        await _mediator.Send(new Delete.Command(messageId));
+        await _mediator.Send(new Delete.DeleteMessageCommand(messageId));
         return NoContent();
     }
 }

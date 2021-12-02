@@ -1,4 +1,7 @@
+using Domain.Channels;
 using Domain.Entities;
+using Domain.Messages;
+using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Interfaces;

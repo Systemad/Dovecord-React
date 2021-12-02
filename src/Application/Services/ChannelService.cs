@@ -3,7 +3,7 @@ using Application.Interfaces;
 using Domain.Entities;
 using Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
-using Channel = Domain.Entities.Channel;
+using Channel = Domain.Channels.Channel;
 
 namespace Application.Services;
 
@@ -20,7 +20,7 @@ public class ChannelService : IChannelService
     public async Task<List<Channel>> GetMessagesByChannelIdAsync(Guid id)
     {
         return await _context.Channels
-            .Where(a => a.ChannelId == id)
+            .Where(a => a.Id == id)
             .Include(m => m.ChannelMessages)
             .ToListAsync();
     }
@@ -52,12 +52,12 @@ public class ChannelService : IChannelService
 
     public async Task<Channel> GetChannelByIdAsync(Guid id)
     {
-        return await _context.Channels.SingleOrDefaultAsync(x => x.ChannelId == id);
+        return await _context.Channels.SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<bool> UpdateChannelAsync(Channel channel)
     {
-        var channelToUpdate = await _context.Channels.Where(x => x.ChannelId == channel.ChannelId)
+        var channelToUpdate = await _context.Channels.Where(x => x.Id == channel.Id)
             .AsTracking().SingleOrDefaultAsync();
         channelToUpdate.Name = channel.Name;
         var updated = await _context.SaveChangesAsync();

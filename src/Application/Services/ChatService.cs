@@ -1,5 +1,7 @@
 using Application.Interfaces;
+using Domain.Channels;
 using Domain.Entities;
+using Domain.Messages;
 using Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,14 +20,14 @@ public class ChatService : IChatService
     public async Task<List<Channel>> GetMessagesByChannelIdAsync(Guid id)
     {
         return await _context.Channels
-            .Where(a => a.ChannelId == id)
+            .Where(a => a.Id == id)
             .Include(m => m.ChannelMessages)
             .ToListAsync();
     }
 
     public async Task<bool> DeleteMessageByIdAsync(Guid id)
     {
-        var message = await _context.ChannelMessages.Where(x => x.ChannelMessageId == id)
+        var message = await _context.ChannelMessages.Where(x => x.Id == id)
             .AsTracking().SingleOrDefaultAsync();
         _context.ChannelMessages.Remove(message);
         var deleted = await _context.SaveChangesAsync();
@@ -41,12 +43,12 @@ public class ChatService : IChatService
 
     public async Task<ChannelMessage> GetMessageByIdAsync(Guid id)
     {
-        return await _context.ChannelMessages.SingleOrDefaultAsync(x => x.ChannelMessageId == id);
+        return await _context.ChannelMessages.SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<bool> UpdateMessageAsync(ChannelMessage message)
     {
-        var messageToUpdate = await _context.ChannelMessages.Where(x => x.ChannelMessageId == message.ChannelMessageId)
+        var messageToUpdate = await _context.ChannelMessages.Where(x => x.Id == message.Id)
             .AsTracking().SingleOrDefaultAsync();
  
         messageToUpdate.Content = message.Content;

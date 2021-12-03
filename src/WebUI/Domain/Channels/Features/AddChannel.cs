@@ -1,9 +1,9 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Infrastructure.Dtos.Channel;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WebUI.Databases;
+using WebUI.Dtos.Channel;
 
 namespace WebUI.Domain.Channels.Features;
 

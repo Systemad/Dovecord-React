@@ -1,9 +1,8 @@
 using AutoMapper;
-using Infrastructure.Dtos.Channel;
-using Infrastructure.Dtos.Message;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WebUI.Databases;
+using WebUI.Dtos.Message;
 using WebUI.Exceptions;
 
 namespace WebUI.Domain.Messages.Features;

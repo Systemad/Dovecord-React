@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Domain.Messages.Features;
+using WebUI.Dtos.Message;
 
 // TODO: Refactor controller implementation i.e add error codes etc
 namespace WebUI.Controllers.v1;
@@ -10,40 +11,42 @@ namespace WebUI.Controllers.v1;
 //[RequiredScope("API.Access")]
 [Route("api/messages")]
 [ApiVersion("1.0")]
-public class ChatController : ControllerBase
+public class MessageController : ControllerBase
 {
-    private readonly ILogger<ChatController> _logger;
+    private readonly ILogger<MessageController> _logger;
     private readonly IMediator _mediator;
 
     static readonly string[] scopeRequiredByApi = new[] { "API.Access" };
      
-    public ChatController(ILogger<ChatController> logger, IMediator mediator)
+    public MessageController(ILogger<MessageController> logger, IMediator mediator)
     {
         _logger = logger;
         _mediator = mediator;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> SaveMessageToChannel([FromBody] Create.Command message)
+    [HttpPost(Name = "AddMessage")]
+    public async Task<IActionResult> SaveMessage([FromBody] MessageManipulationDto message)
     {
-        await _mediator.Send(message);
-        return Ok();
+        var command = new AddMessage.AddMessageCommand(message);
+        var commandResponse = await _mediator.Send(command);
+        return Ok(commandResponse);
     }
     
-    [HttpPut]
-    public async Task<IActionResult> UpdateMessage([FromBody] Edit.UpdateChannelCommand command)
+    [HttpPut("{id:guid}", Name = "UpdateMessage")]
+    public async Task<IActionResult> UpdateMessage(Guid id, MessageManipulationDto message)
     {
+        var command = new UpdateMessage.UpdateMessageCommand(id, message);
         await _mediator.Send(command);
         return NoContent();
     }
         
-    [HttpGet("{channelId:guid}")]
+    [HttpGet("{id:guid}")]
     //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Channel))]
     //[ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetMessagesFromChannelId(Guid channelId)
+    public async Task<IActionResult> GetMessagesFromChannel(Guid id)
     {
-        var query = new List.Query(channelId);
-        var result = await _mediator.Send(query);
+        var command = new GetMessageList.MessageListQuery(id);
+        var result = await _mediator.Send(command);
         return Ok(result);
     }
         

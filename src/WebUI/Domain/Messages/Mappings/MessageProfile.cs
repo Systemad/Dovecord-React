@@ -1,7 +1,7 @@
 using AutoMapper;
-using Infrastructure.Dtos.Channel;
-using Infrastructure.Dtos.Message;
 using WebUI.Domain.Messages;
+using WebUI.Dtos.Channel;
+using WebUI.Dtos.Message;
 
 namespace Application.Common.Mappings;
 

@@ -1,17 +1,17 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Infrastructure.Dtos.Channel;
-using Infrastructure.Dtos.Message;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WebUI.Databases;
 using WebUI.Domain.Channels;
+using WebUI.Dtos.Channel;
+using WebUI.Dtos.Message;
 
 namespace WebUI.Domain.Messages.Features;
 
 public static class GetMessageList
 {
-    public record MessageListQuery : IRequest<List<ChannelMessageDto>>;
+    public record MessageListQuery(Guid id) : IRequest<List<ChannelMessageDto>>;
 
     public class QueryHandler : IRequestHandler<MessageListQuery, List<ChannelMessageDto>>
     {
@@ -26,13 +26,22 @@ public static class GetMessageList
         
         public async Task<List<ChannelMessageDto>> Handle(MessageListQuery request, CancellationToken cancellationToken)
         {
-            var channels = await _context.Channels.ToListAsync(cancellationToken);
-            var collection = _context as IQueryable<ChannelMessageDto>;
+            var messages = await _context.ChannelMessages
+                .Where(m => m.ChannelId == request.id)
+                .ToListAsync(cancellationToken);
+
+            // TODO TODO
+            var chcch = await _context.Channels
+                .Where(i => i.Id == request.id)
+                .Select(x => x.ChannelMessages)
+                .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+            
+            var collection = new List<ChannelMessage>().AsQueryable();
 
             var dtoCollection = collection.ProjectTo<ChannelDto>(_mapper.ConfigurationProvider);
             
             // TODO: Check if correct
-            return _mapper.Map<List<ChannelMessageDto>>(channels);
+            return _mapper.Map<List<ChannelMessageDto>>(dtoCollection);
         }
     }
 }

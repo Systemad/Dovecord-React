@@ -1,5 +1,5 @@
 using AutoMapper;
-using Infrastructure.Dtos.Channel;
+using WebUI.Dtos.Channel;
 
 namespace WebUI.Domain.Channels.Mappings;
 

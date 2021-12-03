@@ -1,4 +1,4 @@
-namespace Infrastructure.Dtos.Channel;
+namespace WebUI.Dtos.Channel;
 
 public class ChannelDto
 {

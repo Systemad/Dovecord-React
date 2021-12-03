@@ -1,4 +1,4 @@
-namespace Infrastructure.Dtos.Message;
+namespace WebUI.Dtos.Message;
 
 public class ChannelMessageDto
 {

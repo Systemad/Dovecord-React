@@ -1,15 +1,15 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Infrastructure.Dtos.Message;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WebUI.Databases;
+using WebUI.Dtos.Message;
 
 namespace WebUI.Domain.Messages.Features;
 
 public static class AddMessage
 {
-    public record AddMessageCommand(MessageManipulationDto ChannelToAdd) : IRequest<ChannelMessageDto>;
+    public record AddMessageCommand(MessageManipulationDto MessageToAdd) : IRequest<ChannelMessageDto>;
 
     public class Handler : IRequestHandler<AddMessageCommand, ChannelMessageDto>
     {
@@ -24,7 +24,7 @@ public static class AddMessage
         
         public async Task<ChannelMessageDto> Handle(AddMessageCommand request, CancellationToken cancellationToken)
         {
-            var message = _mapper.Map<ChannelMessage>(request.ChannelToAdd);
+            var message = _mapper.Map<ChannelMessage>(request.MessageToAdd);
             _context.ChannelMessages.Add(message);
             await _context.SaveChangesAsync(cancellationToken);
 

@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Application.Interfaces;
 using Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
@@ -12,10 +13,10 @@ namespace WebUI.Hubs;
 [RequiredScope("API.Access")]
 public class ChatHub : Hub<IChatClient>
 {
-    private IUserService _userService;
-    public ChatHub(IUserService userService)
+    private readonly IMediator _mediator;
+    public ChatHub(IMediator mediator)
     {
-        _userService = userService;
+        _mediator = mediator;
     }
 
     string Username => Context?.User?.Identity?.Name ?? "Unknown";
@@ -23,6 +24,8 @@ public class ChatHub : Hub<IChatClient>
     
     public override async Task OnConnectedAsync()
     {
+        // mediatr == details
+        // if not found
         var exist = await _userService.CheckIfUserExistAsync(UserId);
         if (!exist)
             await _userService.CreateUserAsync(UserId, Username);

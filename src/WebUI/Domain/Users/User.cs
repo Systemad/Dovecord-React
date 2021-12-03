@@ -1,6 +1,6 @@
-using Domain.Messages;
+using WebUI.Domain.Messages;
 
-namespace Domain.Users;
+namespace WebUI.Domain.Users;
 // TODO: Populate with user info 
 
 public class User
@@ -8,6 +8,5 @@ public class User
     public Guid UserId { get; set; }
     public string? Name { get; set; }
     public bool? IsOnline { get; set; }
-    
     public virtual ICollection<ChannelMessage> SentMessages { get; set; }
 }

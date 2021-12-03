@@ -1,9 +1,8 @@
-﻿using Domain.Channels;
-using Domain.Users;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WebUI.Domain.Channels;
 using WebUI.Domain.Messages;
+using WebUI.Domain.Users;
 using WebUI.Services;
-using Channel = WebUI.Domain.Channels.Channel;
 
 namespace WebUI.Databases;
 
@@ -32,6 +31,18 @@ public class DoveDbContext : DbContext
                 .HasForeignKey(k => k.UserId);
         });
     }
+    
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+    {
+        UpdateAuditFields();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+    
+    public override int SaveChanges()
+    {
+        UpdateAuditFields();
+        return base.SaveChanges();
+    }
     private void UpdateAuditFields()
     {
         var now = DateTime.UtcNow;
@@ -43,10 +54,12 @@ public class DoveDbContext : DbContext
                     entry.Entity.CreatedBy = Guid.Parse(_currentUserService?.UserId);;
                     entry.Entity.CreatedOn = now;
                     entry.Entity.LastModifiedOn = now;
+                    entry.Entity.IsEdit = false;
                     break;
 
                 case EntityState.Modified:
                     entry.Entity.LastModifiedOn = now;
+                    entry.Entity.IsEdit = true;
                     break;
                 
                 case EntityState.Deleted:

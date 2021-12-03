@@ -1,5 +1,5 @@
-﻿using Domain.Users;
-using Channel = WebUI.Domain.Channels.Channel;
+﻿using WebUI.Domain.Channels;
+using WebUI.Domain.Users;
 
 namespace WebUI.Domain.Messages;
 

@@ -50,7 +50,7 @@ public class ChatController : ControllerBase
     [HttpDelete("{messageId:guid}")]
     public async Task<IActionResult> DeleteMessageById(Guid messageId)
     {
-        await _mediator.Send(new Delete.DeleteMessageCommand(messageId));
+        await _mediator.Send(new DeleteMessage.DeleteMessageCommand(messageId));
         return NoContent();
     }
 }

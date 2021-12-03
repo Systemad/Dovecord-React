@@ -1,9 +1,7 @@
 using AutoMapper;
 using Infrastructure.Dtos.Channel;
-using Domain.Channels;
-using Channel = WebUI.Domain.Channels.Channel;
 
-namespace Application.Common.Mappings;
+namespace WebUI.Domain.Channels.Mappings;
 
 public class ChannelProfile : Profile
 {

@@ -52,7 +52,7 @@ public class ChatHub : Hub<IChatClient>
         var userCommandResponse = await _mediator.Send(userCommand);
         userCommandResponse.IsOnline = false;
 
-        // Fix mapping ?
+        // Fix mapping 
         var updateUser = new UpdateUser.UpdateUserCommand(usersCommandResponse);
         var updateUserResponse = _mediator.Send(updateUser);
     }

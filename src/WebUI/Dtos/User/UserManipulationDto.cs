@@ -1,4 +1,4 @@
-namespace Infrastructure.Dtos.User;
+namespace WebUI.Dtos.User;
 
 public class UserManipulationDto
 {

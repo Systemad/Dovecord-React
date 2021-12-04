@@ -67,5 +67,15 @@ public class DoveDbContext : DbContext
                     break;
             }
         }
+        
+        foreach (var entry in ChangeTracker.Entries<User>())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.Id = Guid.Parse(_currentUserService?.UserId);;
+                    break;
+            }
+        }
     }
 }

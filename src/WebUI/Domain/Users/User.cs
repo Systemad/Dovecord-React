@@ -5,7 +5,7 @@ namespace WebUI.Domain.Users;
 
 public class User
 {
-    public Guid UserId { get; set; }
+    public Guid Id { get; set; }
     public string? Name { get; set; }
     public bool? IsOnline { get; set; }
     public virtual ICollection<ChannelMessage> SentMessages { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Infrastructure.Dtos.User;
 using WebUI.Domain.Messages;
 using WebUI.Domain.Users;
 
@@ -6,7 +7,7 @@ namespace WebUI.Hubs;
 
 public interface IChatClient
 {
-    Task SendUserList(List<User> users);
+    Task SendUserList(List<UserDto> users);
 
     Task UserTyping(ActorAction action);
 

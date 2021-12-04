@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
 using WebUI.Domain.Messages;
+using WebUI.Domain.Users.Features;
 
 namespace WebUI.Hubs;
 
@@ -24,20 +25,36 @@ public class ChatHub : Hub<IChatClient>
     
     public override async Task OnConnectedAsync()
     {
-        // mediatr == details
-        // if not found
-        var exist = await _userService.CheckIfUserExistAsync(UserId);
-        if (!exist)
-            await _userService.CreateUserAsync(UserId, Username);
-            
-        await _userService.UserLoggedOnAsync(UserId);
-        await Clients.All.SendUserList(await _userService.GetUsersAsync());
+        var usersCommand = new GetUserList.UserListQuery();
+        var usersCommandResponse = await _mediator.Send(usersCommand);
+        //var query = new GetUser.UserQuery(UserId);
+        
+        // TODO: Add Login
+        var userCommand = new GetUser.UserQuery(UserId);
+        var userCommandResponse = await _mediator.Send(userCommand);
+        userCommandResponse.IsOnline = true;
+
+        // Fix mapping ?
+        var updateUser = new UpdateUser.UpdateUserCommand(usersCommandResponse);
+        var updateUserResponse = _mediator.Send(updateUser);
+        
+        await Clients.All.SendUserList(usersCommandResponse);
     }
 
     public override async Task OnDisconnectedAsync(Exception? ex)
     {
-        await _userService.UserLoggedOffAsync(UserId);
-        await Clients.All.SendUserList(await _userService.GetUsersAsync());
+        var usersCommand = new GetUserList.UserListQuery();
+        var usersCommandResponse = await _mediator.Send(usersCommand);
+        //var query = new GetUser.UserQuery(UserId);
+        
+        // TODO: Add Login
+        var userCommand = new GetUser.UserQuery(UserId);
+        var userCommandResponse = await _mediator.Send(userCommand);
+        userCommandResponse.IsOnline = false;
+
+        // Fix mapping ?
+        var updateUser = new UpdateUser.UpdateUserCommand(usersCommandResponse);
+        var updateUserResponse = _mediator.Send(updateUser);
     }
 
     public async Task PostMessage(ChannelMessage message, Guid channelId)

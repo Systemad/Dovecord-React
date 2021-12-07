@@ -25,11 +25,6 @@ public static class GetChannelList
         public async Task<List<ChannelDto>> Handle(ChannelListQuery request, CancellationToken cancellationToken)
         {
             var channels = await _context.Channels.ToListAsync(cancellationToken);
-            var collection = _context as IQueryable<Channel>;
-
-            var dtoCollection = collection.ProjectTo<ChannelDto>(_mapper.ConfigurationProvider);
-            
-            // TODO: Check if correct
             return _mapper.Map<List<ChannelDto>>(channels);
         }
     }

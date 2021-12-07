@@ -27,11 +27,6 @@ public static class GetUserList
         public async Task<List<UserDto>> Handle(UserListQuery request, CancellationToken cancellationToken)
         {
             var channels = await _context.Channels.ToListAsync(cancellationToken);
-            var collection = _context as IQueryable<User>;
-
-            var dtoCollection = collection.ProjectTo<UserDto>(_mapper.ConfigurationProvider);
-            
-            // TODO: Check if correct
             return _mapper.Map<List<UserDto>>(channels);
         }
     }

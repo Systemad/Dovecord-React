@@ -23,6 +23,7 @@ public class ChannelController : ControllerBase
         _mediator = mediator;
     }   
     
+    // TODO: fix
     [HttpGet(Name = "GetChannels")]
     public async Task<IActionResult> GetChannels()
     {

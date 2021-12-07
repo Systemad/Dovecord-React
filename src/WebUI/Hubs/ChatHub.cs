@@ -1,12 +1,10 @@
 ﻿using System.Security.Claims;
-using Application.Interfaces;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
 using WebUI.Domain.Messages;
-using WebUI.Domain.Users.Features;
 
 namespace WebUI.Hubs;
 
@@ -25,6 +23,7 @@ public class ChatHub : Hub<IChatClient>
     
     public override async Task OnConnectedAsync()
     {
+        /*
         var usersCommand = new GetUserList.UserListQuery();
         var usersCommandResponse = await _mediator.Send(usersCommand);
         //var query = new GetUser.UserQuery(UserId);
@@ -35,14 +34,15 @@ public class ChatHub : Hub<IChatClient>
         userCommandResponse.IsOnline = true;
 
         // Fix mapping ?
-        var updateUser = new UpdateUser.UpdateUserCommand(usersCommandResponse);
-        var updateUserResponse = _mediator.Send(updateUser);
-        
+        var updateUser = new UpdateUser.UpdateUserCommand(userCommandResponse.Id, userCommandResponse);
+        await _mediator.Send(updateUser);
         await Clients.All.SendUserList(usersCommandResponse);
+        */
     }
 
     public override async Task OnDisconnectedAsync(Exception? ex)
     {
+        /*
         var usersCommand = new GetUserList.UserListQuery();
         var usersCommandResponse = await _mediator.Send(usersCommand);
         //var query = new GetUser.UserQuery(UserId);
@@ -54,7 +54,8 @@ public class ChatHub : Hub<IChatClient>
 
         // Fix mapping 
         var updateUser = new UpdateUser.UpdateUserCommand(usersCommandResponse);
-        var updateUserResponse = _mediator.Send(updateUser);
+        await _mediator.Send(updateUser);
+        */
     }
 
     public async Task PostMessage(ChannelMessage message, Guid channelId)

@@ -34,8 +34,10 @@ public static class BuilderExtensions
     
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddSingleton<ICurrentUserService, CurrentUserService>();
+        services.AddHttpContextAccessor();
         services.AddMediatR(Assembly.GetExecutingAssembly());
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
         return services;
     } 
     

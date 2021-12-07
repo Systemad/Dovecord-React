@@ -1,5 +1,3 @@
-using Application;
-using Infrastructure;
 using WebUI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,8 +10,8 @@ builder.Services.AddRouting(options =>
     options.LowercaseUrls = true;
     options.LowercaseQueryStrings = true;
 });
-builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.IsProduction());
+builder.Services.AddApplication();
 builder.Services.AddSwagger();
 
 var app = builder.Build();

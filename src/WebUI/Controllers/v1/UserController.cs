@@ -12,7 +12,7 @@ namespace WebUI.Controllers.v1;
 //[Authorize]
 [ApiController]
 //[RequiredScope("API.Access")]
-[Route("api/channels")]
+[Route("api/users")]
 [ApiVersion("1.0")]
 public class UserController : ControllerBase
 {

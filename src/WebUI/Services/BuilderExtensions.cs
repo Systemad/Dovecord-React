@@ -41,7 +41,7 @@ public static class BuilderExtensions
         return services;
     } 
     
-    public static IServiceCollection AddSwagger(this IServiceCollection services)
+    public static IServiceCollection AddSwaggerExtension(this IServiceCollection services)
     {
         services.AddSwaggerGen(options =>
         {

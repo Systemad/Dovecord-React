@@ -12,7 +12,7 @@ builder.Services.AddRouting(options =>
 });
 builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.IsProduction());
 builder.Services.AddApplication();
-builder.Services.AddSwagger();
+builder.Services.AddSwaggerExtension();
 
 var app = builder.Build();
 

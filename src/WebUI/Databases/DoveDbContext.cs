@@ -14,9 +14,9 @@ public class DoveDbContext : DbContext
         _currentUserService = currentUserService;
     }
 
-    public virtual DbSet<Channel> Channels { get; set; }
-    public virtual DbSet<ChannelMessage> ChannelMessages { get; set; }
-    public virtual DbSet<User> Users { get; set; }
+    public DbSet<Channel> Channels { get; set; }
+    public DbSet<ChannelMessage> ChannelMessages { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -74,6 +74,9 @@ public class DoveDbContext : DbContext
             {
                 case EntityState.Added:
                     entry.Entity.Id = Guid.Parse(_currentUserService?.UserId);;
+                    break;
+                case EntityState.Deleted:
+                    // deleted_at
                     break;
             }
         }

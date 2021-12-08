@@ -41,7 +41,7 @@ public class UserController : ControllerBase
         return Ok(result);
     }
     
-    [HttpPost(Name = "AddChannel")]
+    [HttpPost(Name = "AddUser")]
     public async Task<IActionResult> AddUser([FromBody] UserManipulationDto userForCreation)
     {
         var command = new AddUser.AddUserCommand(userForCreation);

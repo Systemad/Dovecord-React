@@ -10,6 +10,7 @@ builder.Services.AddRouting(options =>
     options.LowercaseUrls = true;
     options.LowercaseQueryStrings = true;
 });
+builder.Services.AddCorsService();
 builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.IsProduction());
 builder.Services.AddApplication();
 builder.Services.AddSwaggerExtension();
@@ -27,7 +28,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
+app.UseCors("AllowAll");
 
 app.MapControllerRoute(
     name: "default",
@@ -35,11 +36,13 @@ app.MapControllerRoute(
 
 app.MapFallbackToFile("index.html");;
 
-app.UseSwagger();
+app.UseOpenApi();
+app.UseSwaggerUi3();
+/*
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
     //options.RoutePrefix = string.Empty;
 });
-
+*/
 app.Run();

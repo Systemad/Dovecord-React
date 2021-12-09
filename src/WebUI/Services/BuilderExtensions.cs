@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using WebUI.Databases;
+using WebUI.Services;
 
 namespace WebUI.Services;
 
@@ -31,7 +32,21 @@ public static class BuilderExtensions
         }
         return services;
     }
-    
+
+    public static IServiceCollection AddCorsService(this IServiceCollection service)
+    {
+        service.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll",
+                builder =>
+                {
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyOrigin();
+                });
+        });
+        return service;
+    }
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddSingleton<ICurrentUserService, CurrentUserService>();
@@ -43,6 +58,8 @@ public static class BuilderExtensions
     
     public static IServiceCollection AddSwaggerExtension(this IServiceCollection services)
     {
+        services.AddSwaggerDocument();
+        /*
         services.AddSwaggerGen(options =>
         {
             options.SwaggerDoc("v1", new OpenApiInfo
@@ -64,6 +81,7 @@ public static class BuilderExtensions
             });
             options.CustomSchemaIds(x => x.FullName);
         });
+        */
         return services;
     }
 }

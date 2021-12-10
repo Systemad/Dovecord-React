@@ -10,14 +10,17 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { WeatherForecastClient } from './web-api-client';
+import { ChannelClient } from './web-api-client';
+import { ChannelComponent } from './channel/channel-component';
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent
+    FetchDataComponent,
+    ChannelComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -27,10 +30,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
+      { path: 'channel', component: ChannelComponent },
     ]),
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [WeatherForecastClient, ChannelClient],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

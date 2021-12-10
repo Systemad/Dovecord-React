@@ -24,7 +24,7 @@ public class UserController : ControllerBase
         _logger = logger;
         _mediator = mediator;
     }   
-    
+    [Produces("application/json")]
     [HttpGet(Name = "GetUsers")]
     public async Task<IActionResult> GetUsers()
     {
@@ -32,7 +32,7 @@ public class UserController : ControllerBase
         var result = await _mediator.Send(query);
         return Ok(result);
     }
-    
+    [Produces("application/json")]
     [HttpGet("{id:guid}", Name = "GetUser")]
     public async Task<IActionResult> GetUser(Guid id)
     {

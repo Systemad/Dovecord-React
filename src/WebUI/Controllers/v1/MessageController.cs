@@ -39,7 +39,8 @@ public class MessageController : ControllerBase
         await _mediator.Send(command);
         return NoContent();
     }
-        
+    
+    [Produces("application/json")]
     [HttpGet("{id:guid}")]
     //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Channel))]
     //[ProducesResponseType(StatusCodes.Status404NotFound)]

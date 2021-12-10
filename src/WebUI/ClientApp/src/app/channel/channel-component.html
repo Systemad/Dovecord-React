@@ -1,0 +1,20 @@
+<h1 id="channelTable">Channels here</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+<p *ngIf="!channels"><em>Loading...</em></p>
+
+<table class='table table-striped' aria-labelledby="channelTable" *ngIf="channels">
+  <thead>
+    <tr>
+      <th>Channel Id</th>
+      <th>Channel Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let channel of channels">
+      <td>{{ channel.id }}</td>
+      <td>{{ channel.name }}</td>
+    </tr>
+  </tbody>
+</table>

@@ -88,7 +88,7 @@ export class WeatherForecastClient implements IWeatherForecastClient {
 }
 
 export interface IChannelClient {
-    getChannels(): Observable<FileResponse | null>;
+    getChannels(): Observable<ChannelDto[]>;
     addChannel(channelForCreation: ChannelManipulationDto): Observable<FileResponse | null>;
     getChannel(id: string): Observable<FileResponse | null>;
     deleteChannel(id: string): Observable<FileResponse | null>;
@@ -108,7 +108,7 @@ export class ChannelClient implements IChannelClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "https://localhost:7045";
     }
 
-    getChannels(): Observable<FileResponse | null> {
+    getChannels(): Observable<ChannelDto[]> {
         let url_ = this.baseUrl + "/api/channels";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -116,7 +116,7 @@ export class ChannelClient implements IChannelClient {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Accept": "application/octet-stream"
+                "Accept": "application/json"
             })
         };
 
@@ -127,31 +127,40 @@ export class ChannelClient implements IChannelClient {
                 try {
                     return this.processGetChannels(<any>response_);
                 } catch (e) {
-                    return <Observable<FileResponse | null>><any>_observableThrow(e);
+                    return <Observable<ChannelDto[]>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<FileResponse | null>><any>_observableThrow(response_);
+                return <Observable<ChannelDto[]>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetChannels(response: HttpResponseBase): Observable<FileResponse | null> {
+    protected processGetChannels(response: HttpResponseBase): Observable<ChannelDto[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        if (status === 201) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData201)) {
+                result201 = [] as any;
+                for (let item of resultData201)
+                    result201!.push(ChannelDto.fromJS(item));
+            }
+            else {
+                result201 = <any>null;
+            }
+            return _observableOf(result201);
+            }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<FileResponse | null>(<any>null);
+        return _observableOf<ChannelDto[]>(<any>null);
     }
 
     addChannel(channelForCreation: ChannelManipulationDto): Observable<FileResponse | null> {
@@ -893,6 +902,46 @@ export interface IWeatherForecast {
     temperatureC: number;
     temperatureF: number;
     summary?: string | undefined;
+}
+
+export class ChannelDto implements IChannelDto {
+    id!: string;
+    name?: string | undefined;
+
+    constructor(data?: IChannelDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): ChannelDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ChannelDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IChannelDto {
+    id: string;
+    name?: string | undefined;
 }
 
 export class ChannelManipulationDto implements IChannelManipulationDto {

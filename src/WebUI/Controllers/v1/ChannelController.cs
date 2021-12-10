@@ -22,8 +22,9 @@ public class ChannelController : ControllerBase
         _logger = logger;
         _mediator = mediator;
     }   
-    
-    // TODO: fix
+
+    [ProducesResponseType(typeof(IEnumerable<ChannelDto>), 201)]
+    [Produces("application/json")]
     [HttpGet(Name = "GetChannels")]
     public async Task<IActionResult> GetChannels()
     {
@@ -31,7 +32,7 @@ public class ChannelController : ControllerBase
         var result = await _mediator.Send(query);
         return Ok(result);
     }
-    
+    [Produces("application/json")]
     [HttpGet("{id:guid}", Name = "GetChannel")]
     public async Task<IActionResult> GetChannel(Guid id)
     {

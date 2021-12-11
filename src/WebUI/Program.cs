@@ -1,3 +1,5 @@
+using WebUI.Databases;
+using WebUI.Seeders;
 using WebUI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,11 +22,18 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+/*
+if (app.Environment.IsDevelopment())
+{
+    using var context = app.Services.GetService<DoveDbContext>();
+    context.Database.EnsureCreated();
+    
+    ChannelSeeder.SeedSampleChannels(app.Services.GetService<DoveDbContext>());
+}
+*/
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

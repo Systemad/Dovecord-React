@@ -13,6 +13,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WeatherForecastClient } from './web-api-client';
 import { ChannelClient } from './web-api-client';
 import { ChannelComponent } from './channel/channel-component';
+import { MatTableModule } from '@angular/material/table';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +34,8 @@ import { ChannelComponent } from './channel/channel-component';
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'channel', component: ChannelComponent },
     ]),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatTableModule
   ],
   providers: [WeatherForecastClient, ChannelClient],
   bootstrap: [AppComponent]

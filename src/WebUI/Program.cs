@@ -15,7 +15,13 @@ builder.Services.AddRouting(options =>
 builder.Services.AddCorsService();
 builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.IsProduction());
 builder.Services.AddApplication();
-builder.Services.AddSwaggerExtension();
+
+//builder.Services.AddSwaggerDocument();
+builder.Services.AddOpenApiDocument(configure =>
+{
+    configure.Title = "Dovecord API";
+});
+//builder.Services.AddSwaggerExtension();
 
 var app = builder.Build();
 
@@ -47,11 +53,4 @@ app.MapFallbackToFile("index.html");;
 
 app.UseOpenApi();
 app.UseSwaggerUi3();
-/*
-app.UseSwaggerUI(options =>
-{
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-    //options.RoutePrefix = string.Empty;
-});
-*/
 app.Run();

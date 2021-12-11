@@ -1,9 +1,7 @@
 using System.Reflection;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using WebUI.Databases;
-using WebUI.Services;
 
 namespace WebUI.Services;
 

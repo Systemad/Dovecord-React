@@ -23,7 +23,7 @@ public class ChannelController : ControllerBase
         _mediator = mediator;
     }   
 
-    [ProducesResponseType(typeof(IEnumerable<ChannelDto>), 201)]
+    //[ProducesResponseType(typeof(IEnumerable<ChannelDto>), 201)]
     [Produces("application/json")]
     [HttpGet(Name = "GetChannels")]
     public async Task<IActionResult> GetChannels()
@@ -32,6 +32,8 @@ public class ChannelController : ControllerBase
         var result = await _mediator.Send(query);
         return Ok(result);
     }
+    
+    [ProducesResponseType(typeof(ChannelDto), 200)]
     [Produces("application/json")]
     [HttpGet("{id:guid}", Name = "GetChannel")]
     public async Task<IActionResult> GetChannel(Guid id)
@@ -41,6 +43,9 @@ public class ChannelController : ControllerBase
         return Ok(result);
     }
     
+    [ProducesResponseType(typeof(ChannelDto), 201)]
+    [Consumes("application/json")]
+    [Produces("application/json")]
     [HttpPost(Name = "AddChannel")]
     public async Task<IActionResult> AddChannel([FromBody] ChannelManipulationDto channelForCreation)
     {
@@ -49,6 +54,7 @@ public class ChannelController : ControllerBase
         return Ok(commandResponse);
     }
     
+    [Produces("application/json")]
     [HttpDelete("{id:guid}", Name = "DeleteChannel")]
     public async Task<IActionResult> DeleteChannel(Guid id)
     {
@@ -57,6 +63,7 @@ public class ChannelController : ControllerBase
         return NoContent();
     }
     
+    [Produces("application/json")]
     [HttpPut("{id:guid}", Name = "UpdateChannel")]
     public async Task<ActionResult> UpdateChannel(Guid id, ChannelManipulationDto channel)
     {

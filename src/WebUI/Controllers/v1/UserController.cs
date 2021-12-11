@@ -1,3 +1,4 @@
+using Infrastructure.Dtos.User;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Domain.Channels.Features;
@@ -24,6 +25,8 @@ public class UserController : ControllerBase
         _logger = logger;
         _mediator = mediator;
     }   
+    
+    [ProducesResponseType(typeof(IEnumerable<UserDto>), 200)]
     [Produces("application/json")]
     [HttpGet(Name = "GetUsers")]
     public async Task<IActionResult> GetUsers()
@@ -32,6 +35,8 @@ public class UserController : ControllerBase
         var result = await _mediator.Send(query);
         return Ok(result);
     }
+    
+    [ProducesResponseType(typeof(UserDto), 201)]
     [Produces("application/json")]
     [HttpGet("{id:guid}", Name = "GetUser")]
     public async Task<IActionResult> GetUser(Guid id)
@@ -41,6 +46,9 @@ public class UserController : ControllerBase
         return Ok(result);
     }
     
+    [ProducesResponseType(typeof(UserDto), 201)]
+    [Consumes("application/json")]
+    [Produces("application/json")]
     [HttpPost(Name = "AddUser")]
     public async Task<IActionResult> AddUser([FromBody] UserManipulationDto userForCreation)
     {
@@ -49,6 +57,7 @@ public class UserController : ControllerBase
         return Ok(commandResponse);
     }
     
+    [Produces("application/json")]
     [HttpDelete("{id:guid}", Name = "DeleteUser")]
     public async Task<IActionResult> DeleteUser(Guid id)
     {
@@ -57,6 +66,7 @@ public class UserController : ControllerBase
         return NoContent();
     }
     
+    [Produces("application/json")]
     [HttpPut("{id:guid}", Name = "UpdateUser")]
     public async Task<ActionResult> UpdateUser(Guid id, UserManipulationDto user)
     {

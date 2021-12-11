@@ -1,6 +1,5 @@
 import { Component, TemplateRef } from '@angular/core';
 import { ChannelClient, ChannelDto } from '../web-api-client';
-;
 @Component({
   selector: 'app-channel-component',
   templateUrl: './channel-component.html'

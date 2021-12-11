@@ -24,6 +24,9 @@ public class MessageController : ControllerBase
         _mediator = mediator;
     }
 
+    [ProducesResponseType(typeof(ChannelMessageDto), 201)]
+    [Consumes("application/json")]
+    [Produces("application/json")]
     [HttpPost(Name = "AddMessage")]
     public async Task<IActionResult> SaveMessage([FromBody] MessageManipulationDto message)
     {
@@ -32,6 +35,7 @@ public class MessageController : ControllerBase
         return Ok(commandResponse);
     }
     
+    [Produces("application/json")]
     [HttpPut("{id:guid}", Name = "UpdateMessage")]
     public async Task<IActionResult> UpdateMessage(Guid id, MessageManipulationDto message)
     {
@@ -40,10 +44,9 @@ public class MessageController : ControllerBase
         return NoContent();
     }
     
+    [ProducesResponseType(typeof(IEnumerable<ChannelMessageDto>), 200)]
     [Produces("application/json")]
     [HttpGet("{id:guid}")]
-    //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Channel))]
-    //[ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetMessagesFromChannel(Guid id)
     {
         var command = new GetMessageList.MessageListQuery(id);
@@ -51,10 +54,11 @@ public class MessageController : ControllerBase
         return Ok(result);
     }
         
-    [HttpDelete("{messageId:guid}")]
-    public async Task<IActionResult> DeleteMessageById(Guid messageId)
+    [Produces("application/json")]
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteMessageById(Guid id)
     {
-        await _mediator.Send(new DeleteMessage.DeleteMessageCommand(messageId));
+        await _mediator.Send(new DeleteMessage.DeleteMessageCommand(id));
         return NoContent();
     }
 }

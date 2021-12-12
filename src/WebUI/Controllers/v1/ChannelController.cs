@@ -23,7 +23,7 @@ public class ChannelController : ControllerBase
         _mediator = mediator;
     }   
 
-    //[ProducesResponseType(typeof(IEnumerable<ChannelDto>), 201)]
+    [ProducesResponseType(typeof(IEnumerable<ChannelDto>), 201)]
     [Produces("application/json")]
     [HttpGet(Name = "GetChannels")]
     public async Task<IActionResult> GetChannels()

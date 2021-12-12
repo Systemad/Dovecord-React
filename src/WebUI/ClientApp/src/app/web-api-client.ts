@@ -18,7 +18,9 @@ export interface IWeatherForecastClient {
     get(): Observable<WeatherForecast[]>;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class WeatherForecastClient implements IWeatherForecastClient {
     private http: HttpClient;
     private baseUrl: string;
@@ -93,7 +95,9 @@ export interface IChannelClient {
     updateChannel(id: string, channel: ChannelManipulationDto): Observable<FileResponse>;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ChannelClient implements IChannelClient {
     private http: HttpClient;
     private baseUrl: string;
@@ -372,7 +376,9 @@ export interface IMessageClient {
     deleteMessageById(id: string): Observable<FileResponse>;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class MessageClient implements IMessageClient {
     private http: HttpClient;
     private baseUrl: string;
@@ -604,7 +610,9 @@ export interface IUserClient {
     updateUser(id: string, user: UserManipulationDto): Observable<FileResponse>;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class UserClient implements IUserClient {
     private http: HttpClient;
     private baseUrl: string;
@@ -1195,7 +1203,7 @@ export interface FileResponse {
     headers?: { [name: string]: any };
 }
 
-export class ApiException extends Error {
+export class SwaggerException extends Error {
     message: string;
     status: number;
     response: string;
@@ -1212,10 +1220,10 @@ export class ApiException extends Error {
         this.result = result;
     }
 
-    protected isApiException = true;
+    protected isSwaggerException = true;
 
-    static isApiException(obj: any): obj is ApiException {
-        return obj.isApiException === true;
+    static isSwaggerException(obj: any): obj is SwaggerException {
+        return obj.isSwaggerException === true;
     }
 }
 
@@ -1223,7 +1231,7 @@ function throwException(message: string, status: number, response: string, heade
     if (result !== null && result !== undefined)
         return _observableThrow(result);
     else
-        return _observableThrow(new ApiException(message, status, response, headers, null));
+        return _observableThrow(new SwaggerException(message, status, response, headers, null));
 }
 
 function blobToText(blob: any): Observable<string> {

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using WebUI.Databases;
 using WebUI.Seeders;
 using WebUI.Services;
@@ -7,6 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddApiVersioning(config =>
+{
+    config.DefaultApiVersion = new ApiVersion(1, 0);
+    // use default version when version is not specified
+    config.AssumeDefaultVersionWhenUnspecified = true;
+    // Advertise the API versions supported for the particular endpoint
+    config.ReportApiVersions = true;
+});
+
 builder.Services.AddRouting(options =>
 {
     options.LowercaseUrls = true;
@@ -16,14 +28,17 @@ builder.Services.AddCorsService();
 builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.IsProduction());
 builder.Services.AddApplication();
 
-//builder.Services.AddSwaggerDocument();
 builder.Services.AddOpenApiDocument(configure =>
 {
+    configure.DocumentName = "v1";
+    configure.Version = "v1";
     configure.Title = "Dovecord API";
+    configure.Description = "Backend API for Dovecord";
 });
-//builder.Services.AddSwaggerExtension();
-
 var app = builder.Build();
+
+app.UseOpenApi();
+app.UseSwaggerUi3();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -40,17 +55,14 @@ if (app.Environment.IsDevelopment())
     ChannelSeeder.SeedSampleChannels(app.Services.GetService<DoveDbContext>());
 }
 */
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseCors("AllowAll");
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 
 app.MapFallbackToFile("index.html");;
-
-app.UseOpenApi();
-app.UseSwaggerUi3();
 app.Run();

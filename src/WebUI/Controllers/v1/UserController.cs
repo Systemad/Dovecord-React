@@ -1,10 +1,7 @@
 using Infrastructure.Dtos.User;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WebUI.Domain.Channels.Features;
-using WebUI.Domain.Channels.Features;
 using WebUI.Domain.Users.Features;
-using WebUI.Dtos.Channel;
 using WebUI.Dtos.User;
 
 namespace WebUI.Controllers.v1;

@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  client: 'e6b54fdf-44c9-4ee1-b9a6-ce1c7f01bac9',
+  authority: 'https://danovas.b2clogin.com/danovas.onmicrosoft.com/B2C_1_signupsignin1',
+  authrityDomain: 'https://danovas.b2clogin.com/danovas.onmicrosoft.com/B2C_1_signupsignin1'
 };
 
 /*

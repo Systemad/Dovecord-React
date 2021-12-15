@@ -11,17 +11,7 @@ type ProfileType = {
   id?: string
 };
 
-type AccountInfo = {
-  homeAccountId?: string;
-  environment?: string;
-  tenantId?: string;
-  username?: string;
-  localAccountId?: string;
-  name?: string;
-  idTokenClaims?: object;
-};
-
-var name: string;
+let name: string;
 
 @Component({
   selector: 'app-profile',
@@ -29,16 +19,16 @@ var name: string;
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  profile: any;
-  accountData: any;
 
   constructor(
-    private http: HttpClient,
-    private authService: AuthService
+    private msal: MsalService
   ) { }
 
-  ngOnInit() {
-    this.profile = this.authService.getActiveAccount();
-    console.log(this.profile)
+  ngOnInit(): void{
+    console.log(this.getName());
+  }
+
+  getName() {
+    return this.msal.instance.getActiveAccount();
   }
 }

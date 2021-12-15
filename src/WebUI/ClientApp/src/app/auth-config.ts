@@ -56,3 +56,18 @@
          }
      }
  }
+
+ /**
+ * Add here the endpoints and scopes when obtaining an access token for protected web APIs. For more information, see:
+ * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md
+ */
+export const protectedResources = {
+  weatherApi: {
+      endpoint: "https://localhost:7045/weatherforecast",
+      scopes: ["https://danovas.onmicrosoft.com/89be5e10-1770-45d7-813a-d47242ae2163/API.Access"],
+  },
+}
+
+export const loginRequest = {
+  scopes: [...protectedResources.weatherApi.scopes] // If you would like the admin-user to explicitly consent via "Admin" page, instead of being prompted for admin consent during initial login, remove this scope.
+};

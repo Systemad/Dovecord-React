@@ -24,7 +24,7 @@ import { MsalGuard, MsalInterceptor, MsalBroadcastService, MsalInterceptorConfig
 import { AppRoutingModule } from './app-routing.module'; // InteractionType added to imports
 
 import { environment } from 'src/environments/environment';
-import { msalConfig } from './auth-config';
+import { msalConfig, loginRequest, protectedResources } from './auth-config';
 
 
 export function MSALInstanceFactory(): IPublicClientApplication {
@@ -34,7 +34,8 @@ export function MSALInstanceFactory(): IPublicClientApplication {
 
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
   const protectedResourceMap = new Map<string, Array<string>>();
-  protectedResourceMap.set('https://localhost:7045/weatherforecast', ['accessit']); // expose same api is server client
+
+  protectedResourceMap.set(protectedResources.weatherApi.endpoint, protectedResources.weatherApi.scopes);
 
   return {
     interactionType: InteractionType.Redirect,
@@ -45,6 +46,7 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
 export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   return {
     interactionType: InteractionType.Redirect,
+    authRequest: loginRequest
   };
 }
 
@@ -71,12 +73,21 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   ],
   providers: [
     {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MsalInterceptor,
+      multi: true
+    },
+    {
       provide: MSAL_INSTANCE,
       useFactory: MSALInstanceFactory
     },
     {
       provide: MSAL_GUARD_CONFIG,
       useFactory: MSALGuardConfigFactory
+    },
+    {
+      provide: MSAL_INTERCEPTOR_CONFIG,
+      useFactory: MSALInterceptorConfigFactory
     },
     MsalService,
     MsalGuard,

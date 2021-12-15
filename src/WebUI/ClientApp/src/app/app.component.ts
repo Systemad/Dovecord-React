@@ -40,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   logout() { // Add log out function here
     this.authService.logoutRedirect({
-      postLogoutRedirectUri: 'http://localhost:4200/'
+      postLogoutRedirectUri: 'https://localhost:44418/'
     });
   }
 

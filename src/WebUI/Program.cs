@@ -24,6 +24,7 @@ builder.Services.AddRouting(options =>
     options.LowercaseUrls = true;
     options.LowercaseQueryStrings = true;
 });
+builder.Services.AddAppAuthentication(builder.Configuration);
 builder.Services.AddCorsService();
 builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.IsProduction());
 builder.Services.AddApplication();
@@ -59,6 +60,9 @@ app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseAuthentication(); 
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",

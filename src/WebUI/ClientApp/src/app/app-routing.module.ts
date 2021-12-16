@@ -9,7 +9,7 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ChannelComponent } from './channel/channel-component';
 import { ProfileComponent } from './profile/profile.component';
-
+import { ChatComponent } from './chat/chat.component';
 import { MsalGuard } from '@azure/msal-angular';
 
 const routes: Routes = [
@@ -17,7 +17,8 @@ const routes: Routes = [
   { path: 'counter', component: CounterComponent },
   { path: 'fetch-data', component: FetchDataComponent },
   { path: 'channel', component: ChannelComponent },
-  { path: 'profile', component: ProfileComponent, canActivate: [MsalGuard]}
+  { path: 'profile', component: ProfileComponent, canActivate: [MsalGuard]},
+  { path: 'chat', component: ChatComponent }
 ]
 
 const isIframe = window !== window.parent && !window.opener;

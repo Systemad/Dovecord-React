@@ -12,25 +12,20 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ChannelComponent } from './channel/channel-component';
 import { ProfileComponent } from './profile/profile.component';
-
-// Modules
-import { MatButtonModule } from '@angular/material/button';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatListModule } from '@angular/material/list';
+import { ChatComponent } from './chat/chat.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IPublicClientApplication, PublicClientApplication, InteractionType, BrowserCacheLocation, LogLevel } from '@azure/msal-browser';
 import { MsalGuard, MsalInterceptor, MsalBroadcastService, MsalInterceptorConfiguration, MsalModule, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG, MsalGuardConfiguration, MsalRedirectComponent } from '@azure/msal-angular';
 import { AppRoutingModule } from './app-routing.module'; // InteractionType added to imports
 
-import { environment } from 'src/environments/environment';
 import { msalConfig, loginRequest, protectedResources } from './auth-config';
-
+import { MaterialModule } from './shared/material.module';
+import { ProfilecardComponent } from './profilecard/profilecard.component';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication(msalConfig);
 }
-
 
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
   const protectedResourceMap = new Map<string, Array<string>>();
@@ -58,17 +53,17 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     CounterComponent,
     FetchDataComponent,
     ChannelComponent,
-    ProfileComponent
+    ProfileComponent,
+    ChatComponent,
+    ProfilecardComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
-    MatButtonModule,
-    MatToolbarModule,
-    MatListModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    MaterialModule,
     MsalModule
   ],
   providers: [

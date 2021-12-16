@@ -5,12 +5,14 @@ import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-nav-menu',
-  templateUrl: './nav-menu.component.html',
-  styleUrls: ['./nav-menu.component.css']
+  selector: 'app-profilecard',
+  templateUrl: './profilecard.component.html',
+  styleUrls: ['./profilecard.component.css']
 })
-export class NavMenuComponent implements OnInit, OnDestroy {
-  title = "Dovecord";
+export class ProfilecardComponent implements OnInit {
+  isExpanded = false;
+
+  title = 'Dovecord';
   isIframe = false;
   loginDisplay = false;
   private readonly _destroying$ = new Subject<void>();
@@ -36,6 +38,12 @@ export class NavMenuComponent implements OnInit, OnDestroy {
     } else {
       this.authService.loginRedirect();
     }
+  }
+
+  logout() { // Add log out function here
+    this.authService.logoutRedirect({
+      postLogoutRedirectUri: 'https://localhost:44418/'
+    });
   }
 
   setLoginDisplay() {

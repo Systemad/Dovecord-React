@@ -1,0 +1,6 @@
+<button mat-button [matMenuTriggerFor]="menu">Profile</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>Profile</button>
+  <button mat-menu-item >Settings</button>
+  <button mat-menu-item *ngIf="loginDisplay" (click)="logout()">Logout</button>
+</mat-menu>

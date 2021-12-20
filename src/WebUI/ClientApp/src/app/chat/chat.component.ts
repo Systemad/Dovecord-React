@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { WeatherForecastClient, WeatherForecast } from '../web-api-client';
+import { ChannelClient, ChannelDto } from '../web-api-client';
 
 @Component({
   selector: 'app-chat',
@@ -7,9 +10,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChatComponent implements OnInit {
 
-  constructor() { }
+  public forecasts: WeatherForecast[] = [];
+  selectedChannel: WeatherForecast | undefined;
 
-  ngOnInit(): void {
+  constructor(private service: WeatherForecastClient) {
+    this.service.get().subscribe(result => {
+      this.forecasts = result;
+      console.log(this.forecasts);
+    }, error => console.error(error));
   }
 
+  ngOnInit() {
+  }
+
+  selectChannel(weatherForecast: WeatherForecast) { this.selectChannel = weatherForecast.toJSON }
 }

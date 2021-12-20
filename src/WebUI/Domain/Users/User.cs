@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using WebUI.Domain.Messages;
 
 namespace WebUI.Domain.Users;
@@ -8,5 +10,8 @@ public class User
     public Guid Id { get; set; }
     public string? Name { get; set; }
     public bool? IsOnline { get; set; }
-    public virtual ICollection<ChannelMessage> SentMessages { get; set; }
+    
+    [JsonIgnore]
+    [IgnoreDataMember]
+    public ICollection<ChannelMessage> SentMessages { get; set; }
 }

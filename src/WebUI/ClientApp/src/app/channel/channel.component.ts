@@ -1,10 +1,13 @@
 import { Component, TemplateRef } from '@angular/core';
 import { ChannelClient, ChannelDto } from '../web-api-client';
+
 @Component({
-  selector: 'app-channel-component',
-  templateUrl: './channel-component.html'
+  selector: 'app-channel',
+  templateUrl: './channel.component.html',
+  styleUrls: ['./channel.component.css']
 })
 export class ChannelComponent {
+
   public channels: ChannelDto[] = [];
 
   constructor(client: ChannelClient){
@@ -13,4 +16,6 @@ export class ChannelComponent {
       console.log(this.channels);
     }, error => console.log(error));
   }
+
 }
+

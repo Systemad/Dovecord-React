@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
-using WebUI.Databases;
-using WebUI.Seeders;
-using WebUI.Services;
+using WebUI.Extensions.Host;
+using WebUI.Extensions.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

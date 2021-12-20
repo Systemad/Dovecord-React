@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebUI.Services;
+using WebUI.Extensions.Host;
+using WebUI.Extensions.Services;
 
 namespace FunctionalTests;
 

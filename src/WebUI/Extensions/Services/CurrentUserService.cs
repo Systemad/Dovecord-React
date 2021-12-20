@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace WebUI.Services;
+namespace WebUI.Extensions.Services;
 public interface ICurrentUserService
 {
     string? UserId { get; }

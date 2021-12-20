@@ -27,6 +27,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 const materialModules = [
   CdkTreeModule,
@@ -56,7 +57,8 @@ const materialModules = [
   MatTreeModule,
   OverlayModule,
   PortalModule,
-  MatDatepickerModule
+  MatDatepickerModule,
+  MatGridListModule
 ];
 
 @NgModule({

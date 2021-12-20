@@ -2,7 +2,7 @@
 using WebUI.Domain.Channels;
 using WebUI.Domain.Messages;
 using WebUI.Domain.Users;
-using WebUI.Services;
+using WebUI.Extensions.Services;
 
 namespace WebUI.Databases;
 

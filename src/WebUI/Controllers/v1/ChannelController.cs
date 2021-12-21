@@ -1,7 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Domain.Channels.Features;
-using WebUI.Domain.Channels.Features;
 using WebUI.Dtos.Channel;
 
 namespace WebUI.Controllers.v1;
@@ -23,7 +22,7 @@ public class ChannelController : ControllerBase
         _mediator = mediator;
     }   
 
-    [ProducesResponseType(typeof(IEnumerable<ChannelDto>), 201)]
+    [ProducesResponseType(typeof(IEnumerable<ChannelDto>), 200)]
     [Produces("application/json")]
     [HttpGet(Name = "GetChannels")]
     public async Task<IActionResult> GetChannels()

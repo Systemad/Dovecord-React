@@ -1,4 +1,4 @@
-<mat-grid-list cols="4" rowHeight="100px">
+<mat-grid-list cols="4" rowHeight="108px" width="100%">
   <mat-grid-tile rowspan="6" colspan="1" style="background: lightpink;">
 
     <!-- TODO:
@@ -11,18 +11,17 @@
     https://www.nexmo.com/legacy-blog/2018/03/28/build-chat-app-angular-material-stitch-javascript-dr
     -->
 
-    <mat-selection-list [(ngModel)]="selectedChannel" [multiple]="false">
-      <mat-list-option *ngFor="let channel of forecasts" [value]="channel" >
-        {{ channel.temperatureC }}
+    <mat-selection-list [multiple]="false">
+      <mat-list-option *ngFor="let channel of channels" [value]="channel" (click)="selectChannel(channel)">
+        {{ channel.name }}
       </mat-list-option>
     </mat-selection-list>
-
 
   </mat-grid-tile>
 
   <mat-grid-tile  rowspan="1" colspan="2" style="background: lightblue">
     <div class="mat-grid-tile-content">
-       {{ selectedChannel?.temperatureC }}
+       {{ selectedChannel?.name }}
     </div>
   </mat-grid-tile>
 

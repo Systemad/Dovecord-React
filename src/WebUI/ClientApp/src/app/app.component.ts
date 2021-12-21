@@ -13,7 +13,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor() { }
 
   ngOnInit() {
-    this.isIframe = window !== window.parent && !window.opener;
+    //this.isIframe = window !== window.parent && !window.opener;
 
   }
 

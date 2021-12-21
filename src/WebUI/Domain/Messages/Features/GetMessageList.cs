@@ -27,21 +27,8 @@ public static class GetMessageList
         public async Task<List<ChannelMessageDto>> Handle(MessageListQuery request, CancellationToken cancellationToken)
         {
             var messages = await _context.ChannelMessages
-                .Where(m => m.ChannelId == request.id)
-                .ToListAsync(cancellationToken);
-
-            // TODO TODO
-            var chcch = await _context.Channels
-                .Where(i => i.Id == request.id)
-                .Select(x => x.ChannelMessages)
-                .FirstOrDefaultAsync(cancellationToken: cancellationToken);
-            
-            var collection = new List<ChannelMessage>().AsQueryable();
-
-            var dtoCollection = collection.ProjectTo<ChannelDto>(_mapper.ConfigurationProvider);
-            
-            // TODO: Check if correct
-            return _mapper.Map<List<ChannelMessageDto>>(dtoCollection);
+                .Where(m => m.ChannelId == request.id).ToListAsync(cancellationToken: cancellationToken);
+            return _mapper.Map<List<ChannelMessageDto>>(messages);
         }
     }
 }

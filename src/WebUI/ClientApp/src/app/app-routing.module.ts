@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'fetch-data', component: FetchDataComponent, canActivate: [MsalGuard] },
   { path: 'channel', component: ChannelComponent, canActivate: [MsalGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [MsalGuard] },
-  { path: 'chat', component: ChatComponent, canActivate: [MsalGuard] }
+  { path: 'chatt', component: ChatComponent, canActivate: [MsalGuard] }
 ]
 
 const isIframe = window !== window.parent && !window.opener;

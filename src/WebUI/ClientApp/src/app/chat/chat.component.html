@@ -30,7 +30,26 @@
   </mat-grid-tile>
 
   <mat-grid-tile rowspan="5" colspan="2" style="background: rgb(221, 189, 241)">
-    <div class="mat-grid-tile-content"> Chat and messagebox component </div>
+    <!--- <div class="mat-grid-tile-content"> Chat and messagebox component </div> -->
+
+    <div>
+      <span *ngFor="let message of messages">
+        {{ message.content }}
+      </span>
+    </div>
+
+
+    <form class="example-form">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Message</mat-label>
+        <input matInput maxlength="256" placeholder="Type your message" [(ngModel)]="inputField" >
+      </mat-form-field>
+    </form>
+
+    <button mat-button (click)="sendMessage()">
+      Send
+    </button>
+
   </mat-grid-tile>
 
 </mat-grid-list>

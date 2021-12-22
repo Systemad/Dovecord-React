@@ -5,10 +5,18 @@ namespace WebUI.Extensions.Host;
 
 public static class InfrastructureExtension
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration, bool isProduction)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
     {
 
-        if (isProduction)
+        if (env.IsDevelopment())
+        {
+            services.AddDbContext<DoveDbContext>(options =>
+            {
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                options.UseInMemoryDatabase($"DovecordTesting");
+            });
+        }
+        else
         {
             services.AddDbContext<DoveDbContext>(options =>
             {
@@ -17,15 +25,6 @@ public static class InfrastructureExtension
                     b => b.MigrationsAssembly(typeof(DoveDbContext).Assembly.FullName));
                 options.UseSnakeCaseNamingConvention(); 
             });
-        }
-        else
-        {
-            services.AddDbContext<DoveDbContext>(options =>
-            {
-                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-                options.UseInMemoryDatabase($"DovecordTesting");
-            });
-            
         }
         return services;
     }

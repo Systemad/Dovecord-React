@@ -6,14 +6,16 @@ import { ChannelClient, ChannelDto, MessageClient, MessageManipulationDto } from
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css']
+  styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit {
 
-  public channels: ChannelDto[] = [];
+  channels: ChannelDto[] = [];
   messages: MessageManipulationDto[] = [];
 
   selectedChannel: ChannelDto | undefined;
+  messageToSend: MessageManipulationDto;
+  inputField: string; // CONTTOL
 
   constructor(private service: ChannelClient, private messageService: MessageClient) {
     this.service.getChannels().subscribe(result => {
@@ -25,7 +27,7 @@ export class ChatComponent implements OnInit {
   ngOnInit() {
   }
 
-  selectChannel(channel: ChannelDto)
+  selectChannel(channel: ChannelDto) : void
   {
     //console.log()
     this.selectedChannel = channel;
@@ -40,4 +42,18 @@ export class ChatComponent implements OnInit {
       console.log(result);
     }, error => console.error(error));
   }
+
+  sendMessage(){
+
+
+    console.log(this.inputField);
+    this.messageToSend.channelId = "52f9764c-ab73-4b1a-8ac9-c6d6637d8e78"
+    this.messageToSend.content = "hello"
+
+    this.messageService.saveMessage(this.messageToSend);
+
+    // RESET Input field
+    this.inputField == "";
+  }
+
 }

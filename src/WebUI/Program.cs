@@ -1,70 +1,39 @@
-using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
+using Serilog;
 using WebUI.Extensions.Host;
-using WebUI.Extensions.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace WebUI;
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-
-builder.Services.AddApiVersioning(config =>
+public class Program
 {
-    config.DefaultApiVersion = new ApiVersion(1, 0);
-    // use default version when version is not specified
-    config.AssumeDefaultVersionWhenUnspecified = true;
-    // Advertise the API versions supported for the particular endpoint
-    config.ReportApiVersions = true;
-});
-
-builder.Services.AddRouting(options =>
-{
-    options.LowercaseUrls = true;
-    options.LowercaseQueryStrings = true;
-});
-builder.Services.AddAppAuthentication(builder.Configuration);
-builder.Services.AddCorsService();
-builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.IsProduction());
-builder.Services.AddApplication();
-
-builder.Services.AddOpenApiDocument(configure =>
-{
-    configure.DocumentName = "v1";
-    configure.Version = "v1";
-    configure.Title = "Dovecord API";
-    configure.Description = "Backend API for Dovecord";
-});
-var app = builder.Build();
-
-app.UseOpenApi();
-app.UseSwaggerUi3();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-/*
-if (app.Environment.IsDevelopment())
-{
-    using var context = app.Services.GetService<DoveDbContext>();
-    context.Database.EnsureCreated();
+    public async static Task Main(string[] args)
+    {
+        var host = CreateHostBuilder(args).Build();
+        host.AddLoggingConfiguration();
+        try
+        {
+            Log.Information("Starting application");
+            await host.RunAsync();
+        }
+        catch (Exception e)
+        {
+            Log.Error(e, "The application failed to start correctly");
+            throw;
+        }
+        finally
+        {
+            Log.Information("Shutting down application");
+            Log.CloseAndFlush();
+        }
+    }
     
-    ChannelSeeder.SeedSampleChannels(app.Services.GetService<DoveDbContext>());
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .UseSerilog()
+            //.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+                    //.UseContentRoot(Directory.GetCurrentDirectory());
+            });
 }
-*/
-app.UseCors("AllowAll");
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
-
-app.UseAuthentication(); 
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
-
-app.MapFallbackToFile("index.html");;
-app.Run();

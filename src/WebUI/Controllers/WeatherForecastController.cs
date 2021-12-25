@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
+using WebUI.Extensions.Services;
 
 namespace WebUI.Controllers;
 
@@ -16,15 +17,17 @@ public class WeatherForecastController : ControllerBase
     };
 
     private readonly ILogger<WeatherForecastController> _logger;
-
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    private readonly ICurrentUserService _currentUserService;
+    public WeatherForecastController(ILogger<WeatherForecastController> logger, ICurrentUserService currentUserService)
     {
         _logger = logger;
+        _currentUserService = currentUserService;
     }
 
     [HttpGet]
     public IEnumerable<WeatherForecast> Get()
     {
+        var user = _currentUserService.UserId;
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateTime.Now.AddDays(index),

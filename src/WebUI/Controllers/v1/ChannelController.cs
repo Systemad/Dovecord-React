@@ -1,14 +1,15 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 using WebUI.Domain.Channels.Features;
 using WebUI.Dtos.Channel;
 
 namespace WebUI.Controllers.v1;
 
-// TODO:
-//[Authorize]
+[Authorize]
+[RequiredScope("API.Access")]
 [ApiController]
-//[RequiredScope("API.Access")]
 [Route("api/channels")]
 [ApiVersion("1.0")]
 public class ChannelController : ControllerBase

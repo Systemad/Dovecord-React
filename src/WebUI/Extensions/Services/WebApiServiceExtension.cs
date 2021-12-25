@@ -9,7 +9,7 @@ public static class WebApiServiceExtension
     {
         services.AddSingleton<ICurrentUserService, CurrentUserService>();
         services.AddHttpContextAccessor();
-        services.AddMediatR(Assembly.GetExecutingAssembly());
+        services.AddMediatR(typeof(Startup));
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         return services;
     } 

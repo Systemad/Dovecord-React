@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { WeatherForecastClient, WeatherForecast } from '../web-api-client';
-import { ChannelClient, ChannelDto, MessageClient, MessageManipulationDto } from '../web-api-client';
+import { ChannelClient, ChannelDto, MessageClient, MessageManipulationDto, ChannelMessageDto } from '../web-api-client';
 
 @Component({
   selector: 'app-chat',
@@ -11,10 +10,10 @@ import { ChannelClient, ChannelDto, MessageClient, MessageManipulationDto } from
 export class ChatComponent implements OnInit {
 
   channels: ChannelDto[] = [];
-  messages: MessageManipulationDto[] = [];
+  messages: ChannelMessageDto[] = [];
 
   selectedChannel: ChannelDto | undefined;
-  messageToSend: MessageManipulationDto;
+  messageToSend: MessageManipulationDto | undefined;
   inputField: string; // CONTTOL
 
   constructor(private service: ChannelClient, private messageService: MessageClient) {
@@ -45,12 +44,20 @@ export class ChatComponent implements OnInit {
 
   sendMessage(){
 
+    let itme = MessageManipulationDto.fromJS({
+      content: "ahahah",
+      channelId: "bd80695d-645b-cf0f-a077-3374e30e4ec9"
+    });
 
-    console.log(this.inputField);
-    this.messageToSend.channelId = "52f9764c-ab73-4b1a-8ac9-c6d6637d8e78"
-    this.messageToSend.content = "hello"
+    //console.log(this.inputField);
+    //this.messageToSend!.channelId = "9efa93cb-13e2-91b5-8e1d-a5dae450377e";
+    //this.messageToSend.content = "hello"
 
-    this.messageService.saveMessage(this.messageToSend);
+    this.messageService.saveMessage(itme).subscribe(
+      result => {
+      this.messages.push(result);
+      console.log(result);
+    }, error => console.log(error));
 
     // RESET Input field
     this.inputField == "";

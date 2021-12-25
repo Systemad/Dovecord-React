@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using WebUI.Databases;
 using WebUI.Extensions.Host;
 using WebUI.Extensions.Services;
+using WebUI.Seeders;
 
 namespace WebUI;
 
@@ -55,6 +57,10 @@ public class Startup
         if (_env.IsDevelopment())
         {
             // Add channel seed
+            using var context = app.ApplicationServices.GetService<DoveDbContext>();
+            context.Database.EnsureCreated();
+            
+            ChannelSeeder.SeedSampleChannels(app.ApplicationServices.GetService<DoveDbContext>());
         }
         else
         {

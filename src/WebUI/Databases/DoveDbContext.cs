@@ -20,6 +20,7 @@ public class DoveDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        /*
         modelBuilder.Entity<ChannelMessage>(entity =>
         {
             entity.HasOne(d => d.Channel)
@@ -30,6 +31,7 @@ public class DoveDbContext : DbContext
                 .WithMany(m => m.SentMessages)
                 .HasForeignKey(k => k.UserId);
         });
+        */
     }
     
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
@@ -51,7 +53,7 @@ public class DoveDbContext : DbContext
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedBy = Guid.Parse(_currentUserService?.UserId);;
+                    entry.Entity.CreatedBy = Guid.Parse(_currentUserService?.UserId);
                     entry.Entity.CreatedOn = now;
                     entry.Entity.LastModifiedOn = now;
                     entry.Entity.IsEdit = false;

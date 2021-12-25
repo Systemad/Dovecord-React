@@ -1,4 +1,5 @@
 using System.Reflection;
+using Autofac.Extensions.DependencyInjection;
 using Serilog;
 using WebUI.Extensions.Host;
 
@@ -30,7 +31,7 @@ public class Program
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .UseSerilog()
-            //.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();

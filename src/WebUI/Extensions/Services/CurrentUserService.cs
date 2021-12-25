@@ -15,5 +15,5 @@ public class CurrentUserService : ICurrentUserService
     }
 
     //public static string GetUserId(this HttpContext httpContext) => httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-    public string? UserId => _httpContext.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    public string? UserId => _httpContext.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 }

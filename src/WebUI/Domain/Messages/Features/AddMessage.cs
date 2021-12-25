@@ -24,7 +24,9 @@ public static class AddMessage
         
         public async Task<ChannelMessageDto> Handle(AddMessageCommand request, CancellationToken cancellationToken)
         {
+            // fix user id
             var message = _mapper.Map<ChannelMessage>(request.MessageToAdd);
+            //message.UserId = message.CreatedBy;
             _context.ChannelMessages.Add(message);
             await _context.SaveChangesAsync(cancellationToken);
 

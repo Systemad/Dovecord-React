@@ -2,8 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { FormsModule } from '@angular/forms';
-import { WeatherForecastClient } from './web-api-client';
-import { ChannelClient } from './web-api-client';
+import { ChannelClient, MessageClient, UserClient, WeatherForecastClient } from './web-api-client';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -13,6 +12,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ChannelComponent } from './channel/channel.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ChatComponent } from './chat/chat.component';
+import { ChattestComponent } from './chattest/chattest.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IPublicClientApplication, PublicClientApplication, InteractionType, BrowserCacheLocation, LogLevel } from '@azure/msal-browser';
@@ -31,6 +31,9 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
   const protectedResourceMap = new Map<string, Array<string>>();
 
   protectedResourceMap.set(protectedResources.weatherApi.endpoint, protectedResources.weatherApi.scopes);
+  protectedResourceMap.set(protectedResources.channelApi.endpoint, protectedResources.channelApi.scopes);
+  protectedResourceMap.set(protectedResources.messageApi.endpoint, protectedResources.messageApi.scopes);
+  protectedResourceMap.set(protectedResources.userApi.endpoint, protectedResources.userApi.scopes);
 
   return {
     interactionType: InteractionType.Redirect,
@@ -55,7 +58,8 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     ChannelComponent,
     ProfileComponent,
     ChatComponent,
-    ProfilecardComponent
+    ProfilecardComponent,
+    ChattestComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -89,6 +93,8 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     MsalBroadcastService,
     WeatherForecastClient,
     ChannelClient,
+    MessageClient,
+    UserClient
   ],
   bootstrap: [AppComponent, MsalRedirectComponent]
 })

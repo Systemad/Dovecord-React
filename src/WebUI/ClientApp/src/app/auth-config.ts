@@ -66,8 +66,20 @@ export const protectedResources = {
       endpoint: "https://localhost:7045/weatherforecast",
       scopes: ["https://danovas.onmicrosoft.com/89be5e10-1770-45d7-813a-d47242ae2163/API.Access"],
   },
+  channelApi: {
+    endpoint: "https://localhost:7045/api/channels",
+    scopes: ["https://danovas.onmicrosoft.com/89be5e10-1770-45d7-813a-d47242ae2163/API.Access"],
+  },
+  userApi: {
+    endpoint: "https://localhost:7045/api/messages",
+    scopes: ["https://danovas.onmicrosoft.com/89be5e10-1770-45d7-813a-d47242ae2163/API.Access"],
+  },
+  messageApi: {
+    endpoint: "https://localhost:7045/api/users",
+    scopes: ["https://danovas.onmicrosoft.com/89be5e10-1770-45d7-813a-d47242ae2163/API.Access"],
+  },
 }
 
 export const loginRequest = {
-  scopes: [...protectedResources.weatherApi.scopes] // If you would like the admin-user to explicitly consent via "Admin" page, instead of being prompted for admin consent during initial login, remove this scope.
+  scopes: [] // If you would like the admin-user to explicitly consent via "Admin" page, instead of being prompted for admin consent during initial login, remove this scope.
 };

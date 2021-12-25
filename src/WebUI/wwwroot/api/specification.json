@@ -1,15 +1,11 @@
 {
-  "x-generator": "NSwag v13.15.3.0 (NJsonSchema v10.6.4.0 (Newtonsoft.Json v11.0.0.0))",
+  "x-generator": "NSwag v13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v11.0.0.0))",
   "openapi": "3.0.0",
   "info": {
     "title": "Dovecord API",
-    "version": "1.0.0"
+    "description": "Backend API for Dovecord",
+    "version": "v1"
   },
-  "servers": [
-    {
-      "url": "https://localhost:7045"
-    }
-  ],
   "paths": {
     "/weatherforecast": {
       "get": {
@@ -41,7 +37,7 @@
         ],
         "operationId": "Channel_GetChannels",
         "responses": {
-          "201": {
+          "200": {
             "description": "",
             "content": {
               "application/json": {

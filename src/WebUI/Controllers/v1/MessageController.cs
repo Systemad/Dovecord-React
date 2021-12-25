@@ -1,27 +1,31 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 using WebUI.Domain.Messages.Features;
 using WebUI.Dtos.Message;
+using WebUI.Extensions.Services;
 
 // TODO: Refactor controller implementation i.e add error codes etc
 namespace WebUI.Controllers.v1;
 
-//[Authorize]
+[Authorize]
+[RequiredScope("API.Access")]
 [ApiController]
-//[RequiredScope("API.Access")]
 [Route("api/messages")]
 [ApiVersion("1.0")]
 public class MessageController : ControllerBase
 {
     private readonly ILogger<MessageController> _logger;
     private readonly IMediator _mediator;
-
+    private readonly ICurrentUserService _currentUserService;
     static readonly string[] scopeRequiredByApi = new[] { "API.Access" };
      
-    public MessageController(ILogger<MessageController> logger, IMediator mediator)
+    public MessageController(ILogger<MessageController> logger, IMediator mediator, ICurrentUserService currentUserService)
     {
         _logger = logger;
         _mediator = mediator;
+        _currentUserService = currentUserService;
     }
 
     [ProducesResponseType(typeof(ChannelMessageDto), 201)]
@@ -30,6 +34,7 @@ public class MessageController : ControllerBase
     [HttpPost(Name = "AddMessage")]
     public async Task<IActionResult> SaveMessage([FromBody] MessageManipulationDto message)
     {
+        var userids = _currentUserService.UserId;
         var command = new AddMessage.AddMessageCommand(message);
         var commandResponse = await _mediator.Send(command);
         return Ok(commandResponse);

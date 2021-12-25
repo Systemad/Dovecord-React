@@ -8,13 +8,15 @@ import { ProfileComponent } from './profile/profile.component';
 import { ChatComponent } from './chat/chat.component';
 import { MsalGuard } from '@azure/msal-angular';
 
+import { ChattestComponent } from './chattest/chattest.component';
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'counter', component: CounterComponent,  canActivate: [MsalGuard] },
   { path: 'fetch-data', component: FetchDataComponent, canActivate: [MsalGuard] },
   { path: 'channel', component: ChannelComponent, canActivate: [MsalGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [MsalGuard] },
-  { path: 'chatt', component: ChatComponent, canActivate: [MsalGuard] }
+  { path: 'chat', component: ChatComponent, canActivate: [MsalGuard] },
+  { path: 'chattest', component: ChattestComponent, canActivate: [MsalGuard] }
 ]
 
 const isIframe = window !== window.parent && !window.opener;

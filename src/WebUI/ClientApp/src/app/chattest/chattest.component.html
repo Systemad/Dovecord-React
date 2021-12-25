@@ -1,4 +1,5 @@
-<mat-grid-list cols="4" rowHeight="3:1">
+<div>
+  <mat-grid-list cols="6" rowHeight="7.04em">
   <mat-grid-tile rowspan="6" colspan="1" style="background: lightpink;">
 
     <!-- TODO:
@@ -14,18 +15,22 @@
 
   </mat-grid-tile>
 
-  <mat-grid-tile  rowspan="1" colspan="2" style="background: lightblue">
+  <mat-grid-tile rowspan="1" colspan="4" style="background: lightblue">
 
   </mat-grid-tile>
 
   <mat-grid-tile rowspan="6" colspan="1" style="background: lightgreen">
-    <div class="mat-grid-tile-content"> Users list component </div>
+    <mat-list role="list">
+      <mat-list-item role="listitem">Item 1</mat-list-item>
+      <mat-list-item role="listitem">Item 2</mat-list-item>
+      <mat-list-item role="listitem">Item 3</mat-list-item>
+    </mat-list>
   </mat-grid-tile>
 
-  <mat-grid-tile rowspan="5" colspan="2" style="background: rgb(221, 189, 241)">
+  <mat-grid-tile rowspan="5" colspan="4" style="background: rgb(221, 189, 241)">
     <!--- <div class="mat-grid-tile-content"> Chat and messagebox component </div> -->
 
   </mat-grid-tile>
 
-</mat-grid-list>
-
+  </mat-grid-list>
+</div>

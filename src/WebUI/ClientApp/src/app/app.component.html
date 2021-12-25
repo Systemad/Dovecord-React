@@ -1,7 +1,5 @@
-<body>
+<body class="wrapper">
   <app-nav-menu></app-nav-menu>
-  <div class="container">
-    <!--This is to avoid reload during acquireTokenSilent() because of hidden iframe -->
-    <router-outlet></router-outlet>
-  </div>
+  <!--This is to avoid reload during acquireTokenSilent() because of hidden iframe -->
+  <router-outlet></router-outlet>
 </body>

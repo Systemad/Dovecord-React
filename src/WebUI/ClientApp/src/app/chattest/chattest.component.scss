@@ -4,3 +4,70 @@
   padding-bottom: 10px;
   padding-top: 10px;
 }
+
+.listing {
+  position: absolute;
+  top: 0;
+  left: 5px;
+  width: 95%;
+}
+
+.message-listing {
+  position: absolute;
+  top: 0;
+  left: 0px;
+  width: 100%;
+}
+
+.message-box {
+  min-height: 75px;
+  max-height: 120px;
+  border-radius: 10px;
+}
+
+.text-message-color {
+  color: var(--tui-text-02-night);
+}
+.chat-message:hover {
+  background-color: rgba(0, 0, 0, 0.363);
+}
+
+.input-box {
+  position: absolute;
+  bottom: 0;
+  left: 0px;
+  width: 100%;
+}
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+
+.mat-grid-tile {
+  border-radius: 10px;
+}
+
+.card-background {
+  background: var(--tui-base-08);
+}
+
+.username-color {
+  color: var(--tui-text-01-night);
+}
+
+.username-card:hover {
+  background-color: rgba(0, 0, 0, 0.363);
+  border-radius: 10px;
+}
+
+
+.list-color:hover {
+  background-color: rgba(0, 0, 0, 0.363);
+  border-radius: 10px;
+}

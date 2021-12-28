@@ -1,0 +1,28 @@
+.listing {
+  position: absolute;
+  top: 0;
+  left: 5px;
+  width: 95%;
+}
+
+.username-color {
+  color: #FFFFFF;
+}
+
+.username-card:hover {
+  background-color: rgba(0, 0, 0, 0.363);
+  border-radius: 10px;
+}
+
+
+.list-color:hover {
+  background-color: rgba(0, 0, 0, 0.363);
+  border-radius: 10px;
+}
+
+.listing {
+  position: absolute;
+  top: 0;
+  left: 5px;
+  width: 95%;
+}

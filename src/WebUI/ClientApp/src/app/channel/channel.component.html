@@ -1,20 +1,7 @@
-<h1 id="tableLabel">Channels here</h1>
-
-<p>This component demonstrates fetching data from the server.</p>
-
-<p *ngIf="!channels"><em>Loading...</em></p>
-
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="channels">
-  <thead>
-    <tr>
-      <th>Channel Id</th>
-      <th>Channel Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let channel of channels">
-      <td>{{ channel.id }}</td>
-      <td>{{ channel.name }}</td>
-    </tr>
-  </tbody>
-</table>
+<div class="listing">
+  <mat-selection-list #shoes [multiple]="false">
+      <mat-list-option *ngFor="let shoe of typesOfShoes" (click)="selectChannel(shoe)" [value]="shoe" class="username-color list-color">
+        {{shoe}}
+      </mat-list-option>
+  </mat-selection-list>
+</div>

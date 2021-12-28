@@ -21,6 +21,7 @@ import { AppRoutingModule } from './app-routing.module'; // InteractionType adde
 
 import { msalConfig, loginRequest, protectedResources } from './auth-config';
 import { MaterialModule } from './shared/material.module';
+import { TaigaModule } from './shared/taiga.module';
 import { ProfilecardComponent } from './profilecard/profilecard.component';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
@@ -68,8 +69,9 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     BrowserAnimationsModule,
     AppRoutingModule,
     MaterialModule,
-    MsalModule
-  ],
+    MsalModule,
+    TaigaModule
+],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

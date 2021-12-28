@@ -5,5 +5,7 @@ a.title {
 .wrapper {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 92vh;
+  background-color: var(--tui-base-09);
+  padding-top: 10px;
 }

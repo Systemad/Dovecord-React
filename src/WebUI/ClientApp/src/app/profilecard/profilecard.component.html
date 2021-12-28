@@ -1,6 +1,28 @@
-<button mat-button [matMenuTriggerFor]="menu">Profile</button>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item>Profile</button>
-  <button mat-menu-item >Settings</button>
-  <button mat-menu-item *ngIf="loginDisplay" (click)="logout()">Logout</button>
-</mat-menu>
+<tui-hosted-dropdown
+    tuiDropdownAlign="left"
+    [content]="dropdown"
+    [(open)]="open">
+    <button tuiButton type="button" appearance="flat" [iconRight]="icon">
+    <!-- Profile icon -->
+    </button>
+</tui-hosted-dropdown>
+
+<ng-template #icon>
+    <tui-svg
+        src="tuiIconChevronDown"
+        class="icon"
+        [class.icon_rotated]="open">
+    </tui-svg>
+</ng-template>
+
+<ng-template #dropdown>
+    <tui-data-list>
+      <!-- Add openProfile(), openX() function to each button -->
+        <button tuiOption (click)="onClick()">
+            Profile
+        </button>
+        <button tuiOption (click)="onClick()">
+            Settings
+        </button>
+    </tui-data-list>
+</ng-template>

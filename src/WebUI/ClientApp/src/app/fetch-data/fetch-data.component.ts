@@ -4,7 +4,8 @@ import { WeatherForecastClient, WeatherForecast } from '../web-api-client';
 import { ChannelClient, ChannelDto } from '../web-api-client';
 @Component({
   selector: 'app-fetch-data',
-  templateUrl: './fetch-data.component.html'
+  templateUrl: './fetch-data.component.html',
+  styleUrls: ['./fetch-data-component.less']
 })
 export class FetchDataComponent {
   public forecasts: WeatherForecast[] = [];

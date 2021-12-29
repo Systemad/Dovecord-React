@@ -7,5 +7,5 @@ a.title {
   flex-direction: column;
   height: 92vh;
   background-color: var(--tui-base-09);
-  padding-top: 10px;
+  padding: 10px;
 }

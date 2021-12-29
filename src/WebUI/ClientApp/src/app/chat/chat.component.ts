@@ -14,7 +14,6 @@ export class ChatComponent implements OnInit {
 
   selectedChannel: ChannelDto | undefined;
   messageToSend: MessageManipulationDto | undefined;
-  inputField: string; // CONTTOL
 
   constructor(private service: ChannelClient, private messageService: MessageClient) {
     this.service.getChannels().subscribe(result => {
@@ -26,11 +25,10 @@ export class ChatComponent implements OnInit {
   ngOnInit() {
   }
 
-  selectChannel(channel: ChannelDto) : void
-  {
-    //console.log()
+
+  selectChannel(channel: ChannelDto) {
+    console.log(channel);
     this.selectedChannel = channel;
-    //console.log(this.selectedChannel.temperatureC);
     this.getChannelMessages(channel);
   }
 
@@ -42,25 +40,17 @@ export class ChatComponent implements OnInit {
     }, error => console.error(error));
   }
 
-  sendMessage(){
-
-    let itme = MessageManipulationDto.fromJS({
-      content: "ahahah",
-      channelId: "bd80695d-645b-cf0f-a077-3374e30e4ec9"
+  sendMessage(message: string){
+    let message2send = MessageManipulationDto.fromJS({
+      content: message,
+      channelId: this.selectedChannel?.id
     });
 
-    //console.log(this.inputField);
-    //this.messageToSend!.channelId = "9efa93cb-13e2-91b5-8e1d-a5dae450377e";
-    //this.messageToSend.content = "hello"
 
-    this.messageService.saveMessage(itme).subscribe(
+    this.messageService.saveMessage(message2send).subscribe(
       result => {
-      this.messages.push(result);
-      console.log(result);
+        this.messages.push(result);
+        console.log(result);
     }, error => console.log(error));
-
-    // RESET Input field
-    this.inputField == "";
   }
-
 }

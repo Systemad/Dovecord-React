@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {TuiInputModule} from '@taiga-ui/kit';
+
+import { CommonModule } from '@angular/common';
+import {TuiAvatarModule, TuiTextAreaModule } from '@taiga-ui/kit';
 import {
   TuiButtonModule,
   TuiCalendarModule,
@@ -43,7 +47,14 @@ const taigaModules = [
     TuiSvgModule,
     TuiHostedDropdownModule,
     TuiDataListModule,
-    TuiButtonModule
+    TuiButtonModule,
+    TuiAvatarModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TuiInputModule,
+    TuiModeModule,
+    TuiTextAreaModule,
+    TuiPrimitiveTextfieldModule
 
 ]
 @NgModule({

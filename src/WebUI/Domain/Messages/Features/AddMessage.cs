@@ -26,7 +26,6 @@ public static class AddMessage
         {
             // fix user id
             var message = _mapper.Map<ChannelMessage>(request.MessageToAdd);
-            //message.UserId = message.CreatedBy;
             _context.ChannelMessages.Add(message);
             await _context.SaveChangesAsync(cancellationToken);
 

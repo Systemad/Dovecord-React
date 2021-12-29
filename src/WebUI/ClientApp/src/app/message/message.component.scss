@@ -14,9 +14,9 @@
 
 .message-listing {
   position: absolute;
-  top: 0;
-  left: 0px;
-  width: 100%;
+  top: 10px;
+  left: 10px;
+  width: 97%;
 }
 
 .message-box {
@@ -34,10 +34,19 @@
 
 .input-box {
   position: absolute;
-  bottom: 0;
-  left: 0px;
-  width: 100%;
+  bottom: 10px;
+  left: 10px;
+  padding-right: 10px;
+  width: 92%;
 }
+
+.send-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  padding-left: 10px;
+}
+
 .example-form {
   min-width: 150px;
   max-width: 500px;
@@ -70,4 +79,8 @@
 .list-color:hover {
   background-color: rgba(0, 0, 0, 0.363);
   border-radius: 10px;
+}
+
+.field-small {
+  min-height: 3.4rem;
 }

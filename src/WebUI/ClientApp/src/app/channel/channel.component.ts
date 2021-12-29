@@ -4,27 +4,27 @@ import { ChannelClient, ChannelDto } from '../web-api-client';
 @Component({
   selector: 'app-channel',
   templateUrl: './channel.component.html',
-  styleUrls: ['./channel.component.css']
+  styleUrls: ['./channel.component.scss']
 })
 export class ChannelComponent {
 
-  public channels: ChannelDto[] = [];
-
   @Input()
-  typesOfShoes: string[];
+  channels?: ChannelDto[];
 
-  @Output() channelEmitter = new EventEmitter<string>();
+  @Output() channelEmitter = new EventEmitter<ChannelDto>();
 
-  selectChannel(channel: string){
+  selectChannel(channel: ChannelDto){
     this.channelEmitter.emit(channel)
   }
 
-  constructor(client: ChannelClient){
+  constructor(client: ChannelClient) {}
+  /*
+  {
     client.getChannels().subscribe(result => {
       this.channels = result;
       console.log(this.channels);
     }, error => console.log(error));
   }
-
+  */
 }
 

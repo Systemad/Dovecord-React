@@ -34,7 +34,6 @@ public class MessageController : ControllerBase
     [HttpPost(Name = "AddMessage")]
     public async Task<IActionResult> SaveMessage([FromBody] MessageManipulationDto message)
     {
-        var userids = _currentUserService.UserId;
         var command = new AddMessage.AddMessageCommand(message);
         var commandResponse = await _mediator.Send(command);
         return Ok(commandResponse);

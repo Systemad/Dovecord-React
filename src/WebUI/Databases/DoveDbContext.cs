@@ -48,12 +48,13 @@ public class DoveDbContext : DbContext
     private void UpdateAuditFields()
     {
         var now = DateTime.UtcNow;
-        foreach (var entry in ChangeTracker.Entries<BaseMessageEntity>())
+        foreach (var entry in ChangeTracker.Entries<ChannelMessage>())
         {
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedBy = Guid.Parse(_currentUserService?.UserId);
+                    entry.Entity.UserId = Guid.Parse(_currentUserService?.UserId);
+                    entry.Entity.CreatedBy = _currentUserService.Username;
                     entry.Entity.CreatedOn = now;
                     entry.Entity.LastModifiedOn = now;
                     entry.Entity.IsEdit = false;

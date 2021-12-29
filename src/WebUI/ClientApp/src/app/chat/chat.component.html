@@ -1,56 +1,26 @@
-<mat-grid-list cols="4" rowHeight="108px" width="100%">
-  <mat-grid-tile rowspan="6" colspan="1" style="background: lightpink;">
+<div>
+  <mat-grid-list cols="6" rowHeight="6.5em" gutterSize="10px">
 
-    <!-- TODO:
-    Figure out how to handle components
-    1. either define component like below, then let them do each thing seperatly
-    2. or use "<mat-list class="conversations">" and do everything here
-    3. Pass data to component
+    <!-- CHANNEL SECTION -->
+    <mat-grid-tile rowspan="7" colspan="1" class="card-background">
+      <app-channel [channels]="channels" (channelEmitter)="selectChannel($event)"> </app-channel>
+    </mat-grid-tile>
 
-    check:
-    https://www.nexmo.com/legacy-blog/2018/03/28/build-chat-app-angular-material-stitch-javascript-dr
-    -->
+    <!-- HEADER BOX-->
+    <mat-grid-tile rowspan="1" colspan="4" class="card-background">
+      {{ selectedChannel?.name }}
+    </mat-grid-tile>
 
-    <mat-selection-list [multiple]="false">
-      <mat-list-option *ngFor="let channel of channels" [value]="channel" (click)="selectChannel(channel)">
-        {{ channel.name }}
-      </mat-list-option>
-    </mat-selection-list>
+    <!-- USER SECTION -->
+    <mat-grid-tile rowspan="7" colspan="1" class="card-background">
 
-  </mat-grid-tile>
+    </mat-grid-tile>
 
-  <mat-grid-tile  rowspan="1" colspan="2" style="background: lightblue">
-    <div class="mat-grid-tile-content">
-       {{ selectedChannel?.name }}
-    </div>
-  </mat-grid-tile>
+    <mat-grid-tile rowspan="6" colspan="4" class="card-background">
 
-  <mat-grid-tile rowspan="6" colspan="1" style="background: lightgreen">
-    <div class="mat-grid-tile-content"> Users list component </div>
-  </mat-grid-tile>
+      <!-- Message list and input component -->
+      <app-message [messages]="messages" (sendMessageEmitter)="sendMessage($event)"></app-message>
+    </mat-grid-tile>
 
-  <mat-grid-tile rowspan="5" colspan="2" style="background: rgb(221, 189, 241)">
-    <!--- <div class="mat-grid-tile-content"> Chat and messagebox component </div> -->
-
-    <div>
-      <span *ngFor="let message of messages">
-        {{ message.content }}
-      </span>
-    </div>
-
-
-    <form class="example-form">
-      <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Message</mat-label>
-        <input matInput maxlength="256" placeholder="Type your message" [(ngModel)]="inputField" >
-      </mat-form-field>
-    </form>
-
-    <button mat-button (click)="sendMessage()">
-      Send
-    </button>
-
-  </mat-grid-tile>
-
-</mat-grid-list>
-
+  </mat-grid-list>
+</div>

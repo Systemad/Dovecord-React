@@ -4,6 +4,7 @@ namespace WebUI.Extensions.Services;
 public interface ICurrentUserService
 {
     string? UserId { get; }
+    string? Username { get; }
 }
 public class CurrentUserService : ICurrentUserService
 {
@@ -14,6 +15,6 @@ public class CurrentUserService : ICurrentUserService
         _httpContext = httpContext;
     }
 
-    //public static string GetUserId(this HttpContext httpContext) => httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
     public string? UserId => _httpContext.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+    public string? Username => _httpContext.HttpContext?.User?.Identity?.Name;
 }

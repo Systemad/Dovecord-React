@@ -10,16 +10,8 @@ import { Component, OnInit } from '@angular/core';
 
 export class ChattestComponent implements OnInit {
 
-  typesOfShoes: string[] = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
-  selectedShoe: string | undefined;
-
   constructor() { }
 
   ngOnInit(): void {
-  }
-
-  selectChannel(channel: string) {
-    console.log(channel);
-    this.selectedShoe = channel;
   }
 }

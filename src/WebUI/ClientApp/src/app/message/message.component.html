@@ -1,0 +1,29 @@
+
+<div class="message-listing" *ngFor="let message of messages">
+  <div class="chat-message message-box">
+      <tui-avatar text="{{ message.createdBy }}" class="tui-space_top-1" [autoColor]="true" size="s" style="display: inline-block;"></tui-avatar>
+      <div class="username-color" style="display: inline-block; padding-left:10px"> {{ message.createdBy }} </div>
+      <div class="username-color"> {{ message.content }} </div>
+  </div>
+</div>
+
+
+<div tuiMode="onDark" class="dark">
+<div class="input-box">
+  <form [formGroup]="messageForm">
+        <tui-text-area
+            formControlName="textValue"
+            tuiHintContent="Remember to follow the rules!"
+            [expandable]="true"
+            class="field-small">
+            <!-- [tuiTextfieldMaxLength]="maxLength"> -->
+            Type your message...
+        </tui-text-area>
+        <tui-field-error formControlName="textValue"></tui-field-error>
+  </form>
+</div>
+
+<div class="send-button">
+  <button tuiIconButton type="button" (click)="sendMessage()"> Send </button>
+</div>
+</div>

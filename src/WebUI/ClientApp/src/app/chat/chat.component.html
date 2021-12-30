@@ -16,10 +16,9 @@
 
     </mat-grid-tile>
 
+    <!-- Message list and input component -->
     <mat-grid-tile rowspan="6" colspan="4" class="card-background">
-
-      <!-- Message list and input component -->
-      <app-message [messages]="messages" (sendMessageEmitter)="sendMessage($event)"></app-message>
+      <app-chat-window [messages]="messages" (sendMessageEmitter)="sendMessage($event)"></app-chat-window>
     </mat-grid-tile>
 
   </mat-grid-list>

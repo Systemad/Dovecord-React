@@ -68,12 +68,6 @@
 
 .username-color {
   color: var(--tui-text-01-night);
-  display: inline-block;
-  padding-left:10px;
-}
-
-.text-color {
-  color: var(--tui-text-02-night)
 }
 
 .username-card:hover {

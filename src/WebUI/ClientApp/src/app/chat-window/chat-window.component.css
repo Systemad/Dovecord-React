@@ -17,6 +17,7 @@
   top: 10px;
   left: 10px;
   width: 97%;
+  max-height: 10px;
 }
 
 .message-box {

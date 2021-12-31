@@ -13,8 +13,7 @@ export function maxLengthMessageFactory(context: {requiredLength: string}): stri
 @Component({
   selector: 'app-message',
   templateUrl: './message.component.html',
-  styleUrls: ['./message.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./message.component.scss']
 })
 
 export class MessageComponent implements OnInit {

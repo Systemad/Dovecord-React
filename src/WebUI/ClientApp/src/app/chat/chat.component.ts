@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ChannelClient, ChannelDto, MessageClient, MessageManipulationDto, ChannelMessageDto } from '../web-api-client';
 
@@ -9,8 +9,8 @@ import { ChannelClient, ChannelDto, MessageClient, MessageManipulationDto, Chann
 })
 export class ChatComponent implements OnInit {
 
-  channels: ChannelDto[] = [];
-  messages: ChannelMessageDto[] = [];
+  channels: ChannelDto[];
+  messages: ChannelMessageDto[];
 
   selectedChannel: ChannelDto | undefined;
   messageToSend: MessageManipulationDto | undefined;
@@ -49,8 +49,8 @@ export class ChatComponent implements OnInit {
 
     this.messageService.saveMessage(message2send).subscribe(
       result => {
-        this.messages.push(result);
         console.log(result);
+        this.messages.push(result);
     }, error => console.log(error));
   }
 }

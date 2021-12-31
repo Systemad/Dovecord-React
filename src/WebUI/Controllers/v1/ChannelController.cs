@@ -51,21 +51,23 @@ public class ChannelController : ControllerBase
     {
         var command = new AddChannel.AddChannelCommand(channelForCreation);
         var commandResponse = await _mediator.Send(command);
-        return Ok(commandResponse);
+        return CreatedAtAction(nameof(GetChannel), new {commandResponse.Id}, commandResponse);
     }
     
+    [ProducesResponseType(204)]
     [Produces("application/json")]
     [HttpDelete("{id:guid}", Name = "DeleteChannel")]
-    public async Task<IActionResult> DeleteChannel(Guid id)
+    public async Task<ActionResult> DeleteChannel(Guid id)
     {
         var command = new DeleteChannel.DeleteChannelCommand(id);
         await _mediator.Send(command);
         return NoContent();
     }
     
+    [ProducesResponseType(204)]
     [Produces("application/json")]
     [HttpPut("{id:guid}", Name = "UpdateChannel")]
-    public async Task<ActionResult> UpdateChannel(Guid id, ChannelManipulationDto channel)
+    public async Task<IActionResult> UpdateChannel(Guid id, ChannelManipulationDto channel)
     {
         var command = new UpdateChannel.UpdateChannelCommand(id, channel);
         await _mediator.Send(command);

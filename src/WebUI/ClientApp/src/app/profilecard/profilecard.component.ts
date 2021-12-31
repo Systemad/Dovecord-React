@@ -22,8 +22,6 @@ export class ProfilecardComponent implements OnInit {
 
   constructor(@Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration, private broadcastService: MsalBroadcastService, private authService: MsalService) { }
 
-
-
   @ViewChild(TuiHostedDropdownComponent)
   component?: TuiHostedDropdownComponent;
 

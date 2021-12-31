@@ -32,13 +32,14 @@ public class MessageController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost(Name = "AddMessage")]
-    public async Task<IActionResult> SaveMessage([FromBody] MessageManipulationDto message)
+    public async Task<ActionResult<ChannelMessageDto>> SaveMessage([FromBody] MessageManipulationDto message)
     {
         var command = new AddMessage.AddMessageCommand(message);
         var commandResponse = await _mediator.Send(command);
-        return Ok(commandResponse);
+        return CreatedAtAction(nameof(GetMessage), new {commandResponse.Id}, commandResponse);
     }
     
+    [ProducesResponseType(204)]
     [Produces("application/json")]
     [HttpPut("{id:guid}", Name = "UpdateMessage")]
     public async Task<IActionResult> UpdateMessage(Guid id, MessageManipulationDto message)
@@ -50,17 +51,29 @@ public class MessageController : ControllerBase
     
     [ProducesResponseType(typeof(IEnumerable<ChannelMessageDto>), 200)]
     [Produces("application/json")]
-    [HttpGet("{id:guid}")]
+    [HttpGet("channel/{id:guid}", Name ="GetMessages")]
     public async Task<IActionResult> GetMessagesFromChannel(Guid id)
     {
         var command = new GetMessageList.MessageListQuery(id);
         var result = await _mediator.Send(command);
         return Ok(result);
     }
-        
+    
+    [ProducesResponseType(typeof(ChannelMessageDto), 200)]
+    [Produces("application/json")]
+    [HttpGet("{id:guid}", Name = "GetMessage")]
+    public async Task<ActionResult<ChannelMessageDto>> GetMessage(Guid id)
+    {
+        var query = new GetMessage.MessageQuery(id);
+        var queryResponse = await _mediator.Send(query);
+
+        return Ok(queryResponse);
+    }
+    
+    [ProducesResponseType(204)]
     [Produces("application/json")]
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeleteMessageById(Guid id)
+    public async Task<ActionResult> DeleteMessageById(Guid id)
     {
         await _mediator.Send(new DeleteMessage.DeleteMessageCommand(id));
         return NoContent();

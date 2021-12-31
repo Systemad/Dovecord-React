@@ -17,7 +17,7 @@ export function maxLengthMessageFactory(context: {requiredLength: string}): stri
     {
         provide: TUI_VALIDATION_ERRORS,
         useValue: {
-            required: 'Message must be at least one character and up to 100! ',
+            required: 'Message must be at least between 1 and 100 characters',
             maxlength: maxLengthMessageFactory,
         },
     },

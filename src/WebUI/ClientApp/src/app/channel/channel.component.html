@@ -1,5 +1,4 @@
 <div class="listing">
-              <!-- #channels-->
   <mat-selection-list [multiple]="false">
       <mat-list-option *ngFor="let channel of channels" (click)="selectChannel(channel)" [value]="channel" class="username-color list-color">
         {{ channel?.name }}

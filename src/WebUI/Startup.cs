@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using WebUI.Databases;
+using WebUI.Extensions.Application;
 using WebUI.Extensions.Host;
 using WebUI.Extensions.Services;
+using WebUI.Hubs;
 using WebUI.Seeders;
+using WebUI.SignalR;
 
 namespace WebUI;
 
@@ -36,7 +39,8 @@ public class Startup
             options.LowercaseUrls = true;
             options.LowercaseQueryStrings = true;
         });
-        
+
+        services.AddSignalRApplication();
         services.AddAppAuthentication(_config);
         services.AddCorsService();
         services.AddInfrastructure(_config, _env);
@@ -79,6 +83,7 @@ public class Startup
         app.UseSerilogRequestLogging();
         app.UseEndpoints(endpoints =>
         {
+            endpoints.MapHub<ChatHub>("/chathub");
             endpoints.MapHealthChecks("/api/health");
             endpoints.MapControllers();
         });

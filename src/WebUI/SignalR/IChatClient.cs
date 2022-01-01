@@ -1,5 +1,5 @@
-﻿using Domain.Entities;
-using Infrastructure.Dtos.User;
+﻿using Infrastructure.Dtos.User;
+using WebUI.Domain.Entities;
 using WebUI.Domain.Messages;
 using WebUI.Domain.Users;
 

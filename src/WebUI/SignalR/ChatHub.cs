@@ -1,12 +1,13 @@
 ﻿using System.Security.Claims;
-using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
+using WebUI.Domain.Entities;
 using WebUI.Domain.Messages;
+using WebUI.Hubs;
 
-namespace WebUI.Hubs;
+namespace WebUI.SignalR;
 
 [Authorize]
 [RequiredScope("API.Access")]

@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ChannelClient, ChannelDto, MessageClient, MessageManipulationDto, ChannelMessageDto } from '../web-api-client';
-
+import { SignalRService } from '../services/signal-r.service';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -15,20 +15,28 @@ export class ChatComponent implements OnInit {
   selectedChannel: ChannelDto | undefined;
   messageToSend: MessageManipulationDto | undefined;
 
-  constructor(private service: ChannelClient, private messageService: MessageClient) {
+  constructor(private signalRService: SignalRService, private service: ChannelClient, private messageService: MessageClient) {
     this.service.getChannels().subscribe(result => {
       this.channels = result;
       console.log(this.channels);
     }, error => console.error(error));
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.signalRService.retrieveMappedObject().subscribe((receivedObj: ChannelMessageDto) => this.messages.push(receivedObj));
   }
 
 
   selectChannel(channel: ChannelDto) {
-    console.log(channel);
+    console.log("Selected", channel);
+    if(this.selectedChannel != null){
+      this.signalRService.leaveChannel(String(this.selectedChannel.id));
+    }
+
+    console.log("setting selected channel to", channel);
     this.selectedChannel = channel;
+
+    this.signalRService.joinChannel(String(this.selectedChannel.id));
     this.getChannelMessages(channel);
   }
 
@@ -50,7 +58,7 @@ export class ChatComponent implements OnInit {
     this.messageService.saveMessage(message2send).subscribe(
       result => {
         console.log(result);
-        this.messages.push(result);
+        //this.messages.push(result);
     }, error => console.log(error));
   }
 }

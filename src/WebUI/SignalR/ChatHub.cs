@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
 using WebUI.Domain.Entities;
-using WebUI.Domain.Messages;
-using WebUI.Hubs;
+using WebUI.Dtos.Message;
 
 namespace WebUI.SignalR;
 
@@ -59,11 +58,16 @@ public class ChatHub : Hub<IChatClient>
         */
     }
 
-    public async Task PostMessage(ChannelMessage message, Guid channelId)
+    public async Task PostMessage(ChannelMessageDto message, Guid channelId)
     {
         await Clients.Group(channelId.ToString()).MessageReceived(message);
     }
 
+    public async Task EditMessage(ChannelMessageDto message, Guid messageId)
+    {
+        await Clients.Group(message.ChannelId.ToString()).MessageReceived(message);
+    }
+    
     public async Task DeleteMessageById(string messageId)
     {
         await Clients.All.DeleteMessageReceived(messageId);
@@ -71,13 +75,13 @@ public class ChatHub : Hub<IChatClient>
     public async Task UserTyping(bool isTyping)
         => await Clients.Others.UserTyping(new ActorAction(Username, isTyping));
         
-    public async Task JoinChannelById(Guid channelId)
+    public async Task JoinChannel(Guid channelId)
     {
         Console.Write($"Joined channel - {channelId.ToString()}");
         await Groups.AddToGroupAsync(Context.ConnectionId, channelId.ToString());
     }
-        
-    public async Task RemoveChannelById(Guid channelId)
+         
+    public async Task LeaveChannel(Guid channelId)
     {
         Console.Write($"Left channel - {channelId.ToString()}");
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, channelId.ToString());

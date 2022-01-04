@@ -30,6 +30,8 @@
     "@angular/router": "~13.1.0",
     "@azure/msal-angular": "^2.0.6",
     "@azure/msal-browser": "^2.20.0",
+    "@microsoft/signalr": "^6.0.1",
+    "@microsoft/signalr-protocol-msgpack": "^6.0.1",
     "@schematics/angular": "^12.2.13",
     "@taiga-ui/cdk": "^2.28.0",
     "@taiga-ui/core": "^2.28.0",

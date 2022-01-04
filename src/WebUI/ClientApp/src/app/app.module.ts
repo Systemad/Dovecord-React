@@ -26,6 +26,7 @@ import { msalConfig, loginRequest, protectedResources } from './auth-config';
 import { MaterialModule } from './shared/material.module';
 import { TaigaModule } from './shared/taiga.module';
 import { ProfilecardComponent } from './profilecard/profilecard.component';
+import { AuthService } from './auth.service';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication(msalConfig);
@@ -38,6 +39,7 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
   protectedResourceMap.set(protectedResources.channelApi.endpoint, protectedResources.channelApi.scopes);
   protectedResourceMap.set(protectedResources.messageApi.endpoint, protectedResources.messageApi.scopes);
   protectedResourceMap.set(protectedResources.userApi.endpoint, protectedResources.userApi.scopes);
+  protectedResourceMap.set(protectedResources.signalrhub.endpoint, protectedResources.signalrhub.scopes);
 
   return {
     interactionType: InteractionType.Redirect,
@@ -102,7 +104,8 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     WeatherForecastClient,
     ChannelClient,
     MessageClient,
-    UserClient
+    UserClient,
+    AuthService
   ],
   bootstrap: [AppComponent, MsalRedirectComponent]
 })

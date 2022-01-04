@@ -1,9 +1,8 @@
 ﻿using Infrastructure.Dtos.User;
 using WebUI.Domain.Entities;
-using WebUI.Domain.Messages;
-using WebUI.Domain.Users;
+using WebUI.Dtos.Message;
 
-namespace WebUI.Hubs;
+namespace WebUI.SignalR;
 
 public interface IChatClient
 {
@@ -11,7 +10,7 @@ public interface IChatClient
 
     Task UserTyping(ActorAction action);
 
-    Task MessageReceived(ChannelMessage message);
+    Task MessageReceived(ChannelMessageDto message);
 
     Task DeleteMessageReceived(string id);
 

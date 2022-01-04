@@ -6,12 +6,17 @@ public static class CorsServiceExtension
     {
         service.AddCors(options =>
         {
-            options.AddPolicy("AllowAll",
+            options.AddPolicy("CorsPolicy",
                 builder =>
                 {
-                    builder.AllowAnyHeader();
-                    builder.AllowAnyMethod();
-                    builder.AllowAnyOrigin();
+                    builder.AllowAnyOrigin()
+                        .WithOrigins("https://localhost:44418")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                    //builder.AllowAnyHeader();
+                    //builder.AllowAnyMethod();
+                    //builder.DisallowCredentials();
                 });
         });
         return service;

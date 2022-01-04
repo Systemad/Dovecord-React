@@ -1,12 +1,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
 using WebUI.Domain.Messages.Features;
 using WebUI.Dtos.Message;
 using WebUI.Extensions.Services;
+using WebUI.SignalR;
 
-// TODO: Refactor controller implementation i.e add error codes etc
 namespace WebUI.Controllers.v1;
 
 [Authorize]
@@ -19,13 +20,17 @@ public class MessageController : ControllerBase
     private readonly ILogger<MessageController> _logger;
     private readonly IMediator _mediator;
     private readonly ICurrentUserService _currentUserService;
-    static readonly string[] scopeRequiredByApi = new[] { "API.Access" };
-     
-    public MessageController(ILogger<MessageController> logger, IMediator mediator, ICurrentUserService currentUserService)
+    private readonly IHubContext<ChatHub, IChatClient> _hubContext;
+
+    public MessageController(ILogger<MessageController> logger,
+        IMediator mediator,
+        ICurrentUserService currentUserService,
+        IHubContext<ChatHub, IChatClient> hubContext)
     {
         _logger = logger;
         _mediator = mediator;
         _currentUserService = currentUserService;
+        _hubContext = hubContext;
     }
 
     [ProducesResponseType(typeof(ChannelMessageDto), 201)]
@@ -36,6 +41,7 @@ public class MessageController : ControllerBase
     {
         var command = new AddMessage.AddMessageCommand(message);
         var commandResponse = await _mediator.Send(command);
+        await _hubContext.Clients.Group(message.ChannelId.ToString()).MessageReceived(commandResponse);
         return CreatedAtAction(nameof(GetMessage), new {commandResponse.Id}, commandResponse);
     }
     
@@ -66,7 +72,6 @@ public class MessageController : ControllerBase
     {
         var query = new GetMessage.MessageQuery(id);
         var queryResponse = await _mediator.Send(query);
-
         return Ok(queryResponse);
     }
     
@@ -76,6 +81,7 @@ public class MessageController : ControllerBase
     public async Task<ActionResult> DeleteMessageById(Guid id)
     {
         await _mediator.Send(new DeleteMessage.DeleteMessageCommand(id));
+        await _hubContext.Clients.All.DeleteMessageReceived(id.ToString());
         return NoContent();
     }
 }

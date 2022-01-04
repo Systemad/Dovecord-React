@@ -4,7 +4,6 @@ using WebUI.Databases;
 using WebUI.Extensions.Application;
 using WebUI.Extensions.Host;
 using WebUI.Extensions.Services;
-using WebUI.Hubs;
 using WebUI.Seeders;
 using WebUI.SignalR;
 
@@ -39,9 +38,9 @@ public class Startup
             options.LowercaseUrls = true;
             options.LowercaseQueryStrings = true;
         });
-
-        services.AddSignalRApplication();
+        
         services.AddAppAuthentication(_config);
+        services.AddSignalRApplication();
         services.AddCorsService();
         services.AddInfrastructure(_config, _env);
         services.AddApplication();
@@ -72,7 +71,7 @@ public class Startup
             app.UseHsts();
         }
         
-        app.UseCors("AllowAll");
+        app.UseCors("CorsPolicy");
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();

@@ -78,6 +78,10 @@ export const protectedResources = {
     endpoint: "https://localhost:7045/api/users",
     scopes: ["https://danovas.onmicrosoft.com/89be5e10-1770-45d7-813a-d47242ae2163/API.Access"],
   },
+  signalrhub:{
+    endpoint: "https://localhost:7045/chathub",
+    scopes: ["https://danovas.onmicrosoft.com/89be5e10-1770-45d7-813a-d47242ae2163/API.Access"]
+  }
 }
 
 export const loginRequest = {

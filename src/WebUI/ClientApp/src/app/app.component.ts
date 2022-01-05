@@ -11,7 +11,6 @@ export class AppComponent implements OnInit {
   isIframe = false;
   private readonly _destroying$ = new Subject<void>();
 
-  hubHelloMessage: string;
   constructor() { }
 
   ngOnInit(): void {

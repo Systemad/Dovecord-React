@@ -18,7 +18,7 @@ export function maxLengthMessageFactory(context: {requiredLength: string}): stri
 
 export class MessageComponent implements OnInit {
 
-  @Input() message: ChannelMessageDto;
+  @Input() message?: ChannelMessageDto;
 
   constructor() {}
 

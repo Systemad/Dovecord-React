@@ -9,8 +9,8 @@ import { SignalRService } from '../services/signal-r.service';
 })
 export class ChatComponent implements OnInit {
 
-  channels: ChannelDto[];
-  messages: ChannelMessageDto[];
+  channels: ChannelDto[] = [];
+  messages: ChannelMessageDto[] = [];
 
   selectedChannel: ChannelDto | undefined;
   messageToSend: MessageManipulationDto | undefined;
@@ -20,6 +20,17 @@ export class ChatComponent implements OnInit {
       this.channels = result;
       console.log(this.channels);
     }, error => console.error(error));
+
+    this.signalRService.initiateSignalrConnection();
+
+    this.signalRService.receivedMessage?.subscribe((message?: ChannelMessageDto) => {
+      console.log("chat component, message received")
+
+      // FIx not pusing / undefined
+      let messager = ChannelMessageDto.fromJS(message);
+
+      this.messages.push(messager);
+    });
   }
 
   ngOnInit(): void {

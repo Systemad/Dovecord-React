@@ -13,7 +13,7 @@ import { ChannelMessageDto } from '../web-api-client';
 })
 export class ChatWindowComponent implements OnInit {
 
-  @Input() messages: ChannelMessageDto[];
+  @Input() messages?: ChannelMessageDto[];
   @Output() sendMessageEmitter = new EventEmitter<string>();
 
   constructor() { }

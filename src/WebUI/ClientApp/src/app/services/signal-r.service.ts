@@ -15,9 +15,9 @@ import { AuthService } from '../auth.service';
 
 export class SignalRService {
 
-  private connectionUrl = 'https://localhost:7045/chathub';
-  hubHelloMessage: BehaviorSubject<string>;
-  receivedMessage: BehaviorSubject<ChannelMessageDto>;
+  connectionUrl = 'https://localhost:7045/chathub';
+  hubHelloMessage?: BehaviorSubject<string>;
+  receivedMessage: BehaviorSubject<ChannelMessageDto | undefined>;
 
   options: signalR.IHttpConnectionOptions = {
     accessTokenFactory: async () => {
@@ -26,44 +26,30 @@ export class SignalRService {
     }
   };
 
-  connection: signalR.HubConnection;
-
-
-  private receivedMessageObject: ChannelMessageDto = new ChannelMessageDto();
-  private sharedObj = new Subject<ChannelMessageDto>();
+  connection?: signalR.HubConnection;
 
   constructor(
   private msalService: MsalService,
   private authService: AuthService) {
 
     // In order to succesfully grab token we need to update and set login status
-    //this.authService.updateLoggedInStatus();
-    //this.addListeners();
-    //this.hubConnection.start();
-  }
+    this.authService.updateLoggedInStatus();
 
-  private setSignalrClientMethods() : void {
-    this.connection.on("MessageReceived", (data: ChannelMessageDto) => {
-      console.log("message received from Hub");
-      console.log(data);
-      //this.receivedMessageObject = data;
-      this.receivedMessage.next(data);
-    })
+    this.receivedMessage = new BehaviorSubject<ChannelMessageDto | undefined>(undefined);
   }
-
   public initiateSignalrConnection(): Promise<void>{
     return new Promise((resolve, reject) => {
       this.connection = new signalR.HubConnectionBuilder()
-      .withUrl(this.connectionUrl, this.options)
-      .withHubProtocol(new MessagePackHubProtocol())
-      .build();
+        .withUrl(this.connectionUrl, this.options)
+        .withHubProtocol(new MessagePackHubProtocol())
+        .build();
 
       this.setSignalrClientMethods();
 
       this.connection
-      .start()
-      .then(() => {
-        console.log(`signalr connection success! connectionId: ${this.connection.connectionId}`);
+        .start()
+        .then(() => {
+          console.log(`signalr connection success! connectionId: ${this.connection!.connectionId}`);
           resolve();
       })
       .catch((error) => {
@@ -73,18 +59,22 @@ export class SignalRService {
     });
   }
 
-
-  public retrieveMappedObject() : Observable<ChannelMessageDto> {
-    return this.sharedObj.asObservable();
+  private setSignalrClientMethods() : void {
+    this.connection!.on("MessageReceived", (data: ChannelMessageDto) => {
+      console.log("message received from Hub");
+      //console.log(data);
+      //this.receivedMessageObject = data;
+      this.receivedMessage?.next(data);
+    })
   }
 
   public joinChannel(channelId: string){
     console.log("joining channel", channelId);
-    this.connection.invoke("JoinChannel", channelId);
+    this.connection?.invoke("JoinChannel", channelId);
   }
 
   public leaveChannel(channelId: string){
     console.log("leaving channel", channelId);
-    this.connection.invoke("LeaveChannel", channelId);
+    this.connection?.invoke("LeaveChannel", channelId);
   }
 }

@@ -99,12 +99,14 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
       provide: MSAL_INTERCEPTOR_CONFIG,
       useFactory: MSALInterceptorConfigFactory
     },
+    /*
     SignalRService, {
       provide: APP_INITIALIZER,
       useFactory: (signalRService: SignalRService) => () => signalRService.initiateSignalrConnection(),
       deps: [SignalRService],
       multi: true,
     },
+    */
     MsalService,
     MsalGuard,
     MsalBroadcastService,
@@ -112,7 +114,6 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     ChannelClient,
     MessageClient,
     UserClient,
-    AuthService
   ],
   bootstrap: [AppComponent, MsalRedirectComponent]
 })

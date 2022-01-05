@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { FormsModule } from '@angular/forms';
 import { ChannelClient, MessageClient, UserClient, WeatherForecastClient } from './web-api-client';
@@ -27,6 +27,7 @@ import { MaterialModule } from './shared/material.module';
 import { TaigaModule } from './shared/taiga.module';
 import { ProfilecardComponent } from './profilecard/profilecard.component';
 import { AuthService } from './auth.service';
+import { SignalRService } from './services/signal-r.service';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication(msalConfig);
@@ -97,6 +98,12 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     {
       provide: MSAL_INTERCEPTOR_CONFIG,
       useFactory: MSALInterceptorConfigFactory
+    },
+    SignalRService, {
+      provide: APP_INITIALIZER,
+      useFactory: (signalRService: SignalRService) => () => signalRService.initiateSignalrConnection(),
+      deps: [SignalRService],
+      multi: true,
     },
     MsalService,
     MsalGuard,

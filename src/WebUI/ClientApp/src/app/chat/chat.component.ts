@@ -23,7 +23,13 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.signalRService.retrieveMappedObject().subscribe((receivedObj: ChannelMessageDto) => this.messages.push(receivedObj));
+
+    //this.signalRService.receivedMessage.subscribe((message: ChannelMessageDto) => {
+    //  console.log("app component: message received")
+    //  this.messages.push(message);
+    //});
+    //this.signalRService.retrieveMappedObject()
+    //.subscribe((receivedObj: ChannelMessageDto) => this.messages.push(receivedObj));
   }
 
 

@@ -37,6 +37,7 @@
     "@taiga-ui/core": "^2.28.0",
     "@taiga-ui/icons": "^2.28.0",
     "@taiga-ui/kit": "^2.28.0",
+    "@types/signalr": "^2.2.37",
     "bootstrap": "^5.1.0",
     "jquery": "^3.5.1",
     "oidc-client": "^1.11.5",

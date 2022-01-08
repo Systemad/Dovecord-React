@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ChannelClient, ChannelDto, MessageClient, MessageManipulationDto, ChannelMessageDto } from '../web-api-client';
+import { ChannelClient, ChannelDto, MessageClient, MessageManipulationDto, ChannelMessageDto, IChannelMessageDto } from '../web-api-client';
 import { SignalRService } from '../services/signal-r.service';
 @Component({
   selector: 'app-chat',
@@ -22,25 +22,15 @@ export class ChatComponent implements OnInit {
     }, error => console.error(error));
 
     this.signalRService.initiateSignalrConnection();
-
-    this.signalRService.receivedMessage?.subscribe((message?: ChannelMessageDto) => {
-      console.log("chat component, message received")
-
-      // FIx not pusing / undefined
-      let messager = ChannelMessageDto.fromJS(message);
-
-      this.messages.push(messager);
-    });
   }
 
   ngOnInit(): void {
 
-    //this.signalRService.receivedMessage.subscribe((message: ChannelMessageDto) => {
-    //  console.log("app component: message received")
-    //  this.messages.push(message);
-    //});
-    //this.signalRService.retrieveMappedObject()
-    //.subscribe((receivedObj: ChannelMessageDto) => this.messages.push(receivedObj));
+    this.signalRService.data.subscribe((message: ChannelMessageDto) => {
+      //let obj = new ChannelMessageDto(message);
+      console.log("chat component, message received", message);
+      this.messages.push(message);
+    });
   }
 
 

@@ -58,16 +58,6 @@ public class ChatHub : Hub<IChatClient>
         */
     }
 
-    public async Task PostMessage(ChannelMessageDto message, Guid channelId)
-    {
-        await Clients.Group(channelId.ToString()).MessageReceived(message);
-    }
-
-    public async Task EditMessage(ChannelMessageDto message, Guid messageId)
-    {
-        await Clients.Group(message.ChannelId.ToString()).MessageReceived(message);
-    }
-    
     public async Task DeleteMessageById(string messageId)
     {
         await Clients.All.DeleteMessageReceived(messageId);

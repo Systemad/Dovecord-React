@@ -1,4 +1,6 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Serilog;
 using WebUI.Databases;
 using WebUI.Extensions.Application;
@@ -23,7 +25,10 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton(Log.Logger);
-        services.AddControllers();
+        services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        });
         services.AddApiVersioning(config =>
         {
             config.DefaultApiVersion = new ApiVersion(1, 0);

@@ -14,7 +14,6 @@ import { AuthService } from '../auth.service';
 export class SignalRService {
 
   connectionUrl = 'https://localhost:7045/chathub';
-  hubHelloMessage?: BehaviorSubject<string>;
   private dataSource = new BehaviorSubject<ChannelMessageDto>(new ChannelMessageDto());
   data = this.dataSource.asObservable();
 
@@ -32,11 +31,13 @@ export class SignalRService {
   private authService: AuthService) {
     this.authService.updateLoggedInStatus();
   }
-  public initiateSignalrConnection(): Promise<void>{
+  public initiateSignalrConnection(): Promise<any>{
     return new Promise((resolve, reject) => {
       this.connection = new signalR.HubConnectionBuilder()
         .withUrl(this.connectionUrl, this.options)
-        //.withHubProtocol(new MessagePackHubProtocol()) // Some reason doesn't work?
+        // Since there are resolver issues from PascalCase (C# class) to CamelCase Typescript
+        // and no real good solution, we will be leaving this out for now
+        //.withHubProtocol(new MessagePackHubProtocol())
         .build();
 
       this.setSignalrClientMethods();
@@ -45,7 +46,7 @@ export class SignalRService {
         .start()
         .then(() => {
           console.log(`signalr connection success! connectionId: ${this.connection!.connectionId}`);
-          resolve();
+          resolve(true);
       })
       .catch((error) => {
         console.log(`singalr connection error: ${error}`);

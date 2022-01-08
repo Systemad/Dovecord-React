@@ -35,12 +35,9 @@ export class ChatComponent implements OnInit {
 
 
   selectChannel(channel: ChannelDto) {
-    console.log("Selected", channel);
     if(this.selectedChannel != null){
       this.signalRService.leaveChannel(String(this.selectedChannel.id));
     }
-
-    console.log("setting selected channel to", channel);
     this.selectedChannel = channel;
 
     this.signalRService.joinChannel(String(this.selectedChannel.id));

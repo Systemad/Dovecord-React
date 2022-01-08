@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
+using Serilog;
 using WebUI.Domain.Messages.Features;
 using WebUI.Dtos.Message;
 using WebUI.Extensions.Services;

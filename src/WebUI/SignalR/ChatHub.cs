@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
+using Serilog;
 using WebUI.Domain.Entities;
 using WebUI.Dtos.Message;
 
@@ -67,13 +68,13 @@ public class ChatHub : Hub<IChatClient>
         
     public async Task JoinChannel(Guid channelId)
     {
-        Console.Write($"Joined channel - {channelId.ToString()}");
+        Log.Information("{} joined channel {}", Username, channelId);
         await Groups.AddToGroupAsync(Context.ConnectionId, channelId.ToString());
     }
          
     public async Task LeaveChannel(Guid channelId)
     {
-        Console.Write($"Left channel - {channelId.ToString()}");
+        Log.Information("{} left channel {}", Username, channelId);
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, channelId.ToString());
     }
 }

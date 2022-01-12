@@ -1,3 +1,24 @@
 <tui-avatar text="{{ message?.createdBy }}" class="tui-space_top-1" [autoColor]="true" size="s" style="display: inline-block;"></tui-avatar>
+
+  <tui-hosted-dropdown tuiDropdownAlign="left" [content]="dropdown" [(open)]="open" style="display: inline-block;float:right">
+    <button tuiButton type="button" appearance="flat" [iconRight]="icon"></button>
+  </tui-hosted-dropdown>
+
+  <ng-template #icon>
+    <tui-svg
+      src="tuiIconMoreVer"
+      class="icon"
+      [class.icon_rotated]="open"
+    ></tui-svg>
+  </ng-template>
+
+  <ng-template #dropdown>
+    <tui-data-list>
+      <button *ngFor="let item of items" tuiOption (click)="onClick(item)">
+          {{item}}
+      </button>
+    </tui-data-list>
+  </ng-template>
+
 <div class="username-color"> {{ message?.createdBy }} </div>
 <div class="text-color"> {{ message?.content }} </div>

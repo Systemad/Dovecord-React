@@ -3,9 +3,9 @@ import * as signalR from '@microsoft/signalr';
 import { MessagePackHubProtocol } from '@microsoft/signalr-protocol-msgpack'
 import { BehaviorSubject } from 'rxjs';
 import { ChannelMessageDto, IChannelMessageDto } from '../web-api-client';
-import { protectedResources } from '../auth-config';
+import { protectedResources } from '../auth/auth-config';
 import { MsalService} from '@azure/msal-angular';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -57,22 +57,33 @@ export class SignalRService {
 
   private setSignalrClientMethods() : void {
     this.connection!.on("MessageReceived", (data: ChannelMessageDto) => {
-      console.log("message received from Hub");
-      this.updatedDataSelection(data);
+        console.log("message received from Hub");
+        this.updatedDataSelection(data);
     })
   }
 
-  updatedDataSelection(data: any){
+  private checkConnectedState(): boolean {
+    if(this.connection && this.connection.state == signalR.HubConnectionState.Connected){
+      return true;
+    }
+    return false;
+  }
+
+  private updatedDataSelection(data: any){
     this.dataSource.next(data);
   }
 
-  public joinChannel(channelId: string){
-    console.log("joining channel", channelId);
-    this.connection?.invoke("JoinChannel", channelId);
+  public joinChannel(channelId: string) : void {
+    if(this.checkConnectedState()){
+      console.log("joining channel", channelId);
+      this.connection?.invoke("JoinChannel", channelId);
+    }
   }
 
-  public leaveChannel(channelId: string){
-    console.log("leaving channel", channelId);
-    this.connection?.invoke("LeaveChannel", channelId);
+  public leaveChannel(channelId: string) : void {
+    if(this.checkConnectedState()){
+      console.log("leaving channel", channelId);
+      this.connection?.invoke("LeaveChannel", channelId);
+    }
   }
 }

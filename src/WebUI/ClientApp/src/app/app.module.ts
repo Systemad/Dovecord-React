@@ -22,12 +22,10 @@ import { IPublicClientApplication, PublicClientApplication, InteractionType, Bro
 import { MsalGuard, MsalInterceptor, MsalBroadcastService, MsalInterceptorConfiguration, MsalModule, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG, MsalGuardConfiguration, MsalRedirectComponent } from '@azure/msal-angular';
 import { AppRoutingModule } from './app-routing.module'; // InteractionType added to imports
 
-import { msalConfig, loginRequest, protectedResources } from './auth-config';
+import { msalConfig, loginRequest, protectedResources } from './auth/auth-config';
 import { MaterialModule } from './shared/material.module';
 import { TaigaModule } from './shared/taiga.module';
 import { ProfilecardComponent } from './profilecard/profilecard.component';
-import { AuthService } from './auth.service';
-import { SignalRService } from './services/signal-r.service';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication(msalConfig);

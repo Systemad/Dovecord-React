@@ -50,7 +50,7 @@ public class MessageController : ControllerBase
     [ProducesResponseType(204)]
     [Produces("application/json")]
     [HttpPut("{id:guid}", Name = "UpdateMessage")]
-    public async Task<IActionResult> UpdateMessage(Guid id, MessageManipulationDto message)
+    public async Task<IActionResult> UpdateMessage(Guid id, string message)
     {
         var command = new UpdateMessage.UpdateMessageCommand(id, message);
         await _mediator.Send(command);

@@ -367,7 +367,7 @@ export class ChannelClient implements IChannelClient {
 
 export interface IMessageClient {
     saveMessage(message: MessageManipulationDto): Observable<ChannelMessageDto>;
-    updateMessage(id: string, message: MessageManipulationDto): Observable<void>;
+    updateMessage(id: string, message: string | null | undefined): Observable<void>;
     getMessage(id: string): Observable<ChannelMessageDto>;
     deleteMessageById(id: string): Observable<void>;
     getMessagesFromChannel(id: string): Observable<ChannelMessageDto[]>;
@@ -438,21 +438,19 @@ export class MessageClient implements IMessageClient {
         return _observableOf<ChannelMessageDto>(<any>null);
     }
 
-    updateMessage(id: string, message: MessageManipulationDto): Observable<void> {
-        let url_ = this.baseUrl + "/api/messages/{id}";
+    updateMessage(id: string, message: string | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/messages/{id}?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (message !== undefined && message !== null)
+            url_ += "message=" + encodeURIComponent("" + message) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(message);
-
         let options_ : any = {
-            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
             })
         };
 

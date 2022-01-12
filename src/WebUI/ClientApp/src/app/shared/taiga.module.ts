@@ -54,7 +54,8 @@ const taigaModules = [
     TuiInputModule,
     TuiModeModule,
     TuiTextAreaModule,
-    TuiPrimitiveTextfieldModule
+    TuiPrimitiveTextfieldModule,
+    TuiDataListModule
 
 ]
 @NgModule({

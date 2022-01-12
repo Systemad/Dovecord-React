@@ -9,7 +9,7 @@ namespace WebUI.Domain.Messages.Features;
 
 public static class UpdateMessage
 {
-    public record UpdateMessageCommand(Guid Id, MessageManipulationDto NewMessageData) : IRequest<bool>;
+    public record UpdateMessageCommand(Guid Id, string NewMessageData) : IRequest<bool>;
     
     public class Query : IRequestHandler<UpdateMessageCommand, bool>
     {

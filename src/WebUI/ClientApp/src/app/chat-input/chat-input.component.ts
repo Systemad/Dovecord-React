@@ -46,18 +46,11 @@ export class ChatInputComponent implements OnInit {
   }
 
   sendMessage() {
-    /*
-    var text = new String(this.messageForm.get("textValue")?.value)
-    console.log(this.messageForm.get("textValue")?.value);
-
-    if(this.messageForm.value. > 1 && text.length < 100){
+    if(this.messageForm.valid){
       this.sendMessageEmitter.emit(this.messageForm.get("textValue")?.value)
       this.messageForm.reset('');
     } else {
-      console.log("do dialog");
+      console.log("NOT VALID")
     }
-    */
-    this.sendMessageEmitter.emit(this.messageForm.get("textValue")?.value)
-    this.messageForm.reset('');
   }
 }

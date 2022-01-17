@@ -6,6 +6,6 @@ a.title {
   display: flex;
   flex-direction: column;
   height: 92vh;
-  background-color: var(--tui-base-09);
+  background-color: var(--tui-base-01);
   padding: 10px;
 }

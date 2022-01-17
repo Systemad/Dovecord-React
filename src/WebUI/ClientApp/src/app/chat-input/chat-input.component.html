@@ -3,10 +3,9 @@
     <form [formGroup]="messageForm">
       <tui-text-area
         formControlName="textValue"
-        tuiHintContent="Remember to follow the rules!"
         [expandable]="true"
+        [tuiTextfieldMaxLength]="maxLength"
         class="field-small">
-        <!-- [tuiTextfieldMaxLength]="maxLength"> -->
         Type your message...
         </tui-text-area>
       <tui-field-error formControlName="textValue"></tui-field-error>

@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
-import { FormsModule } from '@angular/forms';
 import { ChannelClient, MessageClient, UserClient, WeatherForecastClient } from './web-api-client';
 
 import { AppComponent } from './app.component';
@@ -71,13 +70,12 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    MaterialModule,
+    TaigaModule,
     HttpClientModule,
-    FormsModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    MaterialModule,
     MsalModule,
-    TaigaModule
 ],
   providers: [
     {

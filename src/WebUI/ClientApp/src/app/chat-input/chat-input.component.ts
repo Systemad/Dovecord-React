@@ -11,7 +11,7 @@ export function maxLengthMessageFactory(context: {requiredLength: string}): stri
 @Component({
   selector: 'app-chat-input',
   templateUrl: './chat-input.component.html',
-  styleUrls: ['./chat-input.component.css'],
+  styleUrls: ['./chat-input.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
@@ -25,12 +25,14 @@ export function maxLengthMessageFactory(context: {requiredLength: string}): stri
 })
 export class ChatInputComponent implements OnInit {
 
+  readonly minLength = 1;
   readonly maxLength = 100;
 
   readonly messageForm = new FormGroup({
     textValue: new FormControl("", [
         Validators.required,
-        Validators.maxLength(this.maxLength),
+        Validators.minLength(this.minLength),
+        Validators.maxLength(this.maxLength)
     ]),
   });
 
@@ -44,7 +46,17 @@ export class ChatInputComponent implements OnInit {
   }
 
   sendMessage() {
+    /*
+    var text = new String(this.messageForm.get("textValue")?.value)
     console.log(this.messageForm.get("textValue")?.value);
+
+    if(this.messageForm.value. > 1 && text.length < 100){
+      this.sendMessageEmitter.emit(this.messageForm.get("textValue")?.value)
+      this.messageForm.reset('');
+    } else {
+      console.log("do dialog");
+    }
+    */
     this.sendMessageEmitter.emit(this.messageForm.get("textValue")?.value)
     this.messageForm.reset('');
   }

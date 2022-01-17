@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
-
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {TuiInputModule} from '@taiga-ui/kit';
-
 import { CommonModule } from '@angular/common';
-import {TuiAvatarModule, TuiTextAreaModule } from '@taiga-ui/kit';
+
+
 import {
+  iconsPathFactory,
+  TUI_ICONS_PATH,
   TuiButtonModule,
   TuiCalendarModule,
   TuiDataListModule,
@@ -33,14 +33,78 @@ import {
   TuiRootModule,
   TuiScrollbarModule,
   TuiSvgModule,
-  TuiSvgService,
   TuiTextfieldControllerModule,
   TuiTooltipModule,
+  TuiThemeNightModule,
 } from '@taiga-ui/core';
+
+
+import {
+  TuiAccordionModule,
+  TuiActionModule,
+  TuiAvatarModule,
+  TuiBadgedContentModule,
+  TuiBadgeModule,
+  TuiBreadcrumbsModule,
+  TuiCalendarMonthModule,
+  TuiCalendarRangeModule,
+  TuiCheckboxBlockModule,
+  TuiCheckboxLabeledModule,
+  TuiCheckboxModule,
+  TuiComboBoxModule,
+  TuiDataListWrapperModule,
+  TuiDropdownContextModule,
+  TuiDropdownSelectionModule,
+  TuiFieldErrorModule,
+  TuiFilterByInputPipeModule,
+  TuiFilterModule,
+  TuiHighlightModule,
+  TuiInputCopyModule,
+  TuiInputCountModule,
+  TuiInputDateModule,
+  TuiInputDateRangeModule,
+  TuiInputDateTimeModule,
+  TuiInputFileModule,
+  TuiInputInlineModule,
+  TuiInputModule,
+  TuiInputMonthModule,
+  TuiInputMonthRangeModule,
+  TuiInputNumberModule,
+  TuiInputPasswordModule,
+  TuiInputPhoneInternationalModule,
+  TuiInputPhoneModule,
+  TuiInputRangeModule,
+  TuiInputSliderModule,
+  TuiInputTagModule,
+  TuiInputTimeModule,
+  TuiIslandModule,
+  TuiLazyLoadingModule,
+  TuiLineClampModule,
+  TuiMarkerIconModule,
+  TuiMultiSelectModule,
+  TuiPaginationModule,
+  TuiPresentModule,
+  TuiProgressModule,
+  TuiProjectClassModule,
+  TuiRadioBlockModule,
+  TuiRadioLabeledModule,
+  TuiRadioListModule,
+  TuiRadioModule,
+  TuiSelectModule,
+  TuiSliderModule,
+  TuiStepperModule,
+  TuiTabsModule,
+  TuiTagModule,
+  TuiTextAreaModule,
+  TuiToggleModule,
+} from '@taiga-ui/kit';
+
 
 const taigaModules = [
 
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     TuiRootModule,
     TuiDialogModule,
     TuiNotificationsModule,
@@ -49,14 +113,13 @@ const taigaModules = [
     TuiDataListModule,
     TuiButtonModule,
     TuiAvatarModule,
-    FormsModule,
-    ReactiveFormsModule,
     TuiInputModule,
     TuiModeModule,
     TuiTextAreaModule,
     TuiPrimitiveTextfieldModule,
-    TuiDataListModule
-
+    TuiDataListModule,
+    TuiThemeNightModule,
+    TuiTextfieldControllerModule
 ]
 @NgModule({
   declarations: [],

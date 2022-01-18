@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\WebUI\WebUI.csproj" />
+      <ProjectReference Include="..\..\src\Dovecord\Dovecord.csproj" />
     </ItemGroup>
 
 </Project>

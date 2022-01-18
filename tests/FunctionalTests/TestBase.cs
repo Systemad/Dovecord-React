@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using WebUI;
-using WebUI.Databases;
+using Dovecord;
+using Dovecord.Databases;
 
 namespace FunctionalTests;
 

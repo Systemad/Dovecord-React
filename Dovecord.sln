@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DD69B216-286E-47A4-AF18-EB7061766D8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI", "src\WebUI\WebUI.csproj", "{4C957828-71B1-4D39-82D8-22D002BD1ABD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dovecord", "src\Dovecord\Dovecord.csproj", "{4C957828-71B1-4D39-82D8-22D002BD1ABD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8E1526EB-9182-4E1E-838A-4362BD72661C}"
 EndProject

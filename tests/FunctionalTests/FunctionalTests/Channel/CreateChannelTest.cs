@@ -4,7 +4,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
-using WebUI.Dtos.Channel;
+using Dovecord.Dtos.Channel;
 
 namespace FunctionalTests.FunctionalTests.Channel;
 

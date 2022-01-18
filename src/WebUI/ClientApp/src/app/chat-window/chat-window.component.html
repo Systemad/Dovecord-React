@@ -1,10 +1,10 @@
-
-<div class="message-listing">
-  <div class="chat-message message-box" *ngFor="let message of messages">
-      <app-message [message]="message"
-      (deleteMessage)="deleteMessage($event)"
-      (editMessage)="editMessage($event)" ></app-message>
+<tui-scrollbar class="box">
+  <div class="message-listing">
+    <div class="chat-message message-box" *ngFor="let message of messages">
+        <app-message [message]="message"
+        (deleteMessage)="deleteMessage($event)"
+        (editMessage)="editMessage($event)" ></app-message>
+    </div>
   </div>
-</div>
-
+</tui-scrollbar>
 <app-chat-input (sendMessageEmitter)="sendMessage($event)"> </app-chat-input>

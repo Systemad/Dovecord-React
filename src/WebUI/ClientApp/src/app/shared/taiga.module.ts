@@ -119,7 +119,8 @@ const taigaModules = [
     TuiPrimitiveTextfieldModule,
     TuiDataListModule,
     TuiThemeNightModule,
-    TuiTextfieldControllerModule
+    TuiTextfieldControllerModule,
+    TuiScrollbarModule
 ]
 @NgModule({
   declarations: [],

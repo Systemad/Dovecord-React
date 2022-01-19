@@ -25,10 +25,14 @@ export class ChatComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.signalRService.data.subscribe((message: ChannelMessageDto) => {
-      //let obj = new ChannelMessageDto(message);
-      //console.log("chat component, message received", message);
+    this.signalRService.messageReceivedObservable.subscribe((message: ChannelMessageDto) => {
       this.messages.push(message);
+    });
+
+    this.signalRService.deleteMessageReceivedObservable.subscribe((message: any) => {
+      this.messages.forEach( (item, index) => {
+        if(item.id === message) this.messages.splice(index,1);
+      });
     });
   }
 
@@ -71,14 +75,10 @@ export class ChatComponent implements OnInit {
     }, error => console.log(error));
   }
 
-  deleteMessage(message: ChannelMessageDto){
-    let idd = message.id;
+  deleteMessage(message: string){
+    //let idd = message.id
 
-    this.messages.forEach( (item, index) => {
-      if(item === message) this.messages.splice(index,1);
-    });
-
-    this.messageService.deleteMessageById(message.id!).subscribe(
+    this.messageService.deleteMessageById(message).subscribe(
       results => {
         console.log(results);
       }, error => console.log(error));

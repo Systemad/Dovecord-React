@@ -21,7 +21,7 @@ export class MessageComponent implements OnInit {
   component?: TuiHostedDropdownComponent;
 
   @Input() message?: ChannelMessageDto;
-  @Output() deleteMessage: EventEmitter<ChannelMessageDto> = new EventEmitter();
+  @Output() deleteMessage: EventEmitter<string> = new EventEmitter();
   @Output() editMessage: EventEmitter<ChannelMessageDto> = new EventEmitter();
 
   constructor() {}
@@ -29,25 +29,23 @@ export class MessageComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  readonly items = ['Edit', 'Delete', 'Info'];
+  readonly items = ['edit', 'delete', 'info'];
 
   open = false;
 
   onClick(item: string) {
 
     switch(item){
-      case "Delete":{
-        console.log("delete clicked", this.message?.id);
-        this.deleteMessage.emit(this.message);
+      case "delete":{
+        this.deleteMessage.emit(this.message?.id);
         break;
       }
-      case "Edit":{
-        console.log("edit clicked");
+      case "edit":{
         this.editMessage.emit(this.message)
         //this.deleteMessage.emit(this.message);
         break;
       }
-      case "Info":{
+      case "info":{
         console.log("info clicked");
         //this.deleteMessage.emit(this.message);
         break;

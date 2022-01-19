@@ -52,6 +52,7 @@ public class MessageController : ControllerBase
     [HttpPut("{id:guid}", Name = "UpdateMessage")]
     public async Task<IActionResult> UpdateMessage(Guid id, string message)
     {
+        //TODO: Add check if current user owns message
         var command = new UpdateMessage.UpdateMessageCommand(id, message);
         await _mediator.Send(command);
         return NoContent();
@@ -82,6 +83,7 @@ public class MessageController : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> DeleteMessageById(Guid id)
     {
+        // TODO: Add check if current user owns message
         await _mediator.Send(new DeleteMessage.DeleteMessageCommand(id));
         await _hubContext.Clients.All.DeleteMessageReceived(id.ToString());
         return NoContent();

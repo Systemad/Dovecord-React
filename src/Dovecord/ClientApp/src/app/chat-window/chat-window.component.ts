@@ -15,7 +15,7 @@ export class ChatWindowComponent implements OnInit {
 
   @Input() messages?: ChannelMessageDto[];
   @Output() sendMessageEmitter = new EventEmitter<string>();
-  @Output() deleteMessageEmitter = new EventEmitter<ChannelMessageDto>();
+  @Output() deleteMessageEmitter = new EventEmitter<string>();
   @Output() editMessageEmitter = new EventEmitter<ChannelMessageDto>();
 
   constructor() { }
@@ -27,7 +27,7 @@ export class ChatWindowComponent implements OnInit {
     this.sendMessageEmitter.emit(message);
   }
 
-  deleteMessage(message: ChannelMessageDto){
+  deleteMessage(message: string){
     this.deleteMessageEmitter.emit(message);
   }
 

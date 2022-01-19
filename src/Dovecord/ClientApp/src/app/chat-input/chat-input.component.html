@@ -1,4 +1,4 @@
-<!-- <div tuiMode="onDark" class="dark"> -->
+<div tuiMode="onDark" class="dark" style="float:left">
     <form [formGroup]="messageForm" class="input-box">
       <tui-text-area
         formControlName="textValue"
@@ -10,5 +10,8 @@
         </tui-text-area>
       <tui-field-error formControlName="textValue"></tui-field-error>
     </form>
-    <button tuiIconButton type="button" (click)="sendMessage()" class="send-button"> Send </button>
-<!-- </div> -->
+</div>
+
+<div style="flot:left">
+    <button tuiIconButton type="button" (click)="sendMessage()" class="send-button">Send</button>
+</div>

@@ -14,8 +14,11 @@ import { AuthService } from '../auth/auth.service';
 export class SignalRService {
 
   connectionUrl = 'https://localhost:7045/chathub';
-  private dataSource = new BehaviorSubject<ChannelMessageDto>(new ChannelMessageDto());
-  data = this.dataSource.asObservable();
+  private messageReceivedSource = new BehaviorSubject<ChannelMessageDto>(new ChannelMessageDto());
+  private deleteMessageReceivedSource = new BehaviorSubject<any>(null);
+
+  messageReceivedObservable = this.messageReceivedSource.asObservable();
+  deleteMessageReceivedObservable = this.deleteMessageReceivedSource.asObservable();
 
   options: signalR.IHttpConnectionOptions = {
     accessTokenFactory: async () => {
@@ -58,7 +61,12 @@ export class SignalRService {
   private setSignalrClientMethods() : void {
     this.connection!.on("MessageReceived", (data: ChannelMessageDto) => {
         console.log("message received from Hub");
-        this.updatedDataSelection(data);
+        this.updatedDataSelection(data, "add");
+    })
+
+    this.connection!.on("DeleteMessageReceived", (data: string) => {
+      console.log("delete received from Hub");
+      this.updatedDataSelection(data, "delete");
     })
   }
 
@@ -69,8 +77,17 @@ export class SignalRService {
     return false;
   }
 
-  private updatedDataSelection(data: any){
-    this.dataSource.next(data);
+  private updatedDataSelection(data: any, tag: string){
+    switch(tag){
+      case "add": {
+        this.messageReceivedSource.next(data);
+        break;
+      };
+      case "delete": {
+        this.deleteMessageReceivedSource.next(data);
+        break;
+      }
+    }
   }
 
   public joinChannel(channelId: string) : void {

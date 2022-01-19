@@ -1,8 +1,8 @@
-<div tuiMode="onDark" class="dark">
-  <div class="input-box">
-    <form [formGroup]="messageForm">
+<!-- <div tuiMode="onDark" class="dark"> -->
+    <form [formGroup]="messageForm" class="input-box">
       <tui-text-area
         formControlName="textValue"
+        tuiHintContent="Remember to follow the rules!"
         [expandable]="true"
         [tuiTextfieldMaxLength]="maxLength"
         class="field-small">
@@ -10,9 +10,5 @@
         </tui-text-area>
       <tui-field-error formControlName="textValue"></tui-field-error>
     </form>
-  </div>
-
-  <div class="send-button">
-    <button tuiIconButton type="button" (click)="sendMessage()"> Send </button>
-  </div>
-</div>
+    <button tuiIconButton type="button" (click)="sendMessage()" class="send-button"> Send </button>
+<!-- </div> -->

@@ -9,3 +9,9 @@ a.title {
   background-color: var(--tui-base-01);
   padding: 10px;
 }
+
+
+.wrapper2 {
+  display: flex;
+  background-color: var(--tui-base-01);
+}

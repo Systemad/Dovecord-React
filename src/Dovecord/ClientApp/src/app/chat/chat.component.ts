@@ -4,7 +4,7 @@ import { SignalRService } from '../services/signal-r.service';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.scss']
+  styleUrls: ['./chat.component.less']
 })
 export class ChatComponent implements OnInit {
 

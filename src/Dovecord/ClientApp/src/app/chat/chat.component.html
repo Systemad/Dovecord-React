@@ -1,30 +1,29 @@
-<div>
-  <!-- TOOD: Replace with Taiga UI grid -->
-  <mat-grid-list cols="6" rowHeight="6.5em" gutterSize="10px">
+<div class="tui-container tui-container_fullwidth">
+  <div class="tui-row tui-row_box">
 
-    <!-- CHANNEL SECTION -->
-    <mat-grid-tile rowspan="7" colspan="1" class="card-background">
-      <app-channel [channels]="channels" (channelEmitter)="selectChannel($event)"> </app-channel>
-    </mat-grid-tile>
+    <div class="tui-col_2">
+          <div class="channel-box">
+            <app-channel [channels]="channels" (channelEmitter)="selectChannel($event)"> </app-channel>
+          </div>
+      </div>
 
-    <!-- HEADER BOX-->
-    <mat-grid-tile rowspan="1" colspan="4" class="card-background">
-      {{ selectedChannel?.name }}
-    </mat-grid-tile>
 
-    <!-- USER SECTION -->
-    <mat-grid-tile rowspan="7" colspan="1" class="card-background">
+      <div class="tui-col_8">
+          <div class="header-box">
+            {{ selectedChannel?.name }}
+          </div>
 
-    </mat-grid-tile>
+          <div class="chat-box">
+            <app-chat-window [messages]="messages"
+            (sendMessageEmitter)="sendMessage($event)"
+            (deleteMessageEmitter)="deleteMessage($event)"
+            (editMessageEmitter)="editMessage($event)"
+            ></app-chat-window>
+          </div>
+      </div>
 
-    <!-- Message list and input component -->
-    <mat-grid-tile rowspan="6" colspan="4" class="card-background">
-      <app-chat-window [messages]="messages"
-        (sendMessageEmitter)="sendMessage($event)"
-        (deleteMessageEmitter)="deleteMessage($event)"
-        (editMessageEmitter)="editMessage($event)"
-        ></app-chat-window>
-    </mat-grid-tile>
-
-  </mat-grid-list>
+      <div class="tui-col_2 tui-container_box">
+          <div class="user-box"> USER </div>
+      </div>
+  </div>
 </div>

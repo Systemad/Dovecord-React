@@ -25,10 +25,8 @@ public static class DeleteChannel
             if (channel is null)
                 throw new NotFoundException("Channel", request.Id);
 
-            
             _context.Channels.Remove(channel);
             await _context.SaveChangesAsync(cancellationToken);
-
             return true;
         }
     }

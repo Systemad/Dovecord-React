@@ -8,6 +8,7 @@ using Serilog;
 using Dovecord.Extensions.Application;
 using Dovecord.Extensions.Host;
 using Dovecord.Extensions.Services;
+using Dovecord.SignalR.Hubs;
 
 namespace Dovecord;
 

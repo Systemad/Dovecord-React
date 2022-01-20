@@ -1,5 +1,5 @@
-<div tuiMode="onDark" class="dark" style="float:left">
-    <form [formGroup]="messageForm" class="input-box">
+<div tuiMode="onDark" class="dark input-box">
+    <form [formGroup]="messageForm" class="">
       <tui-text-area
         formControlName="textValue"
         tuiHintContent="Remember to follow the rules!"
@@ -12,6 +12,6 @@
     </form>
 </div>
 
-<div style="flot:left">
-    <button tuiIconButton type="button" (click)="sendMessage()" class="send-button">Send</button>
+<div style="send-button">
+    <button tuiIconButton type="button" (click)="sendMessage()">Send</button>
 </div>

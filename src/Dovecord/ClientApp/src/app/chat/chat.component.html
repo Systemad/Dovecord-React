@@ -1,29 +1,33 @@
 <div class="tui-container tui-container_fullwidth">
   <div class="tui-row tui-row_box">
 
+    <!-- Left side: User component -->
     <div class="tui-col_2">
-          <div class="channel-box">
-            <app-channel [channels]="channels" (channelEmitter)="selectChannel($event)"> </app-channel>
-          </div>
+      <div class="channel-box">
+        <app-channel [channels]="channels" (channelEmitter)="selectChannel($event)"></app-channel>
+      </div>
+    </div>
+
+    <!-- Middle: Header component -->
+    <div class="tui-col_8">
+      <div class="header-box">
+        {{ selectedChannel?.name }}
       </div>
 
-
-      <div class="tui-col_8">
-          <div class="header-box">
-            {{ selectedChannel?.name }}
-          </div>
-
-          <div class="chat-box">
-            <app-chat-window [messages]="messages"
-            (sendMessageEmitter)="sendMessage($event)"
-            (deleteMessageEmitter)="deleteMessage($event)"
-            (editMessageEmitter)="editMessage($event)"
-            ></app-chat-window>
-          </div>
+      <!-- Middle: Main chat component (messages / input) -->
+      <div class="chat-box">
+        <app-chat-window [messages]="messages"
+          (sendMessageEmitter)="sendMessage($event)"
+          (deleteMessageEmitter)="deleteMessage($event)"
+          (editMessageEmitter)="editMessage($event)">
+        </app-chat-window>
       </div>
+    </div>
 
-      <div class="tui-col_2 tui-container_box">
-          <div class="user-box"> USER </div>
-      </div>
+      <!-- Right side: User component -->
+    <div class="tui-col_2 tui-container_box">
+      <div class="user-box"> USER </div>
+    </div>
+
   </div>
 </div>

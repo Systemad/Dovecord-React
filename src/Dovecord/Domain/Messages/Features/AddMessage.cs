@@ -2,6 +2,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Dovecord.Databases;
 using Dovecord.Dtos.Message;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ public static class AddMessage
     {
         private readonly DoveDbContext _context;
         private readonly IMapper _mapper;
-
+        
         public Handler(DoveDbContext context, IMapper mapper)
         {
             _context = context;
@@ -24,11 +25,9 @@ public static class AddMessage
         
         public async Task<ChannelMessageDto> Handle(AddMessageCommand request, CancellationToken cancellationToken)
         {
-            // fix user id
             var message = _mapper.Map<ChannelMessage>(request.MessageToAdd);
             _context.ChannelMessages.Add(message);
             await _context.SaveChangesAsync(cancellationToken);
-
             // TODO: figure out
             return await _context.ChannelMessages
                 .ProjectTo<ChannelMessageDto>(_mapper.ConfigurationProvider)

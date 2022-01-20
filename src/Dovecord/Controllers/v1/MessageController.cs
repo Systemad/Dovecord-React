@@ -3,6 +3,7 @@ using Dovecord.Domain.Messages.Features;
 using Dovecord.Dtos.Message;
 using Dovecord.Extensions.Services;
 using Dovecord.SignalR;
+using Dovecord.SignalR.Hubs;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

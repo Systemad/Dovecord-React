@@ -7,8 +7,8 @@ using Microsoft.Identity.Web.Resource;
 
 namespace Dovecord.Controllers.v1;
 
-[Authorize]
-[RequiredScope("API.Access")]
+//[Authorize]
+//[RequiredScope("API.Access")]
 [ApiController]
 [Route("api/channels")]
 [ApiVersion("1.0")]

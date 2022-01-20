@@ -37,6 +37,7 @@ export class SignalRService {
   public initiateSignalrConnection(): Promise<any>{
     return new Promise((resolve, reject) => {
       this.connection = new signalR.HubConnectionBuilder()
+        .withAutomaticReconnect()
         .withUrl(this.connectionUrl, this.options)
         // Since there are resolver issues from PascalCase (C# class) to CamelCase Typescript
         // and no real good solution, we will be leaving this out for now

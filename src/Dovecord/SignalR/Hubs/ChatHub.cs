@@ -5,9 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
 using Serilog;
-using Dovecord.Dtos.Message;
 
-namespace Dovecord.SignalR;
+namespace Dovecord.SignalR.Hubs;
 
 [Authorize]
 [RequiredScope("API.Access")]

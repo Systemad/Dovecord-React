@@ -28,6 +28,7 @@ export class ChatInputComponent implements OnInit {
   readonly minLength = 1;
   readonly maxLength = 100;
 
+  currentText: String = new String();
   readonly messageForm = new FormGroup({
     textValue: new FormControl("", [
         Validators.required,
@@ -47,8 +48,11 @@ export class ChatInputComponent implements OnInit {
 
   sendMessage() {
     if(this.messageForm.valid){
-      this.sendMessageEmitter.emit(this.messageForm.get("textValue")?.value)
+      this.currentText = this.messageForm.get("textValue")?.value
+
+      this.sendMessageEmitter.emit(this.currentText.trim())
       this.messageForm.reset('');
+      this.currentText = "";
     } else {
       console.log("NOT VALID")
     }

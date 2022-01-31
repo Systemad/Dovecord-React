@@ -15,3 +15,7 @@ a.title {
   display: flex;
   background-color: var(--tui-base-01);
 }
+
+html, body {
+  height: 100%;
+}

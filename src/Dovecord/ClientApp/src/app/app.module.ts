@@ -15,6 +15,8 @@ import { ChattestComponent } from './chattest/chattest.component';
 import { MessageComponent } from './message/message.component';
 import { ChatInputComponent } from './chat-input/chat-input.component';
 import { ChatWindowComponent } from './chat-window/chat-window.component';
+import { HeaderBoxComponent } from './header-box/header-box.component';
+import { UserListComponent } from './user-list/user-list.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IPublicClientApplication, PublicClientApplication, InteractionType, BrowserCacheLocation, LogLevel } from '@azure/msal-browser';
@@ -66,7 +68,9 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     ChattestComponent,
     MessageComponent,
     ChatInputComponent,
-    ChatWindowComponent
+    ChatWindowComponent,
+    HeaderBoxComponent,
+    UserListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

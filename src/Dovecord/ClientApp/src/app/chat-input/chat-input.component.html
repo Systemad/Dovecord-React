@@ -1,17 +1,13 @@
-<div tuiMode="onDark" class="dark input-box">
-    <form [formGroup]="messageForm" class="">
-      <tui-text-area
-        formControlName="textValue"
-        tuiHintContent="Remember to follow the rules!"
-        [expandable]="true"
-        [tuiTextfieldMaxLength]="maxLength"
-        class="field-small">
-        Type your message...
-        </tui-text-area>
-      <tui-field-error formControlName="textValue"></tui-field-error>
-    </form>
-</div>
-
-<div style="send-button">
-    <button tuiIconButton type="button" (click)="sendMessage()">Send</button>
+<div class="input-area">
+    <div tuiMode="onDark" class="dark">
+        <form [formGroup]="messageForm" (keydown.enter)="sendMessage()">
+          <tui-text-area
+            formControlName="textValue"
+            tuiHintContent="Remember to follow the rules!"
+            [expandable]="true"
+            class="field-small tui-space_bottom-10">
+            Type your message...
+            </tui-text-area>
+        </form>
+    </div>
 </div>

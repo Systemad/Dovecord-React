@@ -27,8 +27,7 @@ public static class AddChannel
             var channel = _mapper.Map<Channel>(request.ChannelToAdd);
             _context.Channels.Add(channel);
             await _context.SaveChangesAsync(cancellationToken);
-
-            // TODO: Setup automapper
+            
             return await _context.Channels
                 .ProjectTo<ChannelDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(c => c.Id == channel.Id, cancellationToken);

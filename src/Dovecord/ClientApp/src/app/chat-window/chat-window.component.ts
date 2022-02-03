@@ -8,7 +8,7 @@ import { ChannelMessageDto } from '../web-api-client';
 @Component({
   selector: 'app-chat-window',
   templateUrl: './chat-window.component.html',
-  styleUrls: ['./chat-window.component.css'],
+  styleUrls: ['./chat-window.component.less'],
   //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChatWindowComponent implements OnInit {

@@ -4,7 +4,7 @@ import { ChannelClient, ChannelDto } from '../web-api-client';
 @Component({
   selector: 'app-channel',
   templateUrl: './channel.component.html',
-  styleUrls: ['./channel.component.scss']
+  styleUrls: ['./channel.component.less']
 })
 export class ChannelComponent {
 

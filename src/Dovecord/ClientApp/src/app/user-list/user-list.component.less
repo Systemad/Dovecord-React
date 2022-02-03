@@ -1,3 +1,5 @@
+@import '~@taiga-ui/core/styles/taiga-ui-local';
+
 .whole-box {
   padding-left: 10px;
   padding-right: 10px;
@@ -10,6 +12,14 @@
   top: 0;
   left: 5px;
   width: 95%;
+  max-height: 100%;
+}
+
+.message-listing {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 97%;
 }
 
 .message-box {
@@ -21,7 +31,7 @@
 .text-message-color {
   color: var(--tui-text-02-night);
 }
-.message-box:hover {
+.chat-message:hover {
   background-color: rgba(0, 0, 0, 0.363);
 }
 
@@ -75,34 +85,15 @@
 }
 
 .field-small {
-  min-height: 3.4rem !important;
+  min-height: 3.4rem;
 }
 
-
-.message-listing {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 97%;
-  max-height: 10px;
-}
-
-.scroll-box {
-  border-radius: 10px;
-  width: 100%;
-  height: 72%;
-}
-
-.line {
-  padding: 5px 0 0 5px;
-  white-space: nowrap;
-}
-
-.main-box {
+.channel-box {
+  padding: 0.5rem;
   width: 100%;
   height: 100%;
-  overflow:hidden;
-  position: relative;
+  box-sizing: border-box;
+  background-color: #222222;
   border-radius: var(--tui-radius-m);
-  background-color: rgba(208, 2, 27, 0.3);
+  .shadow(5);
 }

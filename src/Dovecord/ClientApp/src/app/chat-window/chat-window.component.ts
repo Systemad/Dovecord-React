@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { TUI_VALIDATION_ERRORS } from '@taiga-ui/kit';
-import { ChannelMessageDto } from '../web-api-client';
+import { ChannelDto, ChannelMessageDto } from '../web-api-client';
 
 @Component({
   selector: 'app-chat-window',
@@ -14,6 +14,7 @@ import { ChannelMessageDto } from '../web-api-client';
 export class ChatWindowComponent implements OnInit {
 
   @Input() messages?: ChannelMessageDto[];
+  @Input() currentChannel?: ChannelDto;
   @Output() sendMessageEmitter = new EventEmitter<string>();
   @Output() deleteMessageEmitter = new EventEmitter<string>();
   @Output() editMessageEmitter = new EventEmitter<ChannelMessageDto>();

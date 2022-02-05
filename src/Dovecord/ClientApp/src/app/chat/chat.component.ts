@@ -1,25 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { ChannelClient, ChannelDto, MessageClient, MessageManipulationDto, ChannelMessageDto } from '../web-api-client';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChannelClient, ChannelDto, MessageClient, MessageManipulationDto, ChannelMessageDto, UserClient, UserDto } from '../web-api-client';
 import { SignalRService } from '../services/signal-r.service';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.less']
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
 
   channels: ChannelDto[] = [];
+  users: UserDto[] = [];
   messages: ChannelMessageDto[] = [];
 
   selectedChannel: ChannelDto | undefined;
   messageToSend: MessageManipulationDto | undefined;
 
-  constructor(private signalRService: SignalRService, private service: ChannelClient, private messageService: MessageClient) {
-    this.service.getChannels().subscribe(result => {
-      this.channels = result;
-      //console.log(this.channels);
-    }, error => console.error(error));
-
+  constructor(private signalRService: SignalRService,
+    private channelService: ChannelClient,
+    private messageService: MessageClient,
+    private userService: UserClient) {
     this.signalRService.initiateSignalrConnection();
   }
 
@@ -34,6 +33,9 @@ export class ChatComponent implements OnInit {
         if(item.id === message) this.messages.splice(index,1);
       });
     });
+
+    this.updateDashboard();
+    this.signalRService.onDataUpdate(this.updateDashboard.bind(this));
   }
 
 
@@ -46,6 +48,19 @@ export class ChatComponent implements OnInit {
     this.signalRService.joinChannel(String(this.selectedChannel.id));
     this.getChannelMessages(channel);
   }
+
+  updateDashboard(){
+    this.channelService.getChannels().subscribe(result => {
+      this.channels = result;
+      //console.log(this.channels);
+    }, error => console.error(error));
+
+    this.userService.getUsers().subscribe(result => {
+      this.users = result;
+      console.log(this.users);
+    }, error => console.error(error));
+  }
+
 
   getChannelMessages(channel: ChannelDto) : void
   {
@@ -82,5 +97,9 @@ export class ChatComponent implements OnInit {
       results => {
         console.log(results);
       }, error => console.log(error));
+  }
+
+  ngOnDestroy(){
+    //this.signalRService.messageReceivedObservable.unsubScri
   }
 }

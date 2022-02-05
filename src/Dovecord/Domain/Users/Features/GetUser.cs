@@ -2,10 +2,10 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Dovecord.Databases;
 using Dovecord.Exceptions;
-using Infrastructure.Dtos.User;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Dovecord.Dtos.Channel;
+using Dovecord.Dtos.User;
 
 namespace Dovecord.Domain.Users.Features;
 
@@ -31,6 +31,7 @@ public static class GetUser
                 .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
 
             if (result is null)
+                //return null;
                 throw new NotFoundException("User", request.Id);
 
             return result;

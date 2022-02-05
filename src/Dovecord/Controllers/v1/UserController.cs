@@ -1,6 +1,5 @@
 using Dovecord.Domain.Users.Features;
 using Dovecord.Dtos.User;
-using Infrastructure.Dtos.User;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,11 +43,12 @@ public class UserController : ControllerBase
         return Ok(result);
     }
     
+    [Obsolete]
     [ProducesResponseType(typeof(UserDto), 201)]
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost(Name = "AddUser")]
-    public async Task<ActionResult> AddUser([FromBody] UserManipulationDto userForCreation)
+    public async Task<ActionResult> AddUser([FromBody] UserCreationDto userForCreation)
     {
         var command = new AddUser.AddUserCommand(userForCreation);
         var commandResponse = await _mediator.Send(command);

@@ -29,23 +29,23 @@ export class MessageComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  readonly items = ['edit', 'delete', 'info'];
+  readonly items = ['Edit', 'Delete', 'Info'];
 
   open = false;
 
   onClick(item: string) {
 
     switch(item){
-      case "delete":{
+      case "Delete":{
         this.deleteMessage.emit(this.message?.id);
         break;
       }
-      case "edit":{
+      case "Edit":{
         this.editMessage.emit(this.message)
         //this.deleteMessage.emit(this.message);
         break;
       }
-      case "info":{
+      case "Info":{
         console.log("info clicked");
         //this.deleteMessage.emit(this.message);
         break;

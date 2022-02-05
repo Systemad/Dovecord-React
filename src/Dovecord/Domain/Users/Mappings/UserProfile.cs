@@ -1,6 +1,5 @@
 using AutoMapper;
 using Dovecord.Dtos.User;
-using Infrastructure.Dtos.User;
 using Dovecord.Domain.Channels;
 using Dovecord.Dtos.Channel;
 
@@ -11,6 +10,7 @@ public class UserProfile : Profile
     public UserProfile()
     {
         CreateMap<User, UserDto>().ReverseMap();
+        CreateMap<UserCreationDto, User>().ReverseMap();
         CreateMap<UserManipulationDto, User>().ReverseMap();
     }
 }

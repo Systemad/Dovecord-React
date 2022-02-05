@@ -8,7 +8,9 @@
 
     <!-- Middle: Header, Message and Chat input component -->
     <div class="tui-col_xs-12 tui-col_md-8 tui-col_lg-12">
-        <app-chat-window [messages]="messages"
+        <app-chat-window
+          [messages]="messages"
+          [currentChannel]="selectedChannel"
           (sendMessageEmitter)="sendMessage($event)"
           (deleteMessageEmitter)="deleteMessage($event)"
           (editMessageEmitter)="editMessage($event)">
@@ -17,7 +19,7 @@
 
       <!-- Right side: User component -->
     <div class="tui-col_xs-12 tui-col_md-2 tui-col_lg-2">
-      <app-user-list></app-user-list>
+      <app-user-list [users]="users"></app-user-list>
     </div>
 
   </div>

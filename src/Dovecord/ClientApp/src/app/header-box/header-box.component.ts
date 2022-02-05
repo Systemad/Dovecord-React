@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ChannelDto } from '../web-api-client';
 
 @Component({
   selector: 'app-header-box',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header-box.component.css']
 })
 export class HeaderBoxComponent implements OnInit {
+
+  @Input() currentChannel?: ChannelDto;
 
   constructor() { }
 

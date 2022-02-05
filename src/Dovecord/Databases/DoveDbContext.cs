@@ -53,7 +53,7 @@ public class DoveDbContext : DbContext
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.UserId = Guid.Parse(_currentUserService?.UserId);
+                    entry.Entity.UserId = Guid.Parse(_currentUserService.UserId);
                     entry.Entity.CreatedBy = _currentUserService.Username;
                     entry.Entity.CreatedOn = now;
                     entry.Entity.LastModifiedOn = now;
@@ -76,7 +76,9 @@ public class DoveDbContext : DbContext
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.Id = Guid.Parse(_currentUserService?.UserId);
+                    entry.Entity.Id = Guid.Parse(_currentUserService.UserId);
+                    break;
+                case EntityState.Modified:
                     break;
                 case EntityState.Deleted:
                     // deleted_at

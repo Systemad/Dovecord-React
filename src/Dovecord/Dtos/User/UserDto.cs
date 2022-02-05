@@ -1,4 +1,4 @@
-namespace Infrastructure.Dtos.User;
+namespace Dovecord.Dtos.User;
 
 public class UserDto
 {

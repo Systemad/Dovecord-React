@@ -1,11 +1,11 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Dovecord.Databases;
-using Infrastructure.Dtos.User;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Dovecord.Domain.Channels;
 using Dovecord.Dtos.Channel;
+using Dovecord.Dtos.User;
 
 namespace Dovecord.Domain.Users.Features;
 
@@ -26,8 +26,9 @@ public static class GetUserList
         
         public async Task<List<UserDto>> Handle(UserListQuery request, CancellationToken cancellationToken)
         {
-            var channels = await _context.Channels.ToListAsync(cancellationToken);
-            return _mapper.Map<List<UserDto>>(channels);
+            var users = await _context.Users.ToListAsync(cancellationToken);
+            //return users;
+            return _mapper.Map<List<UserDto>>(users);
         }
     }
 }

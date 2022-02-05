@@ -10,7 +10,7 @@ namespace Dovecord.Domain.Users.Features;
 
 public static class UpdateUser
 {
-    public record UpdateUserCommand(Guid Id, UserManipulationDto NewChannelData) : IRequest<bool>;
+    public record UpdateUserCommand(Guid Id, UserManipulationDto NewUserData) : IRequest<bool>;
     
     public class Query : IRequestHandler<UpdateUserCommand, bool>
     {
@@ -29,11 +29,12 @@ public static class UpdateUser
                 .Where(x => x.Id == request.Id)
                 .AsTracking()
                 .SingleOrDefaultAsync(cancellationToken);
-            
+
             if (userToUpdate is null)
-                throw new NotFoundException("User", request.Id);
+                return false;
+                //throw new NotFoundException("User", request.Id);
             
-            _mapper.Map(request.NewChannelData, userToUpdate);  
+            _mapper.Map(request.NewUserData, userToUpdate);  
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }

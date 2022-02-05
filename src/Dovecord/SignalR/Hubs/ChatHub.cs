@@ -1,5 +1,7 @@
 ﻿using System.Security.Claims;
 using Dovecord.Domain.Entities;
+using Dovecord.Domain.Users.Features;
+using Dovecord.Dtos.User;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
@@ -18,44 +20,30 @@ public class ChatHub : Hub<IChatClient>
         _mediator = mediator;
     }
 
-    string Username => Context?.User?.Identity?.Name ?? "Unknown";
-    Guid UserId => Guid.Parse(Context?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+    private string Username => Context?.User?.Identity?.Name ?? "Unknown";
+    private Guid UserId => Guid.Parse(Context?.User.FindFirstValue(ClaimTypes.NameIdentifier));
     
     public override async Task OnConnectedAsync()
     {
-        /*
-        var usersCommand = new GetUserList.UserListQuery();
-        var usersCommandResponse = await _mediator.Send(usersCommand);
-        //var query = new GetUser.UserQuery(UserId);
-        
-        // TODO: Add Login
-        var userCommand = new GetUser.UserQuery(UserId);
-        var userCommandResponse = await _mediator.Send(userCommand);
-        userCommandResponse.IsOnline = true;
-
-        // Fix mapping ?
-        var updateUser = new UpdateUser.UpdateUserCommand(userCommandResponse.Id, userCommandResponse);
-        await _mediator.Send(updateUser);
-        await Clients.All.SendUserList(usersCommandResponse);
-        */
+        var updateUser = new UpdateUser.UpdateUserCommand(UserId, new UserManipulationDto { IsOnline = true });
+        var userExist = await _mediator.Send(updateUser);
+        if (!userExist)
+        {
+            var addUser = new AddUser.AddUserCommand(new UserCreationDto
+            {
+                Name = Username,
+                IsOnline = true
+            });
+            await _mediator.Send(addUser);
+        }
+        await Clients.All.UpdateData();
     }
 
     public override async Task OnDisconnectedAsync(Exception? ex)
     {
-        /*
-        var usersCommand = new GetUserList.UserListQuery();
-        var usersCommandResponse = await _mediator.Send(usersCommand);
-        //var query = new GetUser.UserQuery(UserId);
-        
-        // TODO: Add Login
-        var userCommand = new GetUser.UserQuery(UserId);
-        var userCommandResponse = await _mediator.Send(userCommand);
-        userCommandResponse.IsOnline = false;
-
-        // Fix mapping 
-        var updateUser = new UpdateUser.UpdateUserCommand(usersCommandResponse);
+        var updateUser = new UpdateUser.UpdateUserCommand(UserId, new UserManipulationDto { IsOnline = false });
         await _mediator.Send(updateUser);
-        */
+        await Clients.All.UpdateData();
     }
 
     public async Task DeleteMessageById(string messageId)

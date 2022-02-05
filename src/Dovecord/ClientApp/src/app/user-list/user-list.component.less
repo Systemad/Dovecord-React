@@ -1,12 +1,5 @@
 @import '~@taiga-ui/core/styles/taiga-ui-local';
 
-.whole-box {
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
-  padding-top: 10px;
-}
-
 .listing {
   position: absolute;
   top: 0;
@@ -60,7 +53,6 @@
   width: 100%;
 }
 
-
 .mat-grid-tile {
   border-radius: 10px;
 }
@@ -75,13 +67,12 @@
 
 .username-card:hover {
   background-color: rgba(0, 0, 0, 0.363);
-  border-radius: 10px;
+  border-radius: var(--tui-radius-m);
 }
-
 
 .list-color:hover {
   background-color: rgba(0, 0, 0, 0.363);
-  border-radius: 10px;
+  border-radius: var(--tui-radius-m);
 }
 
 .field-small {
@@ -96,4 +87,8 @@
   background-color: #222222;
   border-radius: var(--tui-radius-m);
   .shadow(5);
+}
+
+.border-radius {
+  border-radius: var(--tui-radius-m);
 }

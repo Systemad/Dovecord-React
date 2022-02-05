@@ -1,12 +1,13 @@
 <div class="main-box">
 
-  <app-header-box>
+  <app-header-box [currentChannel]="currentChannel">
 
   </app-header-box>
 
   <tui-scrollbar class="scroll-box">
       <div class="message-box" *ngFor="let message of messages">
-          <app-message [message]="message"
+          <app-message
+          [message]="message"
           (deleteMessage)="deleteMessage($event)"
           (editMessage)="editMessage($event)"></app-message>
       </div>

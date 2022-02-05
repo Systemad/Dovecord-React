@@ -69,6 +69,17 @@ export class SignalRService {
       console.log("delete received from Hub");
       this.updatedDataSelection(data, "delete");
     })
+
+    this.connection!.on("UpdateData", (data) => {
+      console.log("update from Hub");
+      this.updateDataTable();
+    })
+  }
+
+  private updateDataTable!: () => void;
+
+  onDataUpdate(fn: () => void) {
+    this.updateDataTable = fn;
   }
 
   private checkConnectedState(): boolean {

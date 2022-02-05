@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { UserDto } from '../web-api-client';
 
 @Component({
   selector: 'app-user-list',
@@ -6,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-list.component.less']
 })
 export class UserListComponent implements OnInit {
+
+  @Input()
+  users?: UserDto[];
 
   constructor() { }
 

@@ -1,8 +1,7 @@
 namespace Dovecord.Dtos.User;
 
-public class UserCreationTest
+public class UserCreationDto
 {
-    public Guid Id { get; set; } = new Guid();
     public string? Name { get; set; }
     public bool? IsOnline { get; set; }
 }

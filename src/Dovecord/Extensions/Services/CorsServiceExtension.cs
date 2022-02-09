@@ -9,14 +9,12 @@ public static class CorsServiceExtension
             options.AddPolicy("CorsPolicy",
                 builder =>
                 {
+                    // Angular and Blazor client
                     builder.AllowAnyOrigin()
-                        .WithOrigins("https://localhost:44418")
+                        .WithOrigins("https://localhost:44418", "https://localhost:5001")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials();
-                    //builder.AllowAnyHeader();
-                    //builder.AllowAnyMethod();
-                    //builder.DisallowCredentials();
                 });
         });
         return service;

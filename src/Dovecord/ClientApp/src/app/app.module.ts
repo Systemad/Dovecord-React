@@ -4,7 +4,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { ChannelClient, MessageClient, UserClient, WeatherForecastClient } from './web-api-client';
 
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { NavMenuComponent } from './Components/nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
@@ -12,10 +12,10 @@ import { ChannelComponent } from './channel/channel.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ChatComponent } from './chat/chat.component';
 import { ChattestComponent } from './chattest/chattest.component';
-import { MessageComponent } from './message/message.component';
+import { MessageComponent } from './Components/message/message.component';
 import { ChatInputComponent } from './chat-input/chat-input.component';
-import { ChatWindowComponent } from './chat-window/chat-window.component';
-import { HeaderBoxComponent } from './header-box/header-box.component';
+import { ChatWindowComponent } from './Components/chat-window/chat-window.component';
+import { HeaderBoxComponent } from './Components/header-box/header-box.component';
 import { UserListComponent } from './user-list/user-list.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -26,7 +26,7 @@ import { AppRoutingModule } from './app-routing.module'; // InteractionType adde
 import { msalConfig, loginRequest, protectedResources } from './auth/auth-config';
 import { MaterialModule } from './shared/material.module';
 import { TaigaModule } from './shared/taiga.module';
-import { ProfilecardComponent } from './profilecard/profilecard.component';
+import { ProfilecardComponent } from './Components/profilecard/profilecard.component';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication(msalConfig);

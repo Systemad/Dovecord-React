@@ -50,8 +50,11 @@ public class Startup
         services.AddCorsService();
         services.AddInfrastructure(_config, _env);
         services.AddApplication();
-        
         services.AddHealthChecks();
+        
+        services.AddSpaStaticFiles(configuration => 
+            configuration.RootPath = "ClientApp/dist");
+        
         services.AddOpenApiDocument(configure =>
         {
             configure.DocumentName = "v1";
@@ -78,6 +81,10 @@ public class Startup
         app.UseCors("CorsPolicy");
         app.UseHttpsRedirection();
         app.UseStaticFiles();
+        if (!env.IsDevelopment())
+        {
+            app.UseSpaStaticFiles();
+        }
         app.UseRouting();
 
         app.UseAuthentication(); 

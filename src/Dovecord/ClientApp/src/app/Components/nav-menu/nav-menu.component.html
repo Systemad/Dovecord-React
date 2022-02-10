@@ -1,0 +1,6 @@
+<mat-toolbar style="background-color: #512DA8">
+  <span>{{ title }}</span>
+  <span class="title-spacer"></span>
+  <button mat-raised-button *ngIf="!loginDisplay" (click)="login()">Login</button>
+  <app-profilecard></app-profilecard>
+</mat-toolbar>

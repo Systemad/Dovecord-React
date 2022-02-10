@@ -1,9 +1,8 @@
 import { Component, OnInit, EventEmitter, Output, Input, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TUI_VALIDATION_ERRORS } from '@taiga-ui/kit';
-import { ChannelMessageDto } from '../web-api-client';
+import { ChannelMessageDto } from 'src/app/web-api-client';
 import { TuiHostedDropdownComponent } from '@taiga-ui/core';
-
 export function maxLengthMessageFactory(context: {requiredLength: string}): string {
   return `Maximum length — ${context.requiredLength}`;
 }

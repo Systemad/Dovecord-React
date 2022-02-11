@@ -8,15 +8,15 @@ import { NavMenuComponent } from './Components/nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
-import { ChannelComponent } from './channel/channel.component';
+import { ChannelComponent } from './Components/channel/channel.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ChatComponent } from './chat/chat.component';
 import { ChattestComponent } from './chattest/chattest.component';
 import { MessageComponent } from './Components/message/message.component';
-import { ChatInputComponent } from './chat-input/chat-input.component';
+import { ChatInputComponent } from './Components/chat-input/chat-input.component';
 import { ChatWindowComponent } from './Components/chat-window/chat-window.component';
 import { HeaderBoxComponent } from './Components/header-box/header-box.component';
-import { UserListComponent } from './user-list/user-list.component';
+import { UserListComponent } from './Components/user-list/user-list.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IPublicClientApplication, PublicClientApplication, InteractionType, BrowserCacheLocation, LogLevel } from '@azure/msal-browser';

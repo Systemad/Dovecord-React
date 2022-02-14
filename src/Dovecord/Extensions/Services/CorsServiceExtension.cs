@@ -11,7 +11,7 @@ public static class CorsServiceExtension
                 {
                     // Angular and Blazor client
                     builder.AllowAnyOrigin()
-                        .WithOrigins("https://localhost:44418", "https://localhost:5001")
+                        .WithOrigins("http://localhost:3000", "https://localhost:44480")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials();

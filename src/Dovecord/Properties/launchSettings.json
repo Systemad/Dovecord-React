@@ -3,8 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:8986",
-      "sslPort": 44342
+      "applicationUrl": "http://localhost:53770",
+      "sslPort": 44380
     }
   },
   "profiles": {
@@ -24,6 +24,5 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
-  },
-  "_comment": "remove ASPNETCORE_HOSTINGSTARTUPASSEMBLIES: Microsoft.AspNetCore.SpaProxy, to prevent launching angular"
+  }
 }

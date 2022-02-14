@@ -51,10 +51,7 @@ public class Startup
         services.AddInfrastructure(_config, _env);
         services.AddApplication();
         services.AddHealthChecks();
-        
-        services.AddSpaStaticFiles(configuration => 
-            configuration.RootPath = "ClientApp/dist");
-        
+
         services.AddOpenApiDocument(configure =>
         {
             configure.DocumentName = "v1";
@@ -78,13 +75,9 @@ public class Startup
             app.UseHsts();
         }
         
-        app.UseCors("CorsPolicy");
+        app.UseCors(configurePolicy => configurePolicy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
         app.UseHttpsRedirection();
         app.UseStaticFiles();
-        if (!env.IsDevelopment())
-        {
-            app.UseSpaStaticFiles();
-        }
         app.UseRouting();
 
         app.UseAuthentication(); 

@@ -7,14 +7,15 @@ import {
     Separator,
     Description,
 } from "./styles";
+import {ChannelDto} from "../../services/types";
 
-const ChannelInfo: React.FC = () => {
+const ChannelInfo = ( /*props: {channel: ChannelDto} */) => {
     return (
         <Container>
             <HashtagIcon />
-            <Title>general-mourao</Title>
+            <Title>props.channel.name</Title>
             <Separator />
-            <Description>Canal aberto para conversas</Description>
+            <Description>TODO: props.channel.name</Description>
         </Container>
     );
 };

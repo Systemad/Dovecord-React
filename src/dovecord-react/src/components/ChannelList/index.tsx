@@ -1,32 +1,30 @@
-import React from "react";
-import { useEffect, useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import ChannelButton from "../ChannelButton";
 import Button from '@mui/material/Button';
 import { Container, Category, AddCategoryIcon } from "./styles";
-import { getWeatherforecast, getChannels } from "../../services/services"
+import {ChannelDto} from "../../services/types";
 
-const ChannelList: React.FC = () => {
-
-    async function loadWeather() {
-        const response = await getChannels();
-        console.log(response);
-    }
+const ChannelList = (props: {channels: ChannelDto[] }) => {
     return (
         <Container>
             <Category>
-                <span>Canais de texto</span>
+                <span>Text Channels</span>
                 <AddCategoryIcon />
-                <Button onClick={() => loadWeather()}>fetch</Button>
             </Category>
 
-            <ChannelButton channelName="general-mourao" />
-            <ChannelButton channelName="links" />
-            <ChannelButton channelName="coding-notes" />
-            <ChannelButton channelName="deep-web" />
-            <ChannelButton channelName="random" />
+            {props.channels.map((channel, key) => (
+                <ChannelButton key={key} channel={channel} />
+            ))}
         </Container>
     );
 };
 
+// LOOP ChannelButton
 export default ChannelList;
+
+/*
+
+            {channels?.map((channel, index) => (
+                <ChannelButton key={index} channel={channel} />
+            ))}
+ */

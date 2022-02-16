@@ -1,4 +1,4 @@
-This is a Single Page App (SPA) chat application made with Angular and ASP.NET Core following the principles of Vertical Slice Architecture with CQRS.
+This is a Single Page App (SPA) chat application made with React and ASP.NET Core following the principles of Vertical Slice Architecture with CQRS.
 
 NOTE: The project is in a very (very) early state!
 

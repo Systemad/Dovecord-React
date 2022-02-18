@@ -1,5 +1,6 @@
-import {configureStore, createSlice, PayloadAction} from '@reduxjs/toolkit'
-import { ChannelDto } from "./services/types";
+import {ChannelDto} from "../../../services/types";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {RootState} from "../store";
 
 interface ChannelSliceState {
     currentChannel: ChannelDto;
@@ -20,15 +21,5 @@ export const channelSlice = createSlice({
 })
 
 export const { setChannel } = channelSlice.actions;
-
-const store = configureStore({
-    reducer: {
-        currentChannel: channelSlice.reducer
-    }
-})
-
-type RootState = ReturnType<typeof store.getState>;
-
 export const selectChannel = (state: RootState) => state.currentChannel;
-
-export default store;
+export default channelSlice

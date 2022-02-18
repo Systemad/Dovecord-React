@@ -7,15 +7,18 @@ import {
     Separator,
     Description,
 } from "./styles";
-import {ChannelDto} from "../../services/types";
+import {selectChannel} from "../../app/features/channels/channelSlice"
+import {useSelector} from "react-redux";
 
 const ChannelInfo = ( /*props: {channel: ChannelDto} */) => {
+    const currentChannel = useSelector(selectChannel);
+
     return (
         <Container>
             <HashtagIcon />
-            <Title>props.channel.name</Title>
+            <Title>{currentChannel.currentChannel.name}</Title>
             <Separator />
-            <Description>TODO: props.channel.name</Description>
+            <Description>{currentChannel.currentChannel.id}</Description>
         </Container>
     );
 };

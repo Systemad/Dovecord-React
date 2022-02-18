@@ -3,11 +3,12 @@ import ChannelButton from "../ChannelButton";
 import Button from '@mui/material/Button';
 import { Container, Category, AddCategoryIcon } from "./styles";
 import {ChannelDto} from "../../services/types";
-import {useDispatch} from "react-redux";
-import store, { setChannel } from "../../store";
-
+import {useDispatch, useSelector} from "react-redux";
+import {selectChannel, setChannel} from "../../app/features/channels/channelSlice"
 const ChannelList = (props: {channels: ChannelDto[] }) => {
     const dispatch = useDispatch();
+    const selectedChannel = useSelector(selectChannel);
+
     return (
         <Container>
             <Category>
@@ -16,18 +17,14 @@ const ChannelList = (props: {channels: ChannelDto[] }) => {
             </Category>
 
             {props.channels.map((channel, key) => (
-                <ChannelButton click={() => dispatch(setChannel(channel))} key={key} channel={channel} />
+                <ChannelButton
+                    selected={selectedChannel.currentChannel.id === channel.id}
+                    click={() => dispatch(setChannel(channel))}
+                    key={key}
+                    channel={channel} />
             ))}
         </Container>
     );
 };
 
-// LOOP ChannelButton
 export default ChannelList;
-
-/*
-
-            {channels?.map((channel, index) => (
-                <ChannelButton key={index} channel={channel} />
-            ))}
- */

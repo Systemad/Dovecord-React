@@ -6,7 +6,8 @@ import { Container, Messages, InputWrapper, Input, InputIcon, SendIcon } from ".
 import {ChannelDto, ChannelMessageDto, MessageManipulationDto} from "../../services/types";
 import {getMessagesChannelId, postMessages} from "../../services/services";
 import {useDispatch, useSelector} from "react-redux";
-import store, {selectChannel} from "../../store";
+import store from "../../app/features/store";
+import {selectChannel} from "../../app/features/channels/channelSlice"
 
 const ChannelData: React.FC = () => {
     const messagesRef = useRef() as React.MutableRefObject<HTMLDivElement>;

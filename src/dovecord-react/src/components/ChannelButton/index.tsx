@@ -6,11 +6,12 @@ import {ChannelDto} from "../../services/types";
 export interface Props {
     channel: ChannelDto;
     click(channel: ChannelDto): void;
+    selected: Boolean;
 }
 
-const ChannelButton: React.FC<Props> = ( {channel, click}) => {
+const ChannelButton: React.FC<Props> = ( {channel, click, selected}) => {
     return (
-        <Container className={"active"} onClick={() => click(channel)}>
+        <Container className={selected ? "active" : ""} onClick={() => click(channel)}>
             <div>
                 <HashtagIcon />
                 <span>{channel.name}</span>

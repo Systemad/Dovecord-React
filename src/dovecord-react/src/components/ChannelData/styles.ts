@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { AlternateEmail } from "styled-icons/material";
+import { AlternateEmail, Send } from "styled-icons/material";
 
 export const Container = styled.div`
     grid-area: CD;
@@ -68,5 +68,11 @@ export const InputIcon = styled(AlternateEmail)`
     width: 24px;
     height: 24px;
 
+    color: var(--gray);
+`;
+
+export const SendIcon = styled(Send)`
+    width: 24px;
+    height: 24px;
     color: var(--gray);
 `;

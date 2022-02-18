@@ -21,13 +21,7 @@ const Layout: React.FC = () => {
 
     const [channels, setChannels] = useState<ChannelDto[]>([]);
     const [messages, setMessages] = useState<ChannelMessageDto[]>([]);
-    let currentChannel: ChannelDto;
 
-    const messagesFromChannel = async (channel: ChannelDto) =>{
-        //const response = await getMessagesChannelId(channel.id);
-        currentChannel = channel;
-        //setMessages(response.data);
-    }
     useEffect(() => {
         let isSubscribed = true;
         const fetchChannels = async () => {

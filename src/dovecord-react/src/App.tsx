@@ -5,6 +5,9 @@ import Layout from "./components/Layout";
 import GlobalStyles from "./styles/GlobalStyles";
 import './App.css';
 
+import store from './store'
+import { Provider } from 'react-redux'
+
 // MSAL imports
 import { MsalProvider } from "@azure/msal-react";
 import { IPublicClientApplication } from "@azure/msal-browser";
@@ -32,8 +35,10 @@ function Pages() {
       <Routes>
           <Route path="/" element={
             <>
-              <Layout/>
-              <GlobalStyles/>
+                <Provider store={store}>
+                    <Layout/>
+                    <GlobalStyles/>
+                </Provider>
             </>
           }/>
       </Routes>

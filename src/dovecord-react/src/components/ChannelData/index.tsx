@@ -1,37 +1,67 @@
-import React, {useRef, useEffect, useState} from "react";
+import React, {useRef, useEffect, useState, MouseEvent, FormEvent} from "react";
 
 import ChannelMessage, { Mention } from "../ChannelMessage";
 
-import { Container, Messages, InputWrapper, Input, InputIcon } from "./styles";
-import {ChannelDto} from "../../services/types";
-import {getMessagesChannelId} from "../../services/services";
+import { Container, Messages, InputWrapper, Input, InputIcon, SendIcon } from "./styles";
+import {ChannelDto, ChannelMessageDto, MessageManipulationDto} from "../../services/types";
+import {getMessagesChannelId, postMessages} from "../../services/services";
+import {useDispatch, useSelector} from "react-redux";
+import store, {selectChannel} from "../../store";
 
 const ChannelData: React.FC = () => {
     const messagesRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const [message, setMessage] = useState('');
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState<ChannelMessageDto[]>([]);
+    const currentChannelSelector = useSelector(selectChannel);
 
-    const messagesFromChannel = async (channel: ChannelDto) =>{
-        const response = await getMessagesChannelId(channel.id);
-        setMessages(response.data);
+    /*
+    const messagesFromChannel = async () =>{
+        if(currentChannelSelector.currentChannel.id != null){
+            const response = await getMessagesChannelId(currentChannelSelector.currentChannel.id!);
+            setMessages(response.data);
+        }
     }
 
-    const onSumbit = (e) => {
-        e.preventDefault();
+     */
+    const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+        event.preventDefault();
+        if(event.key === "Enter"){
+            const isMessageProvided = message && message !== '';
 
+            if (isMessageProvided) {
+                let newMessage =  {
+                    channelId: currentChannelSelector.currentChannel.id!, // SET CURRENT CHANNEL
+                    content: message,
+                } as MessageManipulationDto;
+
+                await postMessages(newMessage);
+                setMessage('');
+                //props.sendMessage(user, message);
+            }
+        }
+
+    }
+
+    const onSumbit = async () => {
         const isMessageProvided = message && message !== '';
-        /*
-        if (isUserProvided && isMessageProvided) {
-            props.sendMessage(user, message);
+
+        if (isMessageProvided) {
+            let newMessage =  {
+                channelId: currentChannelSelector.currentChannel.id,
+                content: message,
+            } as MessageManipulationDto;
+
+            await postMessages(newMessage);
+            setMessage('');
         }
         else {
-            alert('Please insert an user and a message.');
+            alert('Message cannot be empty');
         }
-         */
     };
 
-    const onMessageUpdate = (e) => {
-        setMessage(e.target.value);
+    const onMessageUpdate = (e: FormEvent<HTMLInputElement>): void => {
+        e.preventDefault();
+        setMessage(e.currentTarget.value);
     }
 
     useEffect(() => {
@@ -57,7 +87,7 @@ const ChannelData: React.FC = () => {
                 ))}
 
                 <ChannelMessage
-                    author="Monteiro Shelby"
+                    author="a"
                     date="18/08/2020"
                     content={
                         <>
@@ -71,8 +101,12 @@ const ChannelData: React.FC = () => {
             </Messages>
 
             <InputWrapper>
-                <Input onChange={onMessageUpdate} value={message} type="text" placeholder="Conversar em #general-mourao" />
-                <InputIcon />
+                <Input
+                    onChange={onMessageUpdate}
+                    value={message}
+                    type="text"
+                    placeholder="Type your message..." />
+                <SendIcon onClick={onSumbit} />
             </InputWrapper>
         </Container>
     );

@@ -4,7 +4,7 @@ import { useMsal, useIsAuthenticated } from "@azure/msal-react";
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
 import { Grid } from "./styles";
 
-import {getChannels, getMessagesChannelId} from "../../services/services"
+import {getChannels, getChannelsId, getMessagesChannelId} from "../../services/services"
 
 import SignInSignOutButton from "../authentication/SignInSignOutButton";
 import ServerList from "../ServerList";
@@ -15,24 +15,50 @@ import UserInfo from "../UserInfo";
 import UserList from "../UserList";
 import ChannelData from "../ChannelData";
 import {ChannelDto, ChannelMessageDto} from "../../services/types";
-import channelData from "../ChannelData";
+import {useAppDispatch} from "../../redux/hooks";
+import { setChannels } from "../../redux/features/channels/channelSlice";
+
+type ChannelState = {
+    channel: ChannelDto
+    messages: ChannelMessageDto[]
+}
+
+type ChannelsState = {
+    channels: ChannelState[],
+}
+
 
 const Layout: React.FC = () => {
+    const dispatch = useAppDispatch();
 
-    const [channels, setChannels] = useState<ChannelDto[]>([]);
-    const [messages, setMessages] = useState<ChannelMessageDto[]>([]);
 
     useEffect(() => {
-        let isSubscribed = true;
+        let isSubscribed = true
         const fetchChannels = async () => {
-            const response = await getChannels();
-            const fetchedChannels = response.data;
+            if(isSubscribed){
+                const channels = await getChannels();
+                const data = channels.data;
+                let newChannelData: ChannelsState = {
+                    channels: []
+                }
 
-            if(isSubscribed)
-                setChannels(fetchedChannels);
+                for (let i = 0; i < channels.data.length; i++){
+                    const channelDataFetch = await getChannelsId(data[i].id!);
+                    const fetchChannelMessages = await getMessagesChannelId(data[i].id!);
+
+                    const newChannel: ChannelState = {
+                        channel: channelDataFetch.data,
+                        messages: fetchChannelMessages.data
+                    }
+                    newChannelData.channels.push(newChannel);
+                }
+                dispatch(setChannels(newChannelData));
+            }
         }
+
         fetchChannels()
             .catch(console.error);
+
         return () => { isSubscribed = false };
     }, []);
 
@@ -42,15 +68,17 @@ const Layout: React.FC = () => {
                 <Grid>
                     <ServerList />
                     <ServerName />
-                    <ChannelInfo /* channel={currentChannel} *//>
-                    <ChannelList channels={channels} />
+                    <ChannelInfo/>
+                    <ChannelList/>
                     <UserInfo />
                     <ChannelData />
                     <UserList />
                 </Grid>
             </AuthenticatedTemplate>
 
-            <SignInSignOutButton />
+            <UnauthenticatedTemplate>
+                <SignInSignOutButton />
+            </UnauthenticatedTemplate>
         </>
     );
 };

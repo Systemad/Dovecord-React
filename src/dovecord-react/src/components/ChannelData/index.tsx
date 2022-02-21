@@ -2,28 +2,21 @@ import React, {useRef, useEffect, useState, MouseEvent, FormEvent} from "react";
 
 import ChannelMessage, { Mention } from "../ChannelMessage";
 
-import { Container, Messages, InputWrapper, Input, InputIcon, SendIcon } from "./styles";
-import {ChannelDto, ChannelMessageDto, MessageManipulationDto} from "../../services/types";
-import {getMessagesChannelId, postMessages} from "../../services/services";
-import {useDispatch, useSelector} from "react-redux";
-import store from "../../app/features/store";
-import {selectChannel} from "../../app/features/channels/channelSlice"
+import { Container, Messages, InputWrapper, Input, SendIcon } from "./styles";
+import { MessageManipulationDto } from "../../services/types";
+import { postMessages } from "../../services/services";
+import { useAppSelector } from "../../redux/hooks";
+import { selectChannels } from "../../redux/features/channels/channelSlice"
+import { getCurrentChannel } from "../../redux/uiSlice";
 
-const ChannelData: React.FC = () => {
+const ChannelData = () => {
     const messagesRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const [message, setMessage] = useState('');
-    const [messages, setMessages] = useState<ChannelMessageDto[]>([]);
-    const currentChannelSelector = useSelector(selectChannel);
+    const currentRoom = useAppSelector(getCurrentChannel);
+    const currentRoomData = useAppSelector(selectChannels);
+    const messages = currentRoomData.find((room) => room.channel.id === currentRoom?.id);
 
-    /*
-    const messagesFromChannel = async () =>{
-        if(currentChannelSelector.currentChannel.id != null){
-            const response = await getMessagesChannelId(currentChannelSelector.currentChannel.id!);
-            setMessages(response.data);
-        }
-    }
 
-     */
     const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
         event.preventDefault();
         if(event.key === "Enter"){
@@ -31,7 +24,7 @@ const ChannelData: React.FC = () => {
 
             if (isMessageProvided) {
                 let newMessage =  {
-                    channelId: currentChannelSelector.currentChannel.id!, // SET CURRENT CHANNEL
+                    channelId: currentRoom?.id, // SET CURRENT CHANNEL
                     content: message,
                 } as MessageManipulationDto;
 
@@ -43,12 +36,12 @@ const ChannelData: React.FC = () => {
 
     }
 
-    const onSumbit = async () => {
+    const Submit = async () => {
         const isMessageProvided = message && message !== '';
 
         if (isMessageProvided) {
             let newMessage =  {
-                channelId: currentChannelSelector.currentChannel.id,
+                channelId: currentRoom?.id,
                 content: message,
             } as MessageManipulationDto;
 
@@ -76,17 +69,8 @@ const ChannelData: React.FC = () => {
     /* MAP messages
     * Right now, just send "mention" as false, but can add ability later
     * */
-    return (
-        <Container>
-            <Messages ref={messagesRef}>
-                {Array.from(Array(15).keys()).map((n) => (
-                    <ChannelMessage
-                        author="Gabriel Shelby"
-                        date="18/08/2020"
-                        content="Bora jogar The Escapists"
-                    />
-                ))}
 
+    /*
                 <ChannelMessage
                     author="a"
                     date="18/08/2020"
@@ -99,6 +83,17 @@ const ChannelData: React.FC = () => {
                     hasMention
                     isBot
                 />
+     */
+    return (
+        <Container>
+            <Messages ref={messagesRef}>
+                {messages?.messages.map((message) => (
+                    <ChannelMessage
+                        author={message.createdBy!}
+                        date={message.createdOn!}
+                        content={message.content!}
+                    />
+                ))}
             </Messages>
 
             <InputWrapper>
@@ -107,7 +102,7 @@ const ChannelData: React.FC = () => {
                     value={message}
                     type="text"
                     placeholder="Type your message..." />
-                <SendIcon onClick={onSumbit} />
+                <SendIcon onClick={Submit} />
             </InputWrapper>
         </Container>
     );

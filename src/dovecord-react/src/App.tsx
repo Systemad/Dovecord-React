@@ -5,7 +5,7 @@ import Layout from "./components/Layout";
 import GlobalStyles from "./styles/GlobalStyles";
 import './App.css';
 
-import store from './app/features/store'
+import { store } from './redux/store'
 import { Provider } from 'react-redux'
 
 // MSAL imports

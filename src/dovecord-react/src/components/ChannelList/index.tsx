@@ -2,12 +2,20 @@ import React, { useEffect, useState } from "react";
 import ChannelButton from "../ChannelButton";
 import Button from '@mui/material/Button';
 import { Container, Category, AddCategoryIcon } from "./styles";
-import {ChannelDto} from "../../services/types";
+import {ChannelDto, ChannelMessageDto} from "../../services/types";
 import {useDispatch, useSelector} from "react-redux";
-import {selectChannel, setChannel} from "../../app/features/channels/channelSlice"
-const ChannelList = (props: {channels: ChannelDto[] }) => {
-    const dispatch = useDispatch();
-    const selectedChannel = useSelector(selectChannel);
+import {selectChannels} from "../../redux/features/channels/channelSlice"
+import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import { setCurrentChannel } from "../../redux/uiSlice";
+
+type ChannelState = {
+    channel: ChannelDto
+    messages: ChannelMessageDto[]
+}
+
+const ChannelList = () => {
+    const dispatch = useAppDispatch();
+    const channels = useAppSelector(selectChannels);
 
     return (
         <Container>
@@ -16,12 +24,10 @@ const ChannelList = (props: {channels: ChannelDto[] }) => {
                 <AddCategoryIcon />
             </Category>
 
-            {props.channels.map((channel, key) => (
+            {channels.map((channel) => (
                 <ChannelButton
-                    selected={selectedChannel.currentChannel.id === channel.id}
-                    click={() => dispatch(setChannel(channel))}
-                    key={key}
-                    channel={channel} />
+                    click={() => dispatch(setCurrentChannel(channel.channel))}
+                    channel={channel.channel} />
             ))}
         </Container>
     );

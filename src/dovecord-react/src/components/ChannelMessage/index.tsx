@@ -4,9 +4,9 @@ import { Container, Avatar, Message, Header, Content } from "./styles";
 export { Mention } from "./styles";
 
 export interface Props {
-    author: string;
-    date: string;
-    content: string | React.ReactElement | React.ReactNode;
+    author?: string;
+    date?: string;
+    content?: string | React.ReactElement | React.ReactNode;
     hasMention?: boolean;
     isBot?: boolean;
 }

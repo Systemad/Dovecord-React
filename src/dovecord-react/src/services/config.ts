@@ -14,8 +14,8 @@ import qs from "qs";
 
 // Msal imports
 import { loginRequest } from "../auth/authConfig";
-import { PublicClientApplication } from '@azure/msal-browser'
-import { msalConfig } from "../auth/authConfig"
+import { PublicClientApplication } from "@azure/msal-browser";
+import { msalConfig } from "../auth/authConfig";
 
 const baseConfig: AxiosRequestConfig = {
   baseURL: "https://localhost:7045", // <--- Add your base url
@@ -32,24 +32,24 @@ let axiosInstance: AxiosInstance;
 const msalInstance = new PublicClientApplication(msalConfig);
 
 const acquireAccessToken = async (msalInstance: any) => {
-    const activeAccount = msalInstance.getActiveAccount(); // This will only return a non-null value if you have logic somewhere else that calls the setActiveAccount API
-    const accounts = msalInstance.getAllAccounts();
-    if (!activeAccount && accounts.length === 0) {
-        /*
-        * User is not signed in. Throw error or wait for user to login.
-        * Do not attempt to log a user in outside of the context of MsalProvider
-        */   
-    }
-    const request = {
-        scopes: loginRequest.scopes,
-        account: activeAccount || accounts[0]
-    };
+  const activeAccount = msalInstance.getActiveAccount(); // This will only return a non-null value if you have logic somewhere else that calls the setActiveAccount API
+  const accounts = msalInstance.getAllAccounts();
+  if (!activeAccount && accounts.length === 0) {
+    /*
+     * User is not signed in. Throw error or wait for user to login.
+     * Do not attempt to log a user in outside of the context of MsalProvider
+     */
+  }
+  const request = {
+    scopes: loginRequest.scopes,
+    account: activeAccount || accounts[0],
+  };
 
-    const authResult = await msalInstance.acquireTokenSilent(request);
+  console.log("msal acquireAccessToken: fetch token");
+  const authResult = await msalInstance.acquireTokenSilent(request);
 
-    return authResult.accessToken
+  return authResult.accessToken;
 };
-
 
 function getAxiosInstance(security: Security): AxiosInstance {
   if (!axiosInstance) {
@@ -97,11 +97,12 @@ function getAxiosInstance(security: Security): AxiosInstance {
   axiosInstance.interceptors.request.use(
     async (requestConfig) => {
       const token = await acquireAccessToken(msalInstance);
+      console.log("Axios interceptor: fetch token");
       // Do something before request is sent
       /** Example on how to add authorization based on security */
-      //if (security?.[0]) {
-          requestConfig.headers!.authorization = `Bearer ${token}`;
-      //}
+      if (security?.[0]) {
+        requestConfig.headers!.authorization = `Bearer ${token}`;
+      }
 
       return requestConfig;
     },

@@ -1,8 +1,8 @@
 import * as signalR from "@microsoft/signalr";
-import {PublicClientApplication} from "@azure/msal-browser";
-import {loginRequest, msalConfig} from "../auth/authConfig";
-import {ChannelMessageDto} from "./types";
-import {useDispatch} from "react-redux";
+import { PublicClientApplication } from "@azure/msal-browser";
+import { loginRequest, msalConfig } from "../auth/authConfig";
+import { ChannelMessageDto } from "./types";
+import { useDispatch } from "react-redux";
 
 /*
 const connectionUrl = 'https://localhost:7045/chathub';

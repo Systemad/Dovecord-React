@@ -1,6 +1,13 @@
 import { LogLevel, Configuration, BrowserCacheLocation, RedirectRequest } from "@azure/msal-browser";
 
-const isIE = window.navigator.userAgent.indexOf("MSIE ") > -1 || window.navigator.userAgent.indexOf("Trident/") > -1;
+const ua = window.navigator.userAgent;
+const msie = ua.indexOf("MSIE ");
+const msie11 = ua.indexOf("Trident/");
+const msedge = ua.indexOf("Edge/");
+const firefox = ua.indexOf("Firefox");
+const isIE = msie > 0 || msie11 > 0;
+const isEdge = msedge > 0;
+const isFirefox = firefox > 0; // Only needed if you need to support the redirect flow in Firefox incognito
 
 export const environment = {
     client: 'e6b54fdf-44c9-4ee1-b9a6-ce1c7f01bac9',
@@ -31,8 +38,8 @@ export const msalConfig: Configuration = {
        navigateToLoginRequestUrl: true, // If "true", will navigate back to the original request location before processing the auth code response.
     },
     cache: {
-     cacheLocation: BrowserCacheLocation.LocalStorage, // Configures cache location. "sessionStorage" is more secure, but "localStorage" gives you SSO between tabs.
-     storeAuthStateInCookie: isIE, // Set this to "true" if you are having issues on IE11 or Edge
+     cacheLocation: "localStorage", // Configures cache location. "sessionStorage" is more secure, but "localStorage" gives you SSO between tabs.
+        storeAuthStateInCookie: isIE || isEdge || isFirefox
     },
     system: {
     loggerOptions: {

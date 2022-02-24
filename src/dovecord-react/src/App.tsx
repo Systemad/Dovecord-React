@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import Layout from "./components/Layout";
 import GlobalStyles from "./styles/GlobalStyles";
@@ -9,7 +9,7 @@ import { store } from './redux/store'
 import { Provider } from 'react-redux'
 
 // MSAL imports
-import { MsalProvider } from "@azure/msal-react";
+import { MsalProvider, useMsal} from "@azure/msal-react";
 import { IPublicClientApplication } from "@azure/msal-browser";
 import { CustomNavigationClient } from "./auth/NavigationClient";
 
@@ -19,14 +19,21 @@ type AppProps = {
 
 function App({pca }: AppProps) {
 
+    //useMsalAuthentication(InteractionType.Redirect)
   const history = useNavigate();
   const navigationClient = new CustomNavigationClient(history);
-  pca.setNavigationClient(navigationClient);
+    pca.setNavigationClient(navigationClient);
+  const { accounts, instance, inProgress } = useMsal();
 
   return (
-      <MsalProvider instance={pca}>
-        <Pages />
-      </MsalProvider>
+      <>
+          <MsalProvider instance={pca}>
+              <Provider store={store}>
+                <Pages />
+              </Provider>
+          </MsalProvider>
+          <GlobalStyles/>
+      </>
   );
 }
 
@@ -35,10 +42,7 @@ function Pages() {
       <Routes>
           <Route path="/" element={
             <>
-                <Provider store={store}>
-                    <Layout/>
-                    <GlobalStyles/>
-                </Provider>
+                <Layout/>
             </>
           }/>
       </Routes>

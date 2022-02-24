@@ -66,7 +66,7 @@ export const deleteChannelsId = (
     template(deleteChannelsId.key, { id }),
     undefined,
     undefined,
-    undefined,
+    _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
@@ -82,7 +82,7 @@ export const deleteMessagesId = (
     template(deleteMessagesId.key, { id }),
     undefined,
     undefined,
-    undefined,
+    _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
@@ -98,7 +98,7 @@ export const deleteUsersId = (
     template(deleteUsersId.key, { id }),
     undefined,
     undefined,
-    undefined,
+    _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
@@ -113,7 +113,7 @@ export const getChannels = (
     getChannels.key,
     undefined,
     undefined,
-    undefined,
+    _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
@@ -129,7 +129,7 @@ export const getChannelsId = (
     template(getChannelsId.key, { id }),
     undefined,
     undefined,
-    undefined,
+    _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
@@ -145,7 +145,7 @@ export const getMessagesChannelId = (
     template(getMessagesChannelId.key, { id }),
     undefined,
     undefined,
-    undefined,
+    _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
@@ -161,7 +161,7 @@ export const getMessagesId = (
     template(getMessagesId.key, { id }),
     undefined,
     undefined,
-    undefined,
+    _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
@@ -176,7 +176,7 @@ export const getUsers = (
     getUsers.key,
     undefined,
     undefined,
-    undefined,
+    _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
@@ -192,7 +192,7 @@ export const getUsersId = (
     template(getUsersId.key, { id }),
     undefined,
     undefined,
-    undefined,
+    _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
@@ -207,7 +207,7 @@ export const getWeatherforecast = (
     getWeatherforecast.key,
     undefined,
     undefined,
-    undefined,
+    _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
@@ -223,7 +223,7 @@ export const postChannels = (
     postChannels.key,
     undefined,
     requestBody,
-    undefined,
+    _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
@@ -239,7 +239,7 @@ export const postMessages = (
     postMessages.key,
     undefined,
     requestBody,
-    undefined,
+    _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
@@ -264,7 +264,7 @@ export const postUsers = (
     postUsers.key,
     undefined,
     requestBody,
-    undefined,
+    _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
@@ -281,7 +281,7 @@ export const putChannelsId = (
     template(putChannelsId.key, { id }),
     undefined,
     requestBody,
-    undefined,
+    _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
@@ -298,7 +298,7 @@ export const putMessagesId = (
     template(putMessagesId.key, { id }),
     queryParams,
     undefined,
-    undefined,
+    _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
@@ -315,7 +315,7 @@ export const putUsersId = (
     template(putUsersId.key, { id }),
     undefined,
     requestBody,
-    undefined,
+    _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
@@ -328,3 +328,4 @@ export const _CONSTANT0 = {
     Accept: "application/json",
   },
 };
+export const _CONSTANT1 = [{ JWT: [] }];

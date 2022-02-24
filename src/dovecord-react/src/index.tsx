@@ -24,6 +24,7 @@ msalInstance.addEventCallback((event: EventMessage) => {
         const account = payload.account;
         msalInstance.setActiveAccount(account);
     }
+    console.log("index: instance callback");
 });
 
 ReactDOM.render(

@@ -4,6 +4,11 @@ import {RootState} from "../../store";
 import {getChannels} from "../../../services/services";
 
 
+type AddMessage = {
+    channelId: string
+    message: ChannelMessageDto[]
+}
+
 type State = {
     channels: ChannelState[],
 }
@@ -32,11 +37,25 @@ export const channelSlice = createSlice({
     reducers: {
         setChannels: (state, action: PayloadAction<State>) => {
             return {...state, ...action.payload}
+        },
+        addMessageToChannel: (state, action: PayloadAction<ChannelMessageDto>) => {
+            //const { channelId, message } = action.payload;
+
+            const channelId = action.payload.channelId;
+            const data = [...state.channels];
+            const message = action.payload;
+            const channel = data.findIndex((channel) => channel.channel.id === channelId);
+            //data[channel] = {...state.channels[channel], messages: [...message, ...state.channels[channel!].messages]}
+            data[channel] = {...state.channels[channel], messages: [message, ...state.channels[channel!].messages]}
+            return {
+                ...state,
+                channels: data
+            }
         }
     }
 })
 
-export const { setChannels } = channelSlice.actions;
+export const { setChannels, addMessageToChannel } = channelSlice.actions;
 
 export const selectChannels = (state: RootState) => state.chatchannels.channels;
 

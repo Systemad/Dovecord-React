@@ -9,11 +9,14 @@ import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
 import {
   PutMessagesIdQueryParams,
+  PutPmessagesIdQueryParams,
   WeatherForecast,
   ChannelDto,
   ChannelManipulationDto,
   ChannelMessageDto,
   MessageManipulationDto,
+  PrivateMessageDto,
+  PrivateMessageManipulationDto,
   UserDto,
   UserCreationDto,
   UserManipulationDto,
@@ -89,6 +92,22 @@ export const deleteMessagesId = (
 
 /** Key is end point string without base url */
 deleteMessagesId.key = "/api/messages/{id}";
+
+export const deletePmessagesId = (
+  id: string,
+  configOverride?: AxiosRequestConfig
+): Promise<SwaggerResponse<any>> => {
+  return Http.deleteRequest(
+    template(deletePmessagesId.key, { id }),
+    undefined,
+    undefined,
+    _CONSTANT1,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+deletePmessagesId.key = "/api/pmessages/{id}";
 
 export const deleteUsersId = (
   id: string,
@@ -169,6 +188,38 @@ export const getMessagesId = (
 /** Key is end point string without base url */
 getMessagesId.key = "/api/messages/{id}";
 
+export const getPmessagesId = (
+  id: string,
+  configOverride?: AxiosRequestConfig
+): Promise<SwaggerResponse<PrivateMessageDto>> => {
+  return Http.getRequest(
+    template(getPmessagesId.key, { id }),
+    undefined,
+    undefined,
+    _CONSTANT1,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+getPmessagesId.key = "/api/pmessages/{id}";
+
+export const getPmessagesUserId = (
+  id: string,
+  configOverride?: AxiosRequestConfig
+): Promise<SwaggerResponse<PrivateMessageDto[]>> => {
+  return Http.getRequest(
+    template(getPmessagesUserId.key, { id }),
+    undefined,
+    undefined,
+    _CONSTANT1,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+getPmessagesUserId.key = "/api/pmessages/user/{id}";
+
 export const getUsers = (
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<UserDto[]>> => {
@@ -247,6 +298,22 @@ export const postMessages = (
 /** Key is end point string without base url */
 postMessages.key = "/api/messages";
 
+export const postPmessages = (
+  requestBody: PrivateMessageManipulationDto,
+  configOverride?: AxiosRequestConfig
+): Promise<SwaggerResponse<any>> => {
+  return Http.postRequest(
+    postPmessages.key,
+    undefined,
+    requestBody,
+    _CONSTANT1,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+postPmessages.key = "/api/pmessages";
+
 /**
  * @deprecated This endpoint deprecated and will be remove. Please use an alternative
  */
@@ -305,6 +372,23 @@ export const putMessagesId = (
 
 /** Key is end point string without base url */
 putMessagesId.key = "/api/messages/{id}";
+
+export const putPmessagesId = (
+  id: string,
+  queryParams?: PutPmessagesIdQueryParams,
+  configOverride?: AxiosRequestConfig
+): Promise<SwaggerResponse<any>> => {
+  return Http.putRequest(
+    template(putPmessagesId.key, { id }),
+    queryParams,
+    undefined,
+    _CONSTANT1,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+putPmessagesId.key = "/api/pmessages/{id}";
 
 export const putUsersId = (
   id: string,

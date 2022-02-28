@@ -25,7 +25,10 @@ export enum ChatCallbacksNames {
 export type ChatCallbacks = {
   [ChatCallbacksNames.hello]: (message: string) => void;
   [ChatCallbacksNames.MessageReceived]: (message?: ChannelMessageDto) => void;
-  [ChatCallbacksNames.DeleteMessageReceived]: (message?: string) => void;
+  [ChatCallbacksNames.DeleteMessageReceived]: (
+    channelId?: string,
+    messageId?: string
+  ) => void;
 };
 
 export interface Chat {

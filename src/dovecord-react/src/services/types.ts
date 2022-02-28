@@ -57,7 +57,51 @@ export interface MessageManipulationDto {
   content?: string;
 }
 
+export interface PrivateMessageDto {
+  content?: string;
+  createdBy?: string;
+  /**
+   *
+   * - Format: date-time
+   */
+  createdOn?: string;
+  /**
+   *
+   * - Format: guid
+   */
+  id?: string;
+  isEdit?: boolean;
+  /**
+   *
+   * - Format: date-time
+   */
+  lastModifiedOn?: string;
+  /**
+   *
+   * - Format: guid
+   */
+  receiverUserId?: string;
+  /**
+   *
+   * - Format: guid
+   */
+  userId?: string;
+}
+
+export interface PrivateMessageManipulationDto {
+  content?: string;
+  /**
+   *
+   * - Format: guid
+   */
+  receiverId?: string;
+}
+
 export interface PutMessagesIdQueryParams {
+  message?: string;
+}
+
+export interface PutPmessagesIdQueryParams {
   message?: string;
 }
 

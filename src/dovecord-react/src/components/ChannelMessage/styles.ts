@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+import {ThreeDotsVertical} from "@styled-icons/bootstrap"
+
 export const Container = styled.div`
     display: flex;
     align-items: center;
@@ -85,4 +87,22 @@ export const Mention = styled.span`
     &:hover {
         text-decoration: underline;
     }
+`;
+
+export const OpenMenu = styled(ThreeDotsVertical)`
+
+  margin-left: 20rem;
+  width: 20px;
+  min-height: 25px;
+  
+  color: red;
+`;
+
+export const MenuContainer = styled.div`
+  width: 20px;
+  height: 20px;
+`;
+
+export const MenuOptions = styled.div`
+
 `;

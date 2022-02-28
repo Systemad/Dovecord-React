@@ -10,16 +10,17 @@ import ServerList from "../ServerList";
 import ServerName from "../ServerName";
 import ChannelInfo from "../ChannelInfo";
 import ChannelList from "../ChannelList";
-import UserInfo from "../UserInfo";
-import UserList from "../UserList";
+import UserInfo from "../User/UserInfo";
+import UserList from "../User/UserList";
 import ChannelData from "../ChannelData";
 import {ChannelDto, ChannelMessageDto} from "../../services/types";
 import {useAppDispatch} from "../../redux/hooks";
-import {addMessageToChannel, setChannels} from "../../redux/features/channels/channelSlice";
+import {addMessageToChannel, deleteMessageFromChannel, setChannels} from "../../redux/features/channels/channelSlice";
 import {createSignalRContext} from "react-signalr";
 import {Chat, ChatCallbacksNames} from "../../services/hub";
 import {AccountInfo} from "@azure/msal-browser";
 import {loginRequest} from "../../auth/authConfig";
+import UserComponent from "../User";
 
 type ChannelState = {
     channel: ChannelDto
@@ -28,6 +29,11 @@ type ChannelState = {
 
 type ChannelsState = {
     channels: ChannelState[],
+}
+
+type DeleteMessage = {
+    channelId: string
+    messageId: string
 }
 
 const SignalRContext = createSignalRContext<Chat>();
@@ -81,7 +87,17 @@ const Layout: React.FC = () => {
         ChatCallbacksNames.MessageReceived,
         (message) => {
             dispatch(addMessageToChannel(message!));
-            console.log(message);
+        }, []
+    );
+
+    SignalRContext.useSignalREffect(
+        ChatCallbacksNames.DeleteMessageReceived,
+        (channelId, messageId) => {
+            let deleteMessage: DeleteMessage = {
+                channelId: channelId!,
+                messageId: messageId!
+            }
+            dispatch(deleteMessageFromChannel(deleteMessage));
         }, []
     );
 
@@ -96,11 +112,10 @@ const Layout: React.FC = () => {
                     <Grid>
                         <ServerList />
                         <ServerName />
-                        <ChannelInfo/>
-                        <ChannelList/>
-                        <UserInfo />
+                        <ChannelInfo />
+                        <ChannelList />
                         <ChannelData />
-                        <UserList />
+                        <UserComponent />
                     </Grid>
                 </SignalRContext.Provider>
             <UnauthenticatedTemplate>

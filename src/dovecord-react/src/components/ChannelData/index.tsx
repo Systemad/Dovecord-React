@@ -91,7 +91,9 @@ const ChannelData = () => {
                     <ChannelMessage
                         author={message.createdBy!}
                         date={message.createdOn!}
-                        content={message.content!}
+                        content={message.content}
+                        key={message.id}
+                        messageId={message.id}
                     />
                 ))}
             </Messages>

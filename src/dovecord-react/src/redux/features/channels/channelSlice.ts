@@ -4,9 +4,9 @@ import {RootState} from "../../store";
 import {getChannels} from "../../../services/services";
 
 
-type AddMessage = {
+type DeleteMessage = {
     channelId: string
-    message: ChannelMessageDto[]
+    messageId: string
 }
 
 type State = {
@@ -45,8 +45,21 @@ export const channelSlice = createSlice({
             const data = [...state.channels];
             const message = action.payload;
             const channel = data.findIndex((channel) => channel.channel.id === channelId);
-            //data[channel] = {...state.channels[channel], messages: [...message, ...state.channels[channel!].messages]}
-            data[channel] = {...state.channels[channel], messages: [message, ...state.channels[channel!].messages]}
+            data[channel] = {...state.channels[channel], messages: [...state.channels[channel!].messages, message]}
+            return {
+                ...state,
+                channels: data
+            }
+        },
+        deleteMessageFromChannel: (state, action: PayloadAction<DeleteMessage>) => {
+            const { channelId, messageId } = action.payload;
+
+            //const channelId = action.payload.channelId;
+            const data = [...state.channels];
+            //const message = action.payload;
+            const channel = data.findIndex((channel) => channel.channel.id === channelId);
+            const newMessages = data[channel].messages.filter((msg) => msg.id !== messageId);
+            data[channel] = {...state.channels[channel], messages: newMessages}
             return {
                 ...state,
                 channels: data
@@ -55,7 +68,7 @@ export const channelSlice = createSlice({
     }
 })
 
-export const { setChannels, addMessageToChannel } = channelSlice.actions;
+export const { setChannels, addMessageToChannel, deleteMessageFromChannel } = channelSlice.actions;
 
 export const selectChannels = (state: RootState) => state.chatchannels.channels;
 

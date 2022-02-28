@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import ChannelSlice from "./features/channels/channelSlice";
 import UiSlice from "./uiSlice";
+import UserSlice from "./features/users/userSlice";
 
 export const store = configureStore({
     reducer: {
         chatchannels: ChannelSlice,
+        users: UserSlice,
         ui: UiSlice
     }
 })

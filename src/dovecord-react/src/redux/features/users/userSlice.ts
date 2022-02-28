@@ -13,6 +13,11 @@ type State = {
     users: UserState[],
 }
 
+// TODO: fecth all users and set empty messages as initial state
+// Only fetch messages once user is licked o
+// filter them into OnlineUsers and offlineusers
+
+// Handle online users in store
 type UserState = {
     users: UserDto
     messages: ChannelMessageDto[]

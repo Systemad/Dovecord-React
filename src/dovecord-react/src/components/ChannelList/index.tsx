@@ -1,21 +1,37 @@
-import React, { useEffect, useState } from "react";
 import ChannelButton from "../ChannelButton";
-import Button from '@mui/material/Button';
 import { Container, Category, AddCategoryIcon } from "./styles";
 import {ChannelDto, ChannelMessageDto} from "../../services/types";
-import {useDispatch, useSelector} from "react-redux";
-import {selectChannels} from "../../redux/features/channels/channelSlice"
+import {fetchChannelsAsync, selectChannels, selectStatus} from "../../redux/features/channels/channelSlice"
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import { setCurrentChannel } from "../../redux/uiSlice";
+import {useEffect} from "react";
 
 type ChannelState = {
     channel: ChannelDto
     messages: ChannelMessageDto[]
+    loading?: 'idle' | 'pending' | 'succeeded' | 'failed'
 }
 
 const ChannelList = () => {
     const dispatch = useAppDispatch();
     const channels = useAppSelector(selectChannels);
+    const channelStatus = useAppSelector(selectStatus)
+
+    const setChannel = async (channel: ChannelState) => {
+        if(channel.loading === 'succeeded'){
+            dispatch(setCurrentChannel(channel.channel));
+        }
+        if(channel.loading === 'idle'){
+
+            console.log("Fetch channel and state it")
+            //dispatch(setCurrentChannel(channel.channel));
+        }
+    }
+    useEffect(() => {
+        if(channelStatus === 'idle'){
+            dispatch(fetchChannelsAsync());
+        }
+    }, []);
 
     return (
         <Container>
@@ -26,7 +42,7 @@ const ChannelList = () => {
 
             {channels.map((channel) => (
                 <ChannelButton
-                    click={() => dispatch(setCurrentChannel(channel.channel))}
+                    click={() => setChannel(channel)}
                     channel={channel.channel} />
             ))}
         </Container>

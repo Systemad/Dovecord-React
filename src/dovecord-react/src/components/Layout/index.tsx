@@ -15,7 +15,12 @@ import UserList from "../User/UserList";
 import ChannelData from "../ChannelData";
 import {ChannelDto, ChannelMessageDto} from "../../services/types";
 import {useAppDispatch} from "../../redux/hooks";
-import {addMessageToChannel, deleteMessageFromChannel, setChannels} from "../../redux/features/channels/channelSlice";
+import {
+    addMessageToChannel,
+    deleteMessageFromChannel,
+    fetchChannelsAsync,
+    setChannels
+} from "../../redux/features/channels/channelSlice";
 import {createSignalRContext} from "react-signalr";
 import {Chat, ChatCallbacksNames} from "../../services/hub";
 import {AccountInfo} from "@azure/msal-browser";
@@ -54,34 +59,6 @@ const Layout: React.FC = () => {
         return token.accessToken;
     }
 
-    const fetchChannels = async () => {
-        const channels = await getChannels();
-        const data = channels.data;
-        let newChannelData: ChannelsState = {
-            channels: []
-        }
-        let count = 0;
-        for (let i = 0; i < data.length; i++){
-            const channelDataFetch = await getChannelsId(data[i].id!);
-            const fetchChannelMessages = await getMessagesChannelId(data[i].id!);
-
-            const newChannel: ChannelState = {
-                channel: channelDataFetch.data,
-                messages: fetchChannelMessages.data
-            }
-            newChannelData.channels.push(newChannel);
-            count++;
-        }
-        dispatch(setChannels(newChannelData));
-    }
-
-
-    useEffect(() => {
-
-        fetchChannels()
-            .catch(console.error);
-
-    }, []);
 
     SignalRContext.useSignalREffect(
         ChatCallbacksNames.MessageReceived,

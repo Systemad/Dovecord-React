@@ -8,7 +8,7 @@ import {getCurrentChannel} from "../../redux/uiSlice";
 
 export interface Props {
     channel: ChannelDto;
-    click(channel: ChannelDto): void;
+    click(): void;
 }
 
 const ChannelButton: React.FC<Props> = ( {channel, click}) => {
@@ -16,7 +16,7 @@ const ChannelButton: React.FC<Props> = ( {channel, click}) => {
     const selected = channel.id === currentChannel?.id;
 
     return (
-        <Container className={selected ? "active" : ""} onClick={() => click(channel)}>
+        <Container className={selected ? "active" : ""} onClick={() => click()}>
             <div>
                 <HashtagIcon />
                 <span>{channel.name}</span>

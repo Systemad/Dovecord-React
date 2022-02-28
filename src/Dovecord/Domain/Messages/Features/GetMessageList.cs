@@ -1,11 +1,8 @@
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Dovecord.Databases;
 using Dovecord.Dtos.Message;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Dovecord.Domain.Channels;
-using Dovecord.Dtos.Channel;
 
 namespace Dovecord.Domain.Messages.Features;
 

@@ -44,7 +44,8 @@ public class MessageController : ControllerBase
     {
         var command = new AddMessage.AddMessageCommand(message);
         var commandResponse = await _mediator.Send(command);
-        await _hubContext.Clients.Group(message.ChannelId.ToString()).MessageReceived(commandResponse);
+        await _hubContext.Clients.All.MessageReceived(commandResponse);
+        //await _hubContext.Clients.Group(message.ChannelId.ToString()).MessageReceived(commandResponse);
         return CreatedAtAction(nameof(GetMessage), new {commandResponse.Id}, commandResponse);
     }
     
@@ -53,7 +54,6 @@ public class MessageController : ControllerBase
     [HttpPut("{id:guid}", Name = "UpdateMessage")]
     public async Task<IActionResult> UpdateMessage(Guid id, string message)
     {
-        //TODO: Add check if current user owns message
         var command = new UpdateMessage.UpdateMessageCommand(id, message);
         await _mediator.Send(command);
         return NoContent();
@@ -84,9 +84,9 @@ public class MessageController : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> DeleteMessageById(Guid id)
     {
-        // TODO: Add check if current user owns message
+        var message = await _mediator.Send(new GetMessage.MessageQuery(id));
         await _mediator.Send(new DeleteMessage.DeleteMessageCommand(id));
-        await _hubContext.Clients.All.DeleteMessageReceived(id.ToString());
+        await _hubContext.Clients.All.DeleteMessageReceived(message.ChannelId.ToString(), message.Id.ToString());
         return NoContent();
     }
 }

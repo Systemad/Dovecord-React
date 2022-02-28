@@ -28,10 +28,9 @@ public static class UpdateChannel
                 .Where(x => x.Id == request.Id)
                 .AsTracking()
                 .SingleOrDefaultAsync(cancellationToken);
-
+            
             if (channelToUpdate is null)
-                return false;
-                //throw new NotFoundException("Channel", request.Id);
+                throw new NotFoundException("Channel", request.Id);
             
             _mapper.Map(request.NewChannelData, channelToUpdate);  
             await _context.SaveChangesAsync(cancellationToken);

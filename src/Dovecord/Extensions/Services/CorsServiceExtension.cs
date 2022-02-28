@@ -9,9 +9,9 @@ public static class CorsServiceExtension
             options.AddPolicy("CorsPolicy",
                 builder =>
                 {
-                    // Angular and Blazor client
+                    // React and Blazor client
                     builder.AllowAnyOrigin()
-                        .WithOrigins("http://localhost:3000", "https://localhost:44480")
+                        .WithOrigins("https://localhost:44480")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials();

@@ -1,18 +1,17 @@
 using AutoMapper;
 using Dovecord.Databases;
 using Dovecord.Exceptions;
+using Dovecord.Extensions.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Dovecord.Dtos.Message;
-using Dovecord.Extensions.Services;
 
-namespace Dovecord.Domain.Messages.Features;
+namespace Dovecord.Domain.PrivateMessage.Features;
 
-public static class UpdateMessage
+public static class UpdatePrivateMessage
 {
-    public record UpdateMessageCommand(Guid Id, string NewMessageData) : IRequest<bool>;
+    public record UpdatePrivateMessageCommand(Guid Id, string NewMessageData) : IRequest<bool>;
     
-    public class Query : IRequestHandler<UpdateMessageCommand, bool>
+    public class Query : IRequestHandler<UpdatePrivateMessageCommand, bool>
     {
         private readonly DoveDbContext _context;
         private readonly IMapper _mapper;
@@ -25,9 +24,9 @@ public static class UpdateMessage
             _currentUserService = currentUserService;
         }
 
-        public async Task<bool> Handle(UpdateMessageCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(UpdatePrivateMessageCommand request, CancellationToken cancellationToken)
         {
-            var messageToUpdate = await _context.ChannelMessages
+            var messageToUpdate = await _context.PrivateMessages
                 .Where(x => x.Id == request.Id)
                 .AsTracking()
                 .SingleOrDefaultAsync(cancellationToken);

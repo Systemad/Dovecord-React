@@ -4,13 +4,13 @@ using Dovecord.Extensions.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Dovecord.Domain.Messages.Features;
+namespace Dovecord.Domain.PrivateMessage.Features;
 
-public static class DeleteMessage
+public static class DeletePrivateMessage
 {
-    public record DeleteMessageCommand(Guid Id) : IRequest<bool>;
+    public record DeletePrivateMessageCommand(Guid Id) : IRequest<bool>;
     
-    public class Handler : IRequestHandler<DeleteMessageCommand, bool>
+    public class Handler : IRequestHandler<DeletePrivateMessageCommand, bool>
     {
         private readonly DoveDbContext _context;
         private readonly ICurrentUserService _currentUserService;
@@ -20,9 +20,9 @@ public static class DeleteMessage
             _currentUserService = currentUserService;
         }
 
-        public async Task<bool> Handle(DeleteMessageCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeletePrivateMessageCommand request, CancellationToken cancellationToken)
         {
-            var message = await _context.ChannelMessages
+            var message = await _context.PrivateMessages
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (message is null)
@@ -31,7 +31,7 @@ public static class DeleteMessage
             if (Guid.Parse(_currentUserService.UserId) != message.UserId)
                 return false;
             
-            _context.ChannelMessages.Remove(message);
+            _context.PrivateMessages.Remove(message);
             await _context.SaveChangesAsync(cancellationToken);
 
             return true;

@@ -9,6 +9,8 @@ using Dovecord.Extensions.Application;
 using Dovecord.Extensions.Host;
 using Dovecord.Extensions.Services;
 using Dovecord.SignalR.Hubs;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 
 namespace Dovecord;
 
@@ -51,13 +53,24 @@ public class Startup
         services.AddInfrastructure(_config, _env);
         services.AddApplication();
         services.AddHealthChecks();
-
+        
+        services.AddSpaStaticFiles(configuration => 
+            configuration.RootPath = "ClientApp/dist");
+        
         services.AddOpenApiDocument(configure =>
         {
             configure.DocumentName = "v1";
             configure.Version = "v1";
             configure.Title = "Dovecord API";
             configure.Description = "Backend API for Dovecord";
+            configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+            {
+                Type = OpenApiSecuritySchemeType.ApiKey,
+                Name = "Authorization",
+                In = OpenApiSecurityApiKeyLocation.Header,
+                Description = "Type into the textbox: Bearer {your JWT token}."
+            });
+            configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
         });
     }
 
@@ -74,10 +87,14 @@ public class Startup
             app.UseExceptionHandler("/Error");
             app.UseHsts();
         }
-        
-        app.UseCors(configurePolicy => configurePolicy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+        app.UseCors("CorsPolicy");
         app.UseHttpsRedirection();
         app.UseStaticFiles();
+        if (!env.IsDevelopment())
+        {
+            app.UseSpaStaticFiles();
+        }
         app.UseRouting();
 
         app.UseAuthentication(); 

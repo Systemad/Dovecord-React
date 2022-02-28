@@ -1,5 +1,6 @@
 ﻿using Dovecord.Domain.Entities;
 using Dovecord.Dtos.Message;
+using Dovecord.Dtos.PrivateMessage;
 using Dovecord.Dtos.User;
 
 namespace Dovecord.SignalR;
@@ -11,8 +12,9 @@ public interface IChatClient
     Task UserTyping(ActorAction action);
 
     Task MessageReceived(ChannelMessageDto message);
+    Task PrivateMessageReceived(PrivateMessageDto message);
 
-    Task DeleteMessageReceived(string id);
+    Task DeleteMessageReceived(string channelId, string messageId);
 
     Task AddToChannel(Guid channelId, Guid userId);
 }

@@ -1,5 +1,6 @@
 ﻿using Dovecord.Domain.Channels;
 using Dovecord.Domain.Messages;
+using Dovecord.Domain.PrivateMessage;
 using Dovecord.Domain.Users;
 using Dovecord.Extensions.Services;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ public class DoveDbContext : DbContext
 
     public DbSet<Channel> Channels { get; set; }
     public DbSet<ChannelMessage> ChannelMessages { get; set; }
+    public DbSet<PrivateMessage> PrivateMessages { get; set; }
     public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

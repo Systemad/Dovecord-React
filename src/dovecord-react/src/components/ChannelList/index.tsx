@@ -1,9 +1,14 @@
 import ChannelButton from "../ChannelButton";
 import { Container, Category, AddCategoryIcon } from "./styles";
 import {ChannelDto, ChannelMessageDto} from "../../services/types";
-import {fetchChannelsAsync, selectChannels, selectStatus} from "../../redux/features/channels/channelSlice"
+import {
+    fetchChannelMessagesAsync,
+    fetchChannelsAsync,
+    selectChannels,
+    selectStatus
+} from "../../redux/features/channels/channelSlice"
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import { setCurrentChannel } from "../../redux/uiSlice";
+import { setCurrentChannel } from "../../redux/features/channels/channelSlice";
 import {useEffect} from "react";
 
 type ChannelState = {
@@ -18,13 +23,9 @@ const ChannelList = () => {
     const channelStatus = useAppSelector(selectStatus)
 
     const setChannel = async (channel: ChannelState) => {
-        if(channel.loading === 'succeeded'){
-            dispatch(setCurrentChannel(channel.channel));
-        }
+        dispatch(setCurrentChannel(channel.channel));
         if(channel.loading === 'idle'){
-
-            console.log("Fetch channel and state it")
-            //dispatch(setCurrentChannel(channel.channel));
+            dispatch(fetchChannelMessagesAsync(channel.channel.id!));
         }
     }
     useEffect(() => {

@@ -1,8 +1,7 @@
 import {ChannelDto, ChannelMessageDto} from "../../../services/types";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../../store";
-import {getChannels, getChannelsId, getMessagesChannelId} from "../../../services/services";
-
+import {getChannels, getMessagesChannelId} from "../../../services/services";
 
 type DeleteMessage = {
     channelId: string
@@ -12,6 +11,7 @@ type DeleteMessage = {
 type State = {
     channels: ChannelState[],
     loading?: 'idle' | 'pending' | 'succeeded' | 'failed'
+    currentChannel?: ChannelDto
 }
 
 type ChannelState = {
@@ -22,8 +22,18 @@ type ChannelState = {
 
 const initialState: State = {
     channels: [],
-    loading: 'idle'
+    loading: 'idle',
+    currentChannel: {}
 }
+
+
+export const fetchChannelMessagesAsync = createAsyncThunk(
+    'channels/id',
+    async (channelId: string) => {
+        const fetchMessages = await getMessagesChannelId(channelId);
+        return fetchMessages.data;
+    }
+)
 
 export const fetchChannelsAsync = createAsyncThunk(
     'channels/fetchChannels',
@@ -36,19 +46,14 @@ export const fetchChannelsAsync = createAsyncThunk(
         }
 
         for (let i = 0; i < data.length; i++){ // TODO: set max 5
-            const channelDataFetch = await getChannelsId(data[i].id!);
-            const fetchChannelMessages = await getMessagesChannelId(data[i].id!);
-
             const newChannel: ChannelState = {
-                channel: channelDataFetch.data,
-                messages: fetchChannelMessages.data,
-                loading: 'succeeded'
+                channel: data[i],
+                messages: [],
+                loading: 'idle'
             }
             newChannelData.channels.push(newChannel);
-
         }
         return newChannelData;
-        //dispatch(setChannels(newChannelData));
     }
 )
 
@@ -59,9 +64,11 @@ export const channelSlice = createSlice({
         setChannels: (state, action: PayloadAction<State>) => {
             return {...state, ...action.payload}
         },
+        setCurrentChannel: (state, action: PayloadAction<ChannelDto>) => {
+            state.currentChannel = action.payload;
+        },
         addMessageToChannel: (state, action: PayloadAction<ChannelMessageDto>) => {
             //const { channelId, message } = action.payload;
-
             const channelId = action.payload.channelId;
             const data = [...state.channels];
             const message = action.payload;
@@ -74,10 +81,7 @@ export const channelSlice = createSlice({
         },
         deleteMessageFromChannel: (state, action: PayloadAction<DeleteMessage>) => {
             const { channelId, messageId } = action.payload;
-
-            //const channelId = action.payload.channelId;
             const data = [...state.channels];
-            //const message = action.payload;
             const channel = data.findIndex((channel) => channel.channel.id === channelId);
             const newMessages = data[channel].messages.filter((msg) => msg.id !== messageId);
             data[channel] = {...state.channels[channel], messages: newMessages}
@@ -95,12 +99,24 @@ export const channelSlice = createSlice({
             state.channels = state.channels.concat(action.payload.channels)  //{...action.payload}
             state.loading = 'succeeded'
         })
+        builder.addCase(fetchChannelMessagesAsync.pending, (state, action) => {
+            const data = [...state.channels];
+            const channel = data.findIndex((channel) => channel.channel.id === state.currentChannel!.id);
+            data[channel].loading = 'pending'
+        })
+        builder.addCase(fetchChannelMessagesAsync.fulfilled, (state, action) => {
+            const data = [...state.channels];
+            const channel = data.findIndex((channel) => channel.channel.id === state.currentChannel!.id);
+            state.channels[channel].messages = action.payload;
+            data[channel].loading = 'succeeded'
+        })
     }
 })
 
-export const { setChannels, addMessageToChannel, deleteMessageFromChannel } = channelSlice.actions;
+export const { setChannels, addMessageToChannel, deleteMessageFromChannel, setCurrentChannel } = channelSlice.actions;
 
 export const selectChannels = (state: RootState) => state.chatchannels.channels;
 export const selectStatus = (state: RootState) => state.chatchannels.loading;
+export const getCurrentChannel = (state: RootState) => state.chatchannels.currentChannel;
 
 export default channelSlice.reducer

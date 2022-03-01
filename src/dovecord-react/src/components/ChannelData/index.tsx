@@ -7,7 +7,7 @@ import { MessageManipulationDto } from "../../services/types";
 import { postMessages } from "../../services/services";
 import { useAppSelector } from "../../redux/hooks";
 import { selectChannels } from "../../redux/features/channels/channelSlice"
-import { getCurrentChannel } from "../../redux/uiSlice";
+import {getCurrentChannel} from "../../redux/features/channels/channelSlice";
 
 const ChannelData = () => {
     const messagesRef = useRef() as React.MutableRefObject<HTMLDivElement>;

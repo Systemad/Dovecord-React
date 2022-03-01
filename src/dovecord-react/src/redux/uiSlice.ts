@@ -13,12 +13,9 @@ export const uiSlice = createSlice({
     name: 'ui',
     initialState,
     reducers: {
-        setCurrentChannel: (state, action: PayloadAction<ChannelDto>) => {
-            state.currentChannel = action.payload;
-        }
+
     }
 })
 
-export const { setCurrentChannel } = uiSlice.actions
 export const getCurrentChannel = (state: RootState) => state.ui.currentChannel;
 export default uiSlice.reducer;

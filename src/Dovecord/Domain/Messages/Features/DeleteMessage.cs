@@ -23,12 +23,13 @@ public static class DeleteMessage
         public async Task<bool> Handle(DeleteMessageCommand request, CancellationToken cancellationToken)
         {
             var message = await _context.ChannelMessages
+                .Include(a => a.Author)
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (message is null)
                 throw new NotFoundException("Message", request.Id);
             
-            if (Guid.Parse(_currentUserService.UserId) != message.UserId)
+            if (message.Author.Id !=  Guid.Parse(_currentUserService.UserId))
                 return false;
             
             _context.ChannelMessages.Remove(message);

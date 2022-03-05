@@ -1,7 +1,7 @@
-import {ChannelDto, ChannelMessageDto} from "../../../services/types";
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {ChannelDto, ChannelMessageDto, PrivateMessageDto, UserDto} from "../../../services/types";
+import {$CombinedState, createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../../store";
-import {getChannels, getMessagesChannelId} from "../../../services/services";
+import {getChannels, getMessagesChannelId, getPmessagesUserId, getUsers} from "../../../services/services";
 
 type DeleteMessage = {
     channelId: string
@@ -9,9 +9,16 @@ type DeleteMessage = {
 }
 
 type State = {
-    channels: ChannelState[],
+    channels: ChannelState[]
+    users: UserState[]
     loading?: 'idle' | 'pending' | 'succeeded' | 'failed'
-    currentChannel?: ChannelDto
+    currentChannel?: ChannelDto | UserDto
+}
+
+type UserState = {
+    user: UserDto
+    messages: PrivateMessageDto[]
+    loading?: 'idle' | 'pending' | 'succeeded' | 'failed'
 }
 
 type ChannelState = {
@@ -22,10 +29,10 @@ type ChannelState = {
 
 const initialState: State = {
     channels: [],
+    users: [],
     loading: 'idle',
     currentChannel: {}
 }
-
 
 export const fetchChannelMessagesAsync = createAsyncThunk(
     'channels/id',
@@ -35,17 +42,31 @@ export const fetchChannelMessagesAsync = createAsyncThunk(
     }
 )
 
+export const fetchUserMessagesAsync = createAsyncThunk(
+    'users/id',
+    async (userId: string) => {
+        const fetchMessages = await getPmessagesUserId(userId);
+        return fetchMessages.data;
+    }
+)
+
 export const fetchChannelsAsync = createAsyncThunk(
     'channels/fetchChannels',
     async () => {
         const channels = await getChannels();
+        const users = await getUsers();
+
+        const userData = users.data;
         const data = channels.data;
+
         let newChannelData: State = {
             channels: [],
+            users: [],
             loading: 'pending'
         }
 
-        for (let i = 0; i < data.length; i++){ // TODO: set max 5
+        // TODO: Dont create initially? Create on click
+        for (let i = 0; i < data.length; i++){
             const newChannel: ChannelState = {
                 channel: data[i],
                 messages: [],
@@ -53,9 +74,20 @@ export const fetchChannelsAsync = createAsyncThunk(
             }
             newChannelData.channels.push(newChannel);
         }
+
+        for (let i = 0; i < userData.length; i++){
+            const newUserState: UserState = {
+                user: userData[i],
+                messages: [],
+                loading: 'idle'
+            }
+            newChannelData.users.push(newUserState);
+        }
         return newChannelData;
     }
 )
+
+
 
 export const channelSlice = createSlice({
     name: 'channels',
@@ -89,7 +121,7 @@ export const channelSlice = createSlice({
                 ...state,
                 channels: data
             }
-        }
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchChannelsAsync.pending, (state, action) => {
@@ -100,13 +132,15 @@ export const channelSlice = createSlice({
             state.loading = 'succeeded'
         })
         builder.addCase(fetchChannelMessagesAsync.pending, (state, action) => {
-            const data = [...state.channels];
-            const channel = data.findIndex((channel) => channel.channel.id === state.currentChannel!.id);
-            data[channel].loading = 'pending'
+            //const hey = store.getState().ui.currentChannel
+            //const data = [...state.channels];
+            //const channel = data.findIndex((channel) => channel.channel.id === action.payload.);
+            //data[channel].loading = 'pending'
         })
         builder.addCase(fetchChannelMessagesAsync.fulfilled, (state, action) => {
+            //const currentChannel = st
             const data = [...state.channels];
-            const channel = data.findIndex((channel) => channel.channel.id === state.currentChannel!.id);
+            const channel = data.findIndex((channel) => channel.channel.id === state.currentChannel?.id);
             state.channels[channel].messages = action.payload;
             data[channel].loading = 'succeeded'
         })
@@ -115,8 +149,8 @@ export const channelSlice = createSlice({
 
 export const { setChannels, addMessageToChannel, deleteMessageFromChannel, setCurrentChannel } = channelSlice.actions;
 
-export const selectChannels = (state: RootState) => state.chatchannels.channels;
-export const selectStatus = (state: RootState) => state.chatchannels.loading;
-export const getCurrentChannel = (state: RootState) => state.chatchannels.currentChannel;
+export const selectChannels = (state: RootState) => state.channels.channels;
+export const selectStatus = (state: RootState) => state.channels.loading;
+//export const getCurrentChannel = (state: RootState) => state.channels.currentChannel;
 
 export default channelSlice.reducer

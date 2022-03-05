@@ -1,4 +1,4 @@
-namespace Dovecord.Dtos.User;
+namespace Dovecord.Domain.Users.Dto;
 
 public class UserCreationDto
 {

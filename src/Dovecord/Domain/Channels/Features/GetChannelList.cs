@@ -1,7 +1,7 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Dovecord.Databases;
-using Dovecord.Dtos.Channel;
+using Dovecord.Domain.Channels.Dto;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

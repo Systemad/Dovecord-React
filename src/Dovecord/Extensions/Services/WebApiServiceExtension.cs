@@ -1,7 +1,6 @@
 using System.Reflection;
 using Dovecord.Application.PipelineBehaviors;
 using Dovecord.Domain.Messages.Validators;
-using Dovecord.Dtos.Message;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;

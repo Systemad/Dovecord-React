@@ -10,6 +10,7 @@ using Dovecord.Extensions.Host;
 using Dovecord.Extensions.Services;
 using Dovecord.SignalR.Hubs;
 using NSwag;
+using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
 
 namespace Dovecord;
@@ -65,12 +66,25 @@ public class Startup
             configure.Description = "Backend API for Dovecord";
             configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
             {
-                Type = OpenApiSecuritySchemeType.ApiKey,
+                Type = OpenApiSecuritySchemeType.OAuth2,
                 Name = "Authorization",
-                In = OpenApiSecurityApiKeyLocation.Header,
-                Description = "Type into the textbox: Bearer {your JWT token}."
+                //In = OpenApiSecurityApiKeyLocation.Header,
+                Description = "Type into the textbox: Bearer {your JWT token}.",
+                Flow = OpenApiOAuth2Flow.Implicit,
+                Flows = new OpenApiOAuthFlows()
+                {
+                    Implicit = new OpenApiOAuthFlow()
+                    {
+                        AuthorizationUrl = "https://danovas.b2clogin.com/danovas.onmicrosoft.com/B2C_1_signupsignin1/oauth2/v2.0/authorize",
+                        TokenUrl = "https://danovas.b2clogin.com/danovas.onmicrosoft.com/B2C_1_signupsignin1/oauth2/v2.0/token",
+                        Scopes = new Dictionary<string, string>
+                        {
+                            { "https://danovas.onmicrosoft.com/89be5e10-1770-45d7-813a-d47242ae2163/API.Access", "Access the api as the signed-in user" },
+                        }
+                    }
+                }
             });
-            configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+            configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("bearer"));
         });
     }
 
@@ -80,7 +94,7 @@ public class Startup
         {
             using var context = app.ApplicationServices.GetService<DoveDbContext>();
             context.Database.EnsureCreated();
-            ChannelSeeder.SeedSampleChannels(app.ApplicationServices.GetService<DoveDbContext>());
+            //ChannelSeeder.SeedSampleChannels(app.ApplicationServices.GetService<DoveDbContext>());
         }
         else
         {
@@ -109,6 +123,13 @@ public class Startup
         });
         
         app.UseOpenApi();
-        app.UseSwaggerUi3();
+        app.UseSwaggerUi3(settings =>
+        {
+            settings.OAuth2Client = new OAuth2ClientSettings
+            {
+             ClientId = "5a1b9d68-aa2e-4fb7-b91b-7ea8c2cb0ace",
+             AppName = "swagger-ui-client"
+            };
+        });
     }
 }

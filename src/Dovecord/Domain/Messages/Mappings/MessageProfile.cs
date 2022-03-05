@@ -1,6 +1,5 @@
 using AutoMapper;
-using Dovecord.Dtos.Message;
-using Dovecord.Dtos.Channel;
+using Dovecord.Domain.Messages.Dto;
 
 namespace Dovecord.Domain.Messages.Mappings;
 

@@ -1,7 +1,6 @@
 using AutoMapper;
-using Dovecord.Dtos.User;
 using Dovecord.Domain.Channels;
-using Dovecord.Dtos.Channel;
+using Dovecord.Domain.Users.Dto;
 
 namespace Dovecord.Domain.Users.Mappings;
 

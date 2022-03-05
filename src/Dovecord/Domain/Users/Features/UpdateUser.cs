@@ -1,10 +1,9 @@
 using AutoMapper;
 using Dovecord.Databases;
-using Dovecord.Dtos.User;
+using Dovecord.Domain.Users.Dto;
 using Dovecord.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Dovecord.Dtos.Channel;
 
 namespace Dovecord.Domain.Users.Features;
 

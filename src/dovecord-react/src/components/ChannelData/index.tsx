@@ -3,17 +3,21 @@ import React, {useRef, useEffect, useState, MouseEvent, FormEvent} from "react";
 import ChannelMessage, { Mention } from "../ChannelMessage";
 
 import { Container, Messages, InputWrapper, Input, SendIcon } from "./styles";
-import { MessageManipulationDto } from "../../services/types";
-import { postMessages } from "../../services/services";
+import {MessageManipulationDto, UserDto, ChannelDto, PrivateMessageManipulationDto} from "../../services/types";
+import {postMessages, postPmessages} from "../../services/services";
 import { useAppSelector } from "../../redux/hooks";
 import { selectChannels } from "../../redux/features/channels/channelSlice"
-import {getCurrentChannel} from "../../redux/features/channels/channelSlice";
+import {getCurrentChannel} from "../../redux/uiSlice";
+
 
 const ChannelData = () => {
     const messagesRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const [message, setMessage] = useState('');
+
     const currentRoom = useAppSelector(getCurrentChannel);
     const currentRoomData = useAppSelector(selectChannels);
+
+
     const messages = currentRoomData.find((room) => room.channel.id === currentRoom?.id);
 
 
@@ -39,13 +43,24 @@ const ChannelData = () => {
     const Submit = async () => {
         const isMessageProvided = message && message !== '';
 
+        // TODO: Check typecheck
         if (isMessageProvided) {
-            let newMessage =  {
-                channelId: currentRoom?.id,
-                content: message,
-            } as MessageManipulationDto;
+            if(typeof currentRoom ===  {} as UserDto){
+                let newMessage =  {
+                    channelId: currentRoom?.id,
+                    content: message,
+                } as MessageManipulationDto;
+                await postMessages(newMessage);
+            }
 
-            await postMessages(newMessage);
+            if(typeof currentRoom ===  {} as ChannelDto){
+                let newpMessage = {
+                    receiverId: currentRoom?.id,
+                    content: message,
+                } as PrivateMessageManipulationDto
+                await postPmessages(newpMessage);
+            }
+
             setMessage('');
         }
         else {

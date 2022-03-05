@@ -1,5 +1,5 @@
+using Dovecord.Domain.Channels.Dto;
 using Dovecord.Domain.Channels.Features;
-using Dovecord.Dtos.Channel;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +7,8 @@ using Microsoft.Identity.Web.Resource;
 
 namespace Dovecord.Controllers.v1;
 
-[Authorize]
-[RequiredScope("API.Access")]
+//[Authorize]
+//[RequiredScope("API.Access")]
 [ApiController]
 [Route("api/channels")]
 [ApiVersion("1.0")]

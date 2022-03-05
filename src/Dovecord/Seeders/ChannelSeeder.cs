@@ -10,9 +10,9 @@ public static class ChannelSeeder
     {
         if (!context.Channels.Any())
         {
-            context.Channels.Add(new AutoFaker<Channel>().Ignore(x => x.ChannelMessages));
-            context.Channels.Add(new AutoFaker<Channel>().Ignore(x => x.ChannelMessages));
-            context.Channels.Add(new AutoFaker<Channel>().Ignore(x => x.ChannelMessages));
+            context.Channels.Add(new AutoFaker<Channel>().Ignore(x => x.Recipients));
+            context.Channels.Add(new AutoFaker<Channel>().Ignore(x => x.Recipients));
+            context.Channels.Add(new AutoFaker<Channel>().Ignore(x => x.Recipients));
             context.SaveChanges();
         }
     }

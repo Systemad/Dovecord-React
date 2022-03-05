@@ -8,10 +8,12 @@ namespace Dovecord.Domain.Users;
 public class User
 {
     public Guid Id { get; set; }
-    public string? Name { get; set; }
+    public string? Username { get; set; }
     public bool? IsOnline { get; set; }
-    
-    [JsonIgnore]
-    [IgnoreDataMember]
-    public ICollection<ChannelMessage> SentMessages { get; set; }
+    public bool? Bot { get; set; }
+    public bool? System { get; set; }
+    public bool? AccentColor { get; set; }
+    //[JsonIgnore]
+    //[IgnoreDataMember]
+    //public ICollection<ChannelMessage> SentMessages { get; set; }
 }

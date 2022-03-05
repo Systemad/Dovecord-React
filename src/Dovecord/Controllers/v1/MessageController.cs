@@ -1,6 +1,6 @@
 using System.Text.Json;
+using Dovecord.Domain.Messages.Dto;
 using Dovecord.Domain.Messages.Features;
-using Dovecord.Dtos.Message;
 using Dovecord.Extensions.Services;
 using Dovecord.SignalR;
 using Dovecord.SignalR.Hubs;

@@ -1,5 +1,5 @@
 using AutoMapper;
-using Dovecord.Dtos.Channel;
+using Dovecord.Domain.Channels.Dto;
 
 namespace Dovecord.Domain.Channels.Mappings;
 

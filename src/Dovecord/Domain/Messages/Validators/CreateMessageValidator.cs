@@ -1,5 +1,4 @@
 using Dovecord.Domain.Messages.Features;
-using Dovecord.Dtos.Message;
 using FluentValidation;
 
 namespace Dovecord.Domain.Messages.Validators;

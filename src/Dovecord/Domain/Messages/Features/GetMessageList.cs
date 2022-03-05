@@ -1,6 +1,6 @@
 using AutoMapper;
 using Dovecord.Databases;
-using Dovecord.Dtos.Message;
+using Dovecord.Domain.Messages.Dto;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

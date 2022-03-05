@@ -4,8 +4,7 @@ using Dovecord.Databases;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Dovecord.Domain.Channels;
-using Dovecord.Dtos.Channel;
-using Dovecord.Dtos.User;
+using Dovecord.Domain.Users.Dto;
 
 namespace Dovecord.Domain.Users.Features;
 

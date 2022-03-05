@@ -4,7 +4,8 @@ import { Container, HashtagIcon, InviteIcon, SettingsIcon } from "./styles";
 import {ChannelDto} from "../../services/types";
 import {useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {getCurrentChannel} from "../../redux/features/channels/channelSlice";
+
+import {getCurrentChannel} from "../../redux/uiSlice";
 
 export interface Props {
     channel: ChannelDto;

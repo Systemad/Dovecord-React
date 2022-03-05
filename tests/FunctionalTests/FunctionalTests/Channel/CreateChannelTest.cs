@@ -2,9 +2,9 @@ using System;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Dovecord.Domain.Channels.Dto;
 using FluentAssertions;
 using NUnit.Framework;
-using Dovecord.Dtos.Channel;
 
 namespace FunctionalTests.FunctionalTests.Channel;
 

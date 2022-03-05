@@ -3,7 +3,6 @@ using Dovecord.Databases;
 using Dovecord.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Dovecord.Dtos.Message;
 using Dovecord.Extensions.Services;
 
 namespace Dovecord.Domain.Messages.Features;
@@ -29,13 +28,14 @@ public static class UpdateMessage
         {
             var messageToUpdate = await _context.ChannelMessages
                 .Where(x => x.Id == request.Id)
+                .Include(a => a.Author)
                 .AsTracking()
                 .SingleOrDefaultAsync(cancellationToken);
             
             if (messageToUpdate is null)
                 throw new NotFoundException("Message", request.Id);
             
-            if (Guid.Parse(_currentUserService.UserId) != messageToUpdate.UserId)
+            if (Guid.Parse(_currentUserService.UserId) != messageToUpdate.Author.Id)
                 return false;
             
             _mapper.Map(request.NewMessageData, messageToUpdate);  

@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Dovecord.Domain.Entities;
+using Dovecord.Domain.Users.Dto;
 using Dovecord.Domain.Users.Features;
-using Dovecord.Dtos.User;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;

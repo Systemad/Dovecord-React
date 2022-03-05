@@ -1,17 +1,17 @@
 using AutoMapper;
 using Dovecord.Databases;
-using Dovecord.Domain.Channels.Dto;
+using Dovecord.Domain.Servers.Dto;
 using Dovecord.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Dovecord.Domain.Channels.Features;
+namespace Dovecord.Domain.Servers.Features;
 
-public static class UpdateChannel
+public static class UpdateServer
 {
-    public record UpdateChannelCommand(Guid Id, ChannelManipulationDto NewChannelData) : IRequest<bool>;
+    public record UpdateServerCommand(Guid Id, ServerManipulationDto NewServerData) : IRequest<bool>;
     
-    public class Query : IRequestHandler<UpdateChannelCommand, bool>
+    public class Query : IRequestHandler<UpdateServerCommand, bool>
     {
         private readonly DoveDbContext _context;
         private readonly IMapper _mapper;
@@ -22,17 +22,17 @@ public static class UpdateChannel
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(UpdateChannelCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(UpdateServerCommand request, CancellationToken cancellationToken)
         {
-            var channelToUpdate = await _context.Channels
+            var serverToUpdate = await _context.Servers
                 .Where(x => x.Id == request.Id)
                 .AsTracking()
                 .SingleOrDefaultAsync(cancellationToken);
             
-            if (channelToUpdate is null)
-                throw new NotFoundException("Channel", request.Id);
+            if (serverToUpdate is null)
+                throw new NotFoundException("Server", request.Id);
             
-            _mapper.Map(request.NewChannelData, channelToUpdate);  
+            _mapper.Map(request.NewServerData, serverToUpdate);  
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }

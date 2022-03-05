@@ -1,20 +1,27 @@
-import React from "react";
+import React, {useEffect} from "react";
 import UserInfo from "./UserInfo";
 import UserList from "./UserList";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {selectUsers} from "../../redux/features/users/userSlice";
+import {fetchUsersAsync, selectUsers, selectUsersStatus} from "../../redux/features/users/userSlice";
 import {UserData} from "./UserInfo/styles";
+import {fetchChannelsAsync} from "../../redux/features/channels/channelSlice";
 
 const UserComponent: React.FC = () => {
     const dispatch = useAppDispatch();
     const onlineUsers = useAppSelector(selectUsers)
     const offlineUsers = useAppSelector(selectUsers)
-
+    const usersStatus = useAppSelector(selectUsersStatus)
+    useEffect(() => {
+        if(usersStatus === 'idle'){
+            dispatch(fetchUsersAsync());
+        }
+    }, []);
     //const users = UserDto;
     //         <UserList/>
     return (
         <>
-        <UserInfo/>
+            <UserList onlineUsers={onlineUsers} />
+            <UserInfo/>
         </>
     );
 };

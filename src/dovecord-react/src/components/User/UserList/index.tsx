@@ -1,17 +1,22 @@
 import React from "react";
 
 import { Container, Role, User, Avatar } from "./styles";
-import {UserDto} from "../../../services/types";
+import {PrivateMessageDto, UserDto} from "../../../services/types";
+import {fetchChannelMessagesAsync, setCurrentChannel} from "../../../redux/features/channels/channelSlice";
+import {fetchUserMessagesAsync, setCurrentUser} from "../../../redux/features/users/userSlice";
+import {useAppDispatch} from "../../../redux/hooks";
 
 interface UserProps {
     user: UserDto;
     isBot?: boolean;
+    click(): void;
 }
 
+
 // Set avatar badge like avatar but for online status
-const UserRow: React.FC<UserProps> = ({ user, isBot }) => {
+const UserRow: React.FC<UserProps> = ({ user, isBot, click }) => {
     return (
-        <User>
+        <User onClick={click}>
             <Avatar className={isBot ? "bot" : ""} />
 
             <strong>{user.name}</strong>
@@ -21,27 +26,37 @@ const UserRow: React.FC<UserProps> = ({ user, isBot }) => {
     );
 };
 
-interface UserListProps {
-    onlineUsers: UserDto[];
-    offlineUsers: UserDto[];
+type UserState = {
+    user: UserDto
+    messages: PrivateMessageDto[]
+    loading?: 'idle' | 'pending' | 'succeeded' | 'failed'
 }
 
-const UserList: React.FC<UserListProps> = ({onlineUsers, offlineUsers}) => {
+interface UserListProps {
+    onlineUsers: UserState[];
+    //offlineUsers: UserDto[];
+}
+
+const UserList: React.FC<UserListProps> = ({onlineUsers}) => {
+    const dispatch = useAppDispatch();
+
+    const setUser = async (user: UserState) => {
+        dispatch(setCurrentUser(user.user));
+        if(user.loading === 'idle'){
+            dispatch(fetchUserMessagesAsync(user.user.id!));
+        }
+    }
+
     return (
         <Container>
             <Role>Online - {onlineUsers.length}</Role>
+
             {onlineUsers.map((user) => (
                 <UserRow
-                    user={user}
-                    isBot={false}/>
-            ))}
-
-            <Role>Offline - {offlineUsers.length}</Role>
-            {offlineUsers.map((user) => (
-                <UserRow
-                    user={user}
-                    isBot={false}/>
-            ))}
+                    user={user.user}
+                    isBot={false}
+                    click={() => setUser(user)}/>
+                ))}
         </Container>
     );
 };

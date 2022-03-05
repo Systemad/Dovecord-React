@@ -1,6 +1,6 @@
 ﻿using Dovecord.Domain.Channels;
 using Dovecord.Domain.Messages;
-using Dovecord.Domain.PrivateMessage;
+using Dovecord.Domain.Servers;
 using Dovecord.Domain.Users;
 using Dovecord.Extensions.Services;
 using Microsoft.EntityFrameworkCore;
@@ -17,8 +17,8 @@ public class DoveDbContext : DbContext
 
     public DbSet<Channel> Channels { get; set; }
     public DbSet<ChannelMessage> ChannelMessages { get; set; }
-    public DbSet<PrivateMessage> PrivateMessages { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Server> Servers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -55,7 +55,7 @@ public class DoveDbContext : DbContext
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.UserId = Guid.Parse(_currentUserService.UserId);
+                    //entry.Entity. = Guid.Parse(_currentUserService.UserId);
                     entry.Entity.CreatedBy = _currentUserService.Username;
                     entry.Entity.CreatedOn = now;
                     entry.Entity.LastModifiedOn = now;
@@ -79,6 +79,21 @@ public class DoveDbContext : DbContext
             {
                 case EntityState.Added:
                     entry.Entity.Id = Guid.Parse(_currentUserService.UserId);
+                    break;
+                case EntityState.Modified:
+                    break;
+                case EntityState.Deleted:
+                    // deleted_at
+                    break;
+            }
+        }
+        
+        foreach (var entry in ChangeTracker.Entries<Server>())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.Id = Guid.NewGuid();
                     break;
                 case EntityState.Modified:
                     break;

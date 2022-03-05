@@ -1,4 +1,4 @@
-namespace Dovecord.Dtos.Message;
+namespace Dovecord.Domain.Messages.Dto;
 
 public class MessageManipulationDto
 {

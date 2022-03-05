@@ -26,7 +26,7 @@ public class ServerController : ControllerBase
         _mediator = mediator;
     }   
 
-    [ProducesResponseType(typeof(IEnumerable<ChannelDto>), 200)]
+    [ProducesResponseType(typeof(IEnumerable<ServerDto>), 200)]
     [Produces("application/json")]
     [HttpGet(Name = "GetServers")]
     public async Task<IActionResult> GetServers()
@@ -36,17 +36,27 @@ public class ServerController : ControllerBase
         return Ok(result);
     }
     
-    [ProducesResponseType(typeof(Server), 200)]
+    [ProducesResponseType(typeof(ServerDto), 200)]
     [Produces("application/json")]
-    [HttpGet("{id:guid}", Name = "GetServer")]
-    public async Task<IActionResult> GetServer(Guid id)
+    [HttpGet("/api/me/server", Name = "GetServersOfUser")]
+    public async Task<IActionResult> GetServersOfUser()
     {
-        var query = new GetServer.GetServerQuery(id);
+        var query = new GetServersOfUser.GetServersOfUserQuery();
         var result = await _mediator.Send(query);
         return Ok(result);
     }
     
-    [ProducesResponseType(typeof(Server), 201)]
+    [ProducesResponseType(typeof(ServerDto), 200)]
+    [Produces("application/json")]
+    [HttpGet("{serverId:guid}", Name = "GetServerById")]
+    public async Task<IActionResult> GetServerById(Guid serverId)
+    {
+        var query = new GetServerById.GetServerByIdGetQuery(serverId);
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+    
+    [ProducesResponseType(typeof(ServerDto), 201)]
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost(Name = "AddServer")]
@@ -54,7 +64,8 @@ public class ServerController : ControllerBase
     {
         var command = new AddServer.AddServerCommand(serverForCreation);
         var commandResponse = await _mediator.Send(command);
-        return CreatedAtAction(nameof(GetServer), new {commandResponse.Id}, commandResponse);
+        return Ok(commandResponse);
+        //return CreatedAtAction(nameof(GetServerById), new {commandResponse.Id}, commandResponse);
     }
     
     [ProducesResponseType(204)]
@@ -70,9 +81,18 @@ public class ServerController : ControllerBase
     [ProducesResponseType(204)]
     [Produces("application/json")]
     [HttpPut("{id:guid}", Name = "UpdateServer")]
-    public async Task<IActionResult> UpdateServer(Guid id, ServerManipulationDto channel)
+    public async Task<IActionResult> UpdateServer(Guid id, ServerManipulationDto server)
     {
-        var command = new UpdateServer.UpdateServerCommand(id, channel);
+        var command = new UpdateServer.UpdateServerCommand(id, server);
+        await _mediator.Send(command);
+        return NoContent();
+    }
+    [ProducesResponseType(204)]
+    [Produces("application/json")]
+    [HttpPost("join/{serverId:guid}", Name = "JoinServer")]
+    public async Task<IActionResult> JoinServer(Guid serverId)
+    {
+        var command = new JoinServer.JoinServerCommand(serverId);
         await _mediator.Send(command);
         return NoContent();
     }

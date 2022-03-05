@@ -9,6 +9,6 @@ public class Server
     public string Name { get; set; }
     public string? IconUrl { get; set; }
     
-    public List<Channel>? Channels { get; set; }
-    public List<User>? Members { get; set; }
+    public ICollection<Channel>? Channels { get; set; }
+    public ICollection<User>? Members { get; set; }
 }

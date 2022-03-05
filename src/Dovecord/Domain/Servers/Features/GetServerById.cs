@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Dovecord.Domain.Servers.Features;
 
-public static class GetServer
+public static class GetServerById
 {
-    public record GetServerQuery(Guid Id) : IRequest<ServerDto>;
+    public record GetServerByIdGetQuery(Guid Id) : IRequest<ServerDto>;
 
-    public class QueryHandler : IRequestHandler<GetServerQuery, ServerDto>
+    public class QueryHandler : IRequestHandler<GetServerByIdGetQuery, ServerDto>
     {
         private readonly DoveDbContext _context;
         private readonly IMapper _mapper;
@@ -23,10 +23,11 @@ public static class GetServer
             _mapper = mapper;
         }
 
-        public async Task<ServerDto> Handle(GetServerQuery request, CancellationToken cancellationToken)
+        public async Task<ServerDto> Handle(GetServerByIdGetQuery request, CancellationToken cancellationToken)
         {
             var result = await _context.Servers
-                .Include(channels => channels.Channels)
+                //.Include(channels => channels.Channels)
+                //.Include(members => members.Members)
                 .ProjectTo<ServerDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
 

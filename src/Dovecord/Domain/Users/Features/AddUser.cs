@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Dovecord.Domain.Channels;
 using Dovecord.Domain.Users.Dto;
+using Dovecord.Extensions.Services;
 
 namespace Dovecord.Domain.Users.Features;
 
@@ -16,23 +17,22 @@ public static class AddUser
     {
         private readonly DoveDbContext _context;
         private readonly IMapper _mapper;
+        private ICurrentUserService _currentUserService;
 
-        public Handler(DoveDbContext context, IMapper mapper)
+        public Handler(DoveDbContext context, IMapper mapper, ICurrentUserService currentUserService)
         {
             _context = context;
             _mapper = mapper;
+            _currentUserService = currentUserService;
         }
         
         public async Task<UserDto> Handle(AddUserCommand request, CancellationToken cancellationToken)
         {
             var user = _mapper.Map<User>(request.UserToAdd);
+            user.Id = Guid.Parse(_currentUserService.UserId);
             _context.Users.Add(user);
             await _context.SaveChangesAsync(cancellationToken);
 
-            var userr = await _context.Users
-                .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(c => c.Id == user.Id, cancellationToken);
-            
             return await _context.Users
                 .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(u => u.Id == user.Id, cancellationToken);

@@ -14,6 +14,7 @@ public static class InfrastructureExtension
             {
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
                 options.UseInMemoryDatabase($"DovecordTesting");
+                options.EnableSensitiveDataLogging();
             });
         }
         else

@@ -38,69 +38,13 @@ public class DoveDbContext : DbContext
     
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
-        UpdateAuditFields();
+        //UpdateAuditFields();
         return base.SaveChangesAsync(cancellationToken);
     }
     
     public override int SaveChanges()
     {
-        UpdateAuditFields();
+        //UpdateAuditFields();
         return base.SaveChanges();
-    }
-    private void UpdateAuditFields()
-    {
-        var now = DateTime.UtcNow;
-        foreach (var entry in ChangeTracker.Entries<ChannelMessage>())
-        {
-            switch (entry.State)
-            {
-                case EntityState.Added:
-                    //entry.Entity. = Guid.Parse(_currentUserService.UserId);
-                    entry.Entity.CreatedBy = _currentUserService.Username;
-                    entry.Entity.CreatedOn = now;
-                    entry.Entity.LastModifiedOn = now;
-                    entry.Entity.IsEdit = false;
-                    break;
-
-                case EntityState.Modified:
-                    entry.Entity.LastModifiedOn = now;
-                    entry.Entity.IsEdit = true;
-                    break;
-                
-                case EntityState.Deleted:
-                    // deleted_at
-                    break;
-            }
-        }
-        
-        foreach (var entry in ChangeTracker.Entries<User>())
-        {
-            switch (entry.State)
-            {
-                case EntityState.Added:
-                    entry.Entity.Id = Guid.Parse(_currentUserService.UserId);
-                    break;
-                case EntityState.Modified:
-                    break;
-                case EntityState.Deleted:
-                    // deleted_at
-                    break;
-            }
-        }
-        
-        foreach (var entry in ChangeTracker.Entries<Server>())
-        {
-            switch (entry.State)
-            {
-                case EntityState.Added:
-                    entry.Entity.Id = Guid.NewGuid();
-                    break;
-                case EntityState.Modified:
-                    break;
-                case EntityState.Deleted:
-                    // deleted_at
-                    break;
-            }
-        }
     }
 }

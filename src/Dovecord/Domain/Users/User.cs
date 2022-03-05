@@ -1,5 +1,6 @@
 using System.Runtime.Serialization;
 using Dovecord.Domain.Messages;
+using Dovecord.Domain.Servers;
 using Newtonsoft.Json;
 
 namespace Dovecord.Domain.Users;
@@ -13,6 +14,8 @@ public class User
     public bool? Bot { get; set; }
     public bool? System { get; set; }
     public bool? AccentColor { get; set; }
+    
+    public ICollection<Server> Servers { get; set; }
     //[JsonIgnore]
     //[IgnoreDataMember]
     //public ICollection<ChannelMessage> SentMessages { get; set; }

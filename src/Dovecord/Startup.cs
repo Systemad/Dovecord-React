@@ -29,9 +29,11 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton(Log.Logger);
-        services.AddControllers().AddJsonOptions(options =>
+        services.AddControllers().AddNewtonsoftJson(options =>
         {
-            options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            //options.JsonSerializerOptions.ReferenceHandler = Newtonsoft.Json.ReferenceLoopHandling.Ignore,
+            //options.SerializerSettings. PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         });
         services.AddApiVersioning(config =>
         {

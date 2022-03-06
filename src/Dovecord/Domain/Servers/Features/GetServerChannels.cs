@@ -1,6 +1,7 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Dovecord.Databases;
+using Dovecord.Domain.Channels.Dto;
 using Dovecord.Domain.Servers.Dto;
 using Dovecord.Domain.Users.Dto;
 using Dovecord.Domain.Users.Features;
@@ -11,11 +12,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Dovecord.Domain.Servers.Features;
 
-public static class GetServersOfUser
+public static class GetServerChannels
 {
-    public record GetServersOfUserQuery : IRequest<List<ServerDto>>;
+    public record GetServerChannelsQuery(Guid serverId) : IRequest<List<ChannelDto>>;
 
-    public class QueryHandler : IRequestHandler<GetServersOfUserQuery, List<ServerDto>>
+    public class QueryHandler : IRequestHandler<GetServerChannelsQuery, List<ChannelDto>>
     {
         private readonly DoveDbContext _context;
         private readonly IMapper _mapper;
@@ -30,7 +31,7 @@ public static class GetServersOfUser
             _mediator = mediator;
         }
 
-        public async Task<List<ServerDto>> Handle(GetServersOfUserQuery request, CancellationToken cancellationToken)
+        public async Task<List<ChannelDto>> Handle(GetServerChannelsQuery request, CancellationToken cancellationToken)
         {
             
             var currentUserId = Guid.Parse(_currentUserService.UserId);
@@ -47,12 +48,12 @@ public static class GetServersOfUser
                 await _mediator.Send(addUser);
             }
             
-            var filteredServer = await _context.Users
-                .Where(user => user.Id == currentUserId)
-                .Select(servers => servers.Servers)
+            var filteredServer = await _context.Servers
+                .Where(server => server.Id == request.serverId)
+                .Select(servers => servers.Channels)
                 .FirstOrDefaultAsync(cancellationToken);
             
-            return _mapper.Map<List<ServerDto>>(filteredServer);
+            return _mapper.Map<List<ChannelDto>>(filteredServer);
         }
     }
 }

@@ -23,6 +23,19 @@ public class DoveDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         /*
+        modelBuilder.Entity<Channel>()
+            .HasOne(s => s.Server)
+            .WithMany(c => c.Channels);
+
+        modelBuilder.Entity<Server>()
+            .HasMany(s => s.Members)
+            .WithOne();
+        
+        modelBuilder.Entity<User>()
+            .HasMany(s => s.Servers)
+            .WithOne();
+        */
+        /*
         modelBuilder.Entity<ChannelMessage>(entity =>
         {
             entity.HasOne(d => d.Channel)

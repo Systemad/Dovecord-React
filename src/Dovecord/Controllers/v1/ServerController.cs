@@ -38,7 +38,7 @@ public class ServerController : ControllerBase
     
     [ProducesResponseType(typeof(ServerDto), 200)]
     [Produces("application/json")]
-    [HttpGet("/api/me/server", Name = "GetServersOfUser")]
+    [HttpGet("/api/me/servers", Name = "GetServersOfUser")]
     public async Task<IActionResult> GetServersOfUser()
     {
         var query = new GetServersOfUser.GetServersOfUserQuery();
@@ -87,6 +87,7 @@ public class ServerController : ControllerBase
         await _mediator.Send(command);
         return NoContent();
     }
+    
     [ProducesResponseType(204)]
     [Produces("application/json")]
     [HttpPost("join/{serverId:guid}", Name = "JoinServer")]
@@ -94,6 +95,18 @@ public class ServerController : ControllerBase
     {
         var command = new JoinServer.JoinServerCommand(serverId);
         await _mediator.Send(command);
+        return NoContent();
+    }
+    
+    [ProducesResponseType(204)]
+    [Produces("application/json")]
+    [HttpPost("leave/{serverId:guid}", Name = "LeaveServer")]
+    public async Task<IActionResult> LeaveServer(Guid serverId)
+    {
+        var command = new JoinServer.JoinServerCommand(serverId);
+        await _mediator.Send(command);
+        // TODO: Leave error message, if leaver is owner, tell them to delete server within server settings
+        
         return NoContent();
     }
 }

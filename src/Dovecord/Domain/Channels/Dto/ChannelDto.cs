@@ -10,7 +10,7 @@ public class ChannelDto
     public string? Name { get; set; }
     public string? Topic { get; set; }
     
-    // If DM or Group DM - Type 1 Ignore
+    // If DM or Group DM / Type 1, Ignore this
     public string? ServerId { get; set; }
 
     // If DM, put both author and recipient. When querying go through all channels that has both members in    

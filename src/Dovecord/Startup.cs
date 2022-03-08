@@ -66,12 +66,13 @@ public class Startup
             configure.Version = "v1";
             configure.Title = "Dovecord API";
             configure.Description = "Backend API for Dovecord";
-            configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+            configure.AddSecurity("bearer", Enumerable.Empty<string>(), new OpenApiSecurityScheme
             {
                 Type = OpenApiSecuritySchemeType.OAuth2,
                 Name = "Authorization",
                 //In = OpenApiSecurityApiKeyLocation.Header,
                 Description = "Type into the textbox: Bearer {your JWT token}.",
+                Scheme = "Bearer",
                 Flow = OpenApiOAuth2Flow.Implicit,
                 Flows = new OpenApiOAuthFlows()
                 {
@@ -81,7 +82,10 @@ public class Startup
                         TokenUrl = "https://danovas.b2clogin.com/danovas.onmicrosoft.com/B2C_1_signupsignin1/oauth2/v2.0/token",
                         Scopes = new Dictionary<string, string>
                         {
-                            { "https://danovas.onmicrosoft.com/89be5e10-1770-45d7-813a-d47242ae2163/API.Access", "Access the api as the signed-in user" },
+                            {
+                                "https://danovas.onmicrosoft.com/89be5e10-1770-45d7-813a-d47242ae2163/API.Access",
+                                "Access the api as the signed-in user"
+                            }
                         }
                     }
                 }

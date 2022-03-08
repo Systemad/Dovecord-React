@@ -48,16 +48,4 @@ public class DoveDbContext : DbContext
         });
         */
     }
-    
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
-    {
-        //UpdateAuditFields();
-        return base.SaveChangesAsync(cancellationToken);
-    }
-    
-    public override int SaveChanges()
-    {
-        //UpdateAuditFields();
-        return base.SaveChanges();
-    }
 }

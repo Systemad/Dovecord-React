@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Dovecord.Domain.Messages.Dto;
 using Dovecord.Domain.Messages.Features;
 using Dovecord.Extensions.Services;
@@ -9,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
-using Serilog;
 
 namespace Dovecord.Controllers.v1;
 
@@ -44,6 +42,9 @@ public class MessageController : ControllerBase
     {
         var command = new AddMessage.AddMessageCommand(message);
         var commandResponse = await _mediator.Send(command);
+        // TODO: Extract?
+        // Click on Server, Users joined group by ID
+        // Send message to that server id??
         await _hubContext.Clients.All.MessageReceived(commandResponse);
         //await _hubContext.Clients.Group(message.ChannelId.ToString()).MessageReceived(commandResponse);
         return CreatedAtAction(nameof(GetMessage), new {commandResponse.Id}, commandResponse);
@@ -64,7 +65,7 @@ public class MessageController : ControllerBase
     [HttpGet("channel/{id:guid}", Name ="GetMessages")]
     public async Task<IActionResult> GetMessagesFromChannel(Guid id)
     {
-        var command = new GetMessageList.MessageListQuery(id);
+        var command = new GetMessagesFromChannel.MessageListQuery(id);
         var result = await _mediator.Send(command);
         return Ok(result);
     }

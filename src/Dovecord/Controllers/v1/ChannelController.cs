@@ -1,5 +1,7 @@
 using Dovecord.Domain.Channels.Dto;
 using Dovecord.Domain.Channels.Features;
+using Dovecord.Domain.Messages.Dto;
+using Dovecord.Domain.Messages.Features;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +9,8 @@ using Microsoft.Identity.Web.Resource;
 
 namespace Dovecord.Controllers.v1;
 
-//[Authorize]
-//[RequiredScope("API.Access")]
+[Authorize]
+[RequiredScope("API.Access")]
 [ApiController]
 [Route("api/channels")]
 [ApiVersion("1.0")]
@@ -30,6 +32,16 @@ public class ChannelController : ControllerBase
     {
         var query = new GetChannelList.ChannelListQuery();
         var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+    
+    [ProducesResponseType(typeof(IEnumerable<ChannelMessageDto>), 200)]
+    [Produces("application/json")]
+    [HttpGet("channels/{channelId:guid}/messages", Name = "GetChannelsMessages")]
+    public async Task<IActionResult> GetChannelMessages(Guid channelId)
+    {
+        var command = new GetMessagesFromChannel.MessageListQuery(channelId);
+        var result = await _mediator.Send(command);
         return Ok(result);
     }
     

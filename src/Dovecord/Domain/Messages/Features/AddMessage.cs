@@ -2,6 +2,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Dovecord.Databases;
 using Dovecord.Domain.Messages.Dto;
+using Dovecord.Exceptions;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -26,13 +27,20 @@ public static class AddMessage
         public async Task<ChannelMessageDto> Handle(AddMessageCommand request, CancellationToken cancellationToken)
         {
             var message = _mapper.Map<ChannelMessage>(request.MessageToAdd);
+            
             var channel = await _context.Channels
-                .FirstOrDefaultAsync(c => c.Id == request.MessageToAdd.ChannelId, cancellationToken: cancellationToken);
+                .Where(x => x.Id == request.MessageToAdd.ChannelId)
+                .Include(m => m.Messages)
+                .AsTracking()
+                .FirstAsync(cancellationToken);
+            //.SingleOrDefaultAsync(cancellationToken);
+
+            if (channel is null)
+                throw new NotFoundException("Channel", channel.Id);
+            
+            channel.Messages.Add(message);
             
             //if(channel.Type == 0)
-                
-                
-            _context.ChannelMessages.Add(message);
             await _context.SaveChangesAsync(cancellationToken);
 
             return await _context.ChannelMessages

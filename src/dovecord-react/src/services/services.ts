@@ -8,15 +8,15 @@ import { AxiosRequestConfig } from "axios";
 import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
 import {
-  PutMessagesIdQueryParams,
-  PutPmessagesIdQueryParams,
+  GetWeatherforecastQueryParams,
+  PutV1MessagesIdQueryParams,
   WeatherForecast,
+  ChannelMessageDto,
   ChannelDto,
   ChannelManipulationDto,
-  ChannelMessageDto,
   MessageManipulationDto,
-  PrivateMessageDto,
-  PrivateMessageManipulationDto,
+  ServerDto,
+  ServerManipulationDto,
   UserDto,
   UserCreationDto,
   UserManipulationDto,
@@ -61,12 +61,12 @@ function objToForm(requestBody: object) {
   return formData;
 }
 
-export const deleteChannelsId = (
+export const deleteV1ChannelsId = (
   id: string,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
   return Http.deleteRequest(
-    template(deleteChannelsId.key, { id }),
+    template(deleteV1ChannelsId.key, { id }),
     undefined,
     undefined,
     _CONSTANT1,
@@ -75,14 +75,14 @@ export const deleteChannelsId = (
 };
 
 /** Key is end point string without base url */
-deleteChannelsId.key = "/api/channels/{id}";
+deleteV1ChannelsId.key = "/api/v1/channels/{id}";
 
-export const deleteMessagesId = (
+export const deleteV1MessagesId = (
   id: string,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
   return Http.deleteRequest(
-    template(deleteMessagesId.key, { id }),
+    template(deleteV1MessagesId.key, { id }),
     undefined,
     undefined,
     _CONSTANT1,
@@ -91,14 +91,14 @@ export const deleteMessagesId = (
 };
 
 /** Key is end point string without base url */
-deleteMessagesId.key = "/api/messages/{id}";
+deleteV1MessagesId.key = "/api/v1/messages/{id}";
 
-export const deletePmessagesId = (
+export const deleteV1ServersId = (
   id: string,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
   return Http.deleteRequest(
-    template(deletePmessagesId.key, { id }),
+    template(deleteV1ServersId.key, { id }),
     undefined,
     undefined,
     _CONSTANT1,
@@ -107,14 +107,14 @@ export const deletePmessagesId = (
 };
 
 /** Key is end point string without base url */
-deletePmessagesId.key = "/api/pmessages/{id}";
+deleteV1ServersId.key = "/api/v1/servers/{id}";
 
-export const deleteUsersId = (
+export const deleteV1UsersId = (
   id: string,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
   return Http.deleteRequest(
-    template(deleteUsersId.key, { id }),
+    template(deleteV1UsersId.key, { id }),
     undefined,
     undefined,
     _CONSTANT1,
@@ -123,13 +123,14 @@ export const deleteUsersId = (
 };
 
 /** Key is end point string without base url */
-deleteUsersId.key = "/api/users/{id}";
+deleteV1UsersId.key = "/api/v1/users/{id}";
 
-export const getChannels = (
+export const getV1ChannelsChannelsChannelIdMessages = (
+  channelId: string,
   configOverride?: AxiosRequestConfig
-): Promise<SwaggerResponse<ChannelDto[]>> => {
+): Promise<SwaggerResponse<ChannelMessageDto[]>> => {
   return Http.getRequest(
-    getChannels.key,
+    template(getV1ChannelsChannelsChannelIdMessages.key, { channelId }),
     undefined,
     undefined,
     _CONSTANT1,
@@ -138,14 +139,15 @@ export const getChannels = (
 };
 
 /** Key is end point string without base url */
-getChannels.key = "/api/channels";
+getV1ChannelsChannelsChannelIdMessages.key =
+  "/api/v1/channels/channels/{channelId}/messages";
 
-export const getChannelsId = (
+export const getV1ChannelsId = (
   id: string,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<ChannelDto>> => {
   return Http.getRequest(
-    template(getChannelsId.key, { id }),
+    template(getV1ChannelsId.key, { id }),
     undefined,
     undefined,
     _CONSTANT1,
@@ -154,14 +156,14 @@ export const getChannelsId = (
 };
 
 /** Key is end point string without base url */
-getChannelsId.key = "/api/channels/{id}";
+getV1ChannelsId.key = "/api/v1/channels/{id}";
 
-export const getMessagesChannelId = (
+export const getV1MessagesChannelId = (
   id: string,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<ChannelMessageDto[]>> => {
   return Http.getRequest(
-    template(getMessagesChannelId.key, { id }),
+    template(getV1MessagesChannelId.key, { id }),
     undefined,
     undefined,
     _CONSTANT1,
@@ -170,14 +172,14 @@ export const getMessagesChannelId = (
 };
 
 /** Key is end point string without base url */
-getMessagesChannelId.key = "/api/messages/channel/{id}";
+getV1MessagesChannelId.key = "/api/v1/messages/channel/{id}";
 
-export const getMessagesId = (
+export const getV1MessagesId = (
   id: string,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<ChannelMessageDto>> => {
   return Http.getRequest(
-    template(getMessagesId.key, { id }),
+    template(getV1MessagesId.key, { id }),
     undefined,
     undefined,
     _CONSTANT1,
@@ -186,14 +188,13 @@ export const getMessagesId = (
 };
 
 /** Key is end point string without base url */
-getMessagesId.key = "/api/messages/{id}";
+getV1MessagesId.key = "/api/v1/messages/{id}";
 
-export const getPmessagesId = (
-  id: string,
+export const getV1Servers = (
   configOverride?: AxiosRequestConfig
-): Promise<SwaggerResponse<PrivateMessageDto>> => {
+): Promise<SwaggerResponse<ServerDto[]>> => {
   return Http.getRequest(
-    template(getPmessagesId.key, { id }),
+    getV1Servers.key,
     undefined,
     undefined,
     _CONSTANT1,
@@ -202,14 +203,13 @@ export const getPmessagesId = (
 };
 
 /** Key is end point string without base url */
-getPmessagesId.key = "/api/pmessages/{id}";
+getV1Servers.key = "/api/v1/servers";
 
-export const getPmessagesUserId = (
-  id: string,
+export const getV1ServersApiMeServers = (
   configOverride?: AxiosRequestConfig
-): Promise<SwaggerResponse<PrivateMessageDto[]>> => {
+): Promise<SwaggerResponse<ServerDto[]>> => {
   return Http.getRequest(
-    template(getPmessagesUserId.key, { id }),
+    getV1ServersApiMeServers.key,
     undefined,
     undefined,
     _CONSTANT1,
@@ -218,13 +218,45 @@ export const getPmessagesUserId = (
 };
 
 /** Key is end point string without base url */
-getPmessagesUserId.key = "/api/pmessages/user/{id}";
+getV1ServersApiMeServers.key = "/api/v1/servers/api/me/servers";
 
-export const getUsers = (
+export const getV1ServersServerId = (
+  serverId: string,
+  configOverride?: AxiosRequestConfig
+): Promise<SwaggerResponse<ServerDto>> => {
+  return Http.getRequest(
+    template(getV1ServersServerId.key, { serverId }),
+    undefined,
+    undefined,
+    _CONSTANT1,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+getV1ServersServerId.key = "/api/v1/servers/{serverId}";
+
+export const getV1ServersServerIdChannels = (
+  serverId: string,
+  configOverride?: AxiosRequestConfig
+): Promise<SwaggerResponse<ChannelDto[]>> => {
+  return Http.getRequest(
+    template(getV1ServersServerIdChannels.key, { serverId }),
+    undefined,
+    undefined,
+    _CONSTANT1,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+getV1ServersServerIdChannels.key = "/api/v1/servers/{serverId}/channels";
+
+export const getV1Users = (
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<UserDto[]>> => {
   return Http.getRequest(
-    getUsers.key,
+    getV1Users.key,
     undefined,
     undefined,
     _CONSTANT1,
@@ -233,14 +265,14 @@ export const getUsers = (
 };
 
 /** Key is end point string without base url */
-getUsers.key = "/api/users";
+getV1Users.key = "/api/v1/users";
 
-export const getUsersId = (
+export const getV1UsersId = (
   id: string,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<UserDto>> => {
   return Http.getRequest(
-    template(getUsersId.key, { id }),
+    template(getV1UsersId.key, { id }),
     undefined,
     undefined,
     _CONSTANT1,
@@ -249,14 +281,15 @@ export const getUsersId = (
 };
 
 /** Key is end point string without base url */
-getUsersId.key = "/api/users/{id}";
+getV1UsersId.key = "/api/v1/users/{id}";
 
 export const getWeatherforecast = (
+  queryParams?: GetWeatherforecastQueryParams,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<WeatherForecast[]>> => {
   return Http.getRequest(
     getWeatherforecast.key,
-    undefined,
+    queryParams,
     undefined,
     _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
@@ -266,12 +299,12 @@ export const getWeatherforecast = (
 /** Key is end point string without base url */
 getWeatherforecast.key = "/weatherforecast";
 
-export const postChannels = (
+export const postV1Channels = (
   requestBody: ChannelManipulationDto,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
   return Http.postRequest(
-    postChannels.key,
+    postV1Channels.key,
     undefined,
     requestBody,
     _CONSTANT1,
@@ -280,14 +313,14 @@ export const postChannels = (
 };
 
 /** Key is end point string without base url */
-postChannels.key = "/api/channels";
+postV1Channels.key = "/api/v1/channels";
 
-export const postMessages = (
+export const postV1Messages = (
   requestBody: MessageManipulationDto,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
   return Http.postRequest(
-    postMessages.key,
+    postV1Messages.key,
     undefined,
     requestBody,
     _CONSTANT1,
@@ -296,14 +329,14 @@ export const postMessages = (
 };
 
 /** Key is end point string without base url */
-postMessages.key = "/api/messages";
+postV1Messages.key = "/api/v1/messages";
 
-export const postPmessages = (
-  requestBody: PrivateMessageManipulationDto,
+export const postV1Servers = (
+  requestBody: ServerManipulationDto,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
   return Http.postRequest(
-    postPmessages.key,
+    postV1Servers.key,
     undefined,
     requestBody,
     _CONSTANT1,
@@ -312,23 +345,55 @@ export const postPmessages = (
 };
 
 /** Key is end point string without base url */
-postPmessages.key = "/api/pmessages";
+postV1Servers.key = "/api/v1/servers";
+
+export const postV1ServersJoinServerId = (
+  serverId: string,
+  configOverride?: AxiosRequestConfig
+): Promise<SwaggerResponse<any>> => {
+  return Http.postRequest(
+    template(postV1ServersJoinServerId.key, { serverId }),
+    undefined,
+    undefined,
+    _CONSTANT1,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+postV1ServersJoinServerId.key = "/api/v1/servers/join/{serverId}";
+
+export const postV1ServersLeaveServerId = (
+  serverId: string,
+  configOverride?: AxiosRequestConfig
+): Promise<SwaggerResponse<any>> => {
+  return Http.postRequest(
+    template(postV1ServersLeaveServerId.key, { serverId }),
+    undefined,
+    undefined,
+    _CONSTANT1,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+postV1ServersLeaveServerId.key = "/api/v1/servers/leave/{serverId}";
 
 /**
  * @deprecated This endpoint deprecated and will be remove. Please use an alternative
  */
-export const postUsers = (
+export const postV1Users = (
   requestBody: UserCreationDto,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
   if (__DEV__) {
     console.warn(
-      "postUsers",
+      "postV1Users",
       "This endpoint deprecated and will be remove. Please use an alternative"
     );
   }
   return Http.postRequest(
-    postUsers.key,
+    postV1Users.key,
     undefined,
     requestBody,
     _CONSTANT1,
@@ -337,15 +402,15 @@ export const postUsers = (
 };
 
 /** Key is end point string without base url */
-postUsers.key = "/api/users";
+postV1Users.key = "/api/v1/users";
 
-export const putChannelsId = (
+export const putV1ChannelsId = (
   id: string,
   requestBody: ChannelManipulationDto,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
   return Http.putRequest(
-    template(putChannelsId.key, { id }),
+    template(putV1ChannelsId.key, { id }),
     undefined,
     requestBody,
     _CONSTANT1,
@@ -354,15 +419,15 @@ export const putChannelsId = (
 };
 
 /** Key is end point string without base url */
-putChannelsId.key = "/api/channels/{id}";
+putV1ChannelsId.key = "/api/v1/channels/{id}";
 
-export const putMessagesId = (
+export const putV1MessagesId = (
   id: string,
-  queryParams?: PutMessagesIdQueryParams,
+  queryParams?: PutV1MessagesIdQueryParams,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
   return Http.putRequest(
-    template(putMessagesId.key, { id }),
+    template(putV1MessagesId.key, { id }),
     queryParams,
     undefined,
     _CONSTANT1,
@@ -371,32 +436,32 @@ export const putMessagesId = (
 };
 
 /** Key is end point string without base url */
-putMessagesId.key = "/api/messages/{id}";
+putV1MessagesId.key = "/api/v1/messages/{id}";
 
-export const putPmessagesId = (
+export const putV1ServersId = (
   id: string,
-  queryParams?: PutPmessagesIdQueryParams,
+  requestBody: ServerManipulationDto,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
   return Http.putRequest(
-    template(putPmessagesId.key, { id }),
-    queryParams,
+    template(putV1ServersId.key, { id }),
     undefined,
+    requestBody,
     _CONSTANT1,
     overrideConfig(_CONSTANT0, configOverride)
   );
 };
 
 /** Key is end point string without base url */
-putPmessagesId.key = "/api/pmessages/{id}";
+putV1ServersId.key = "/api/v1/servers/{id}";
 
-export const putUsersId = (
+export const putV1UsersId = (
   id: string,
   requestBody: UserManipulationDto,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
   return Http.putRequest(
-    template(putUsersId.key, { id }),
+    template(putV1UsersId.key, { id }),
     undefined,
     requestBody,
     _CONSTANT1,
@@ -405,11 +470,11 @@ export const putUsersId = (
 };
 
 /** Key is end point string without base url */
-putUsersId.key = "/api/users/{id}";
+putV1UsersId.key = "/api/v1/users/{id}";
 export const _CONSTANT0 = {
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
   },
 };
-export const _CONSTANT1 = [{ JWT: [] }];
+export const _CONSTANT1 = [{ bearer: [] }];

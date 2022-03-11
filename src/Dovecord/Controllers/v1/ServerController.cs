@@ -13,7 +13,7 @@ namespace Dovecord.Controllers.v1;
 [Authorize]
 [RequiredScope("API.Access")]
 [ApiController]
-[Route("api/servers")]
+[Route("api/v{version:apiVersion}/servers")]
 [ApiVersion("1.0")]
 public class ServerController : ControllerBase
 {
@@ -36,9 +36,9 @@ public class ServerController : ControllerBase
         return Ok(result);
     }
     
-    [ProducesResponseType(typeof(ServerDto), 200)]
+    [ProducesResponseType(typeof(IEnumerable<ServerDto>), 200)]
     [Produces("application/json")]
-    [HttpGet("/api/me/servers", Name = "GetServersOfUser")]
+    [HttpGet("api/me/servers", Name = "GetServersOfUser")]
     public async Task<IActionResult> GetServersOfUser()
     {
         var query = new GetServersOfUser.GetServersOfUserQuery();
@@ -52,6 +52,16 @@ public class ServerController : ControllerBase
     public async Task<IActionResult> GetServerById(Guid serverId)
     {
         var query = new GetServerById.GetServerByIdGetQuery(serverId);
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+    
+    [ProducesResponseType(typeof(IEnumerable<ChannelDto>), 200)]
+    [Produces("application/json")]
+    [HttpGet("{serverId:guid}/channels", Name = "GetChannels")]
+    public async Task<IActionResult> GetChannels(Guid serverId)
+    {
+        var query = new GetChannelList.ChannelListQuery(serverId);
         var result = await _mediator.Send(query);
         return Ok(result);
     }

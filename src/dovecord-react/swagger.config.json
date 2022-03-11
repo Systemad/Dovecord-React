@@ -1,5 +1,6 @@
 {
     "url": "https://localhost:7045/swagger/v1/swagger.json",
     "dir": "src/services",
+    "language": "typescript",
     "prefix": "/api"
 }

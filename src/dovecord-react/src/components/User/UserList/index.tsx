@@ -1,9 +1,7 @@
 import React from "react";
-
+/*
 import { Container, Role, User, Avatar } from "./styles";
-import {PrivateMessageDto, UserDto} from "../../../services/types";
-import {fetchChannelMessagesAsync, setCurrentChannel} from "../../../redux/features/channels/channelSlice";
-import {fetchUserMessagesAsync, setCurrentUser} from "../../../redux/features/users/userSlice";
+
 import {useAppDispatch} from "../../../redux/hooks";
 
 interface UserProps {
@@ -62,3 +60,5 @@ const UserList: React.FC<UserListProps> = ({onlineUsers}) => {
 };
 
 export default UserList;
+
+ */

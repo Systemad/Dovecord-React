@@ -32,7 +32,6 @@ public static class GetServersOfUser
 
         public async Task<List<ServerDto>> Handle(GetServersOfUserQuery request, CancellationToken cancellationToken)
         {
-            
             var currentUserId = Guid.Parse(_currentUserService.UserId);
             
             var updateUser = new UpdateUser.UpdateUserCommand(currentUserId, new UserManipulationDto { IsOnline = true });

@@ -10,7 +10,7 @@ import {
 import {useSelector} from "react-redux";
 import {useAppSelector} from "../../redux/hooks";
 import {getCurrentChannel} from "../../redux/uiSlice";
-//import {getCurrentChannel} from "../../redux/features/channels/channelSlice";
+//import {getCurrentChannel} from "../../redux/features/servers/channelSlice";
 
 const ChannelInfo = ( /*props: {channel: ChannelDto} */) => {
     const currentChannel = useAppSelector(getCurrentChannel);

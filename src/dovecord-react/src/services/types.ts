@@ -4,6 +4,29 @@
  * @version 5
  */
 
+export interface Channel {
+  /**
+   *
+   * - Format: guid
+   */
+  id?: string;
+  messages?: ChannelMessage[];
+  name?: string;
+  recipients?: User[];
+  server?: Server;
+  /**
+   *
+   * - Format: guid
+   */
+  serverId?: string;
+  topic?: string;
+  /**
+   *
+   * - Format: int32
+   */
+  type?: number;
+}
+
 export interface ChannelDto {
   /**
    *
@@ -11,13 +34,76 @@ export interface ChannelDto {
    */
   id?: string;
   name?: string;
+  recipients?: User[];
+  /**
+   *
+   * - Format: guid
+   */
+  serverId?: string;
+  topic?: string;
+  /**
+   *
+   * - Format: int32
+   */
+  type?: number;
 }
 
 export interface ChannelManipulationDto {
   name?: string;
+  /**
+   *
+   * - Format: guid
+   */
+  serverId?: string;
+  topic?: string;
+  /**
+   *
+   * - Format: int32
+   */
+  type?: number;
+}
+
+export interface ChannelMessage {
+  author?: User;
+  /**
+   *
+   * - Format: guid
+   */
+  authorId?: string;
+  channel?: Channel;
+  /**
+   *
+   * - Format: guid
+   */
+  channelId?: string;
+  content?: string;
+  createdBy?: string;
+  /**
+   *
+   * - Format: date-time
+   */
+  createdOn?: string;
+  /**
+   *
+   * - Format: guid
+   */
+  id?: string;
+  isEdit?: boolean;
+  /**
+   *
+   * - Format: date-time
+   */
+  lastModifiedOn?: string;
+  server?: Server;
+  /**
+   *
+   * - Format: guid
+   */
+  serverId?: string;
 }
 
 export interface ChannelMessageDto {
+  author?: User;
   /**
    *
    * - Format: guid
@@ -45,7 +131,11 @@ export interface ChannelMessageDto {
    *
    * - Format: guid
    */
-  userId?: string;
+  serverId?: string;
+}
+
+export interface GetWeatherforecastQueryParams {
+  "api-version"?: string;
 }
 
 export interface MessageManipulationDto {
@@ -57,52 +147,60 @@ export interface MessageManipulationDto {
   content?: string;
 }
 
-export interface PrivateMessageDto {
-  content?: string;
-  createdBy?: string;
-  /**
-   *
-   * - Format: date-time
-   */
-  createdOn?: string;
+export interface PutV1MessagesIdQueryParams {
+  message?: string;
+}
+
+export interface Server {
+  channels?: Channel[];
+  iconUrl?: string;
   /**
    *
    * - Format: guid
    */
   id?: string;
-  isEdit?: boolean;
-  /**
-   *
-   * - Format: date-time
-   */
-  lastModifiedOn?: string;
+  members?: User[];
+  name?: string;
   /**
    *
    * - Format: guid
    */
-  receiverUserId?: string;
+  ownerUserId?: string;
+}
+
+export interface ServerDto {
+  channels?: Channel[];
   /**
    *
    * - Format: guid
    */
-  userId?: string;
-}
-
-export interface PrivateMessageManipulationDto {
-  content?: string;
+  id?: string;
+  members?: User[];
+  name?: string;
   /**
    *
    * - Format: guid
    */
-  receiverId?: string;
+  ownerUserId?: string;
+  topic?: string;
 }
 
-export interface PutMessagesIdQueryParams {
-  message?: string;
+export interface ServerManipulationDto {
+  name?: string;
 }
 
-export interface PutPmessagesIdQueryParams {
-  message?: string;
+export interface User {
+  accentColor?: boolean;
+  bot?: boolean;
+  /**
+   *
+   * - Format: guid
+   */
+  id?: string;
+  isOnline?: boolean;
+  servers?: Server[];
+  system?: boolean;
+  username?: string;
 }
 
 export interface UserCreationDto {

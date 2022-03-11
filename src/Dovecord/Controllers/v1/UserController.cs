@@ -10,7 +10,7 @@ namespace Dovecord.Controllers.v1;
 [Authorize]
 [ApiController]
 [RequiredScope("API.Access")]
-[Route("api/users")]
+[Route("api/v{version:apiVersion}/users")]
 [ApiVersion("1.0")]
 public class UserController : ControllerBase
 {

@@ -1,11 +1,9 @@
 import React, {useEffect} from "react";
 import UserInfo from "./UserInfo";
-import UserList from "./UserList";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {fetchUsersAsync, selectUsers, selectUsersStatus} from "../../redux/features/users/userSlice";
 import {UserData} from "./UserInfo/styles";
-import {fetchChannelsAsync} from "../../redux/features/channels/channelSlice";
-
+import {fetchChannelsAsync} from "../../redux/features/servers/serverSlice";
+/*
 const UserComponent: React.FC = () => {
     const dispatch = useAppDispatch();
     const onlineUsers = useAppSelector(selectUsers)
@@ -27,3 +25,4 @@ const UserComponent: React.FC = () => {
 };
 
 export default UserComponent;
+ */

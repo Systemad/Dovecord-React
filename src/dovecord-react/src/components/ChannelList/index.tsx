@@ -3,12 +3,10 @@ import { Container, Category, AddCategoryIcon } from "./styles";
 import {ChannelDto, ChannelMessageDto} from "../../services/types";
 import {
     fetchChannelMessagesAsync,
-    fetchChannelsAsync,
-    selectChannels,
-    selectStatus
-} from "../../redux/features/channels/channelSlice"
+    fetchChannelsAsync, selectCurrentState, selectMainState, selectServers,
+} from "../../redux/features/servers/serverSlice"
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import { setCurrentChannel } from "../../redux/features/channels/channelSlice";
+import { setCurrentChannel } from "../../redux/features/servers/serverSlice";
 import {useEffect} from "react";
 
 type ChannelState = {
@@ -19,8 +17,9 @@ type ChannelState = {
 
 const ChannelList = () => {
     const dispatch = useAppDispatch();
-    const channels = useAppSelector(selectChannels);
-    const channelStatus = useAppSelector(selectStatus)
+    const mainState = useAppSelector(selectMainState);
+    const currentState = useAppSelector(selectCurrentState);
+    const currentServer = useAppSelector(selectServers).find((server) => server.server.id === currentState.currentServer!.id);
 
     const setChannel = async (channel: ChannelState) => {
         dispatch(setCurrentChannel(channel.channel));
@@ -29,8 +28,8 @@ const ChannelList = () => {
         }
     }
     useEffect(() => {
-        if(channelStatus === 'idle'){
-            dispatch(fetchChannelsAsync());
+        if(mainState.loading === 'idle'){
+            dispatch(fetchChannelsAsync(currentServer?.server.id!));
         }
     }, []);
 
@@ -41,7 +40,7 @@ const ChannelList = () => {
                 <AddCategoryIcon />
             </Category>
 
-            {channels.map((channel) => (
+            {currentServer?.channels.map((channel) => (
                 <ChannelButton
                     click={() => setChannel(channel)}
                     channel={channel.channel} />

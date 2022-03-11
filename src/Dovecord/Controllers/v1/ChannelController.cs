@@ -12,7 +12,7 @@ namespace Dovecord.Controllers.v1;
 [Authorize]
 [RequiredScope("API.Access")]
 [ApiController]
-[Route("api/channels")]
+[Route("api/v{version:apiVersion}/channels")]
 [ApiVersion("1.0")]
 public class ChannelController : ControllerBase
 {
@@ -24,16 +24,6 @@ public class ChannelController : ControllerBase
         _logger = logger;
         _mediator = mediator;
     }   
-
-    [ProducesResponseType(typeof(IEnumerable<ChannelDto>), 200)]
-    [Produces("application/json")]
-    [HttpGet(Name = "GetChannels")]
-    public async Task<IActionResult> GetChannels()
-    {
-        var query = new GetChannelList.ChannelListQuery();
-        var result = await _mediator.Send(query);
-        return Ok(result);
-    }
     
     [ProducesResponseType(typeof(IEnumerable<ChannelMessageDto>), 200)]
     [Produces("application/json")]

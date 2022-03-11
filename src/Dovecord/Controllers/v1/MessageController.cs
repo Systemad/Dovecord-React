@@ -14,7 +14,7 @@ namespace Dovecord.Controllers.v1;
 [Authorize]
 [RequiredScope("API.Access")]
 [ApiController]
-[Route("api/messages")]
+[Route("api/v{version:apiVersion}/messages")]
 [ApiVersion("1.0")]
 public class MessageController : ControllerBase
 {

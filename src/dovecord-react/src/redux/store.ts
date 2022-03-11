@@ -1,13 +1,11 @@
 import { configureStore, combineReducers  } from '@reduxjs/toolkit'
-import ChannelSlice from "./features/channels/channelSlice";
 import UiSlice from "./uiSlice";
-import UserSlice from "./features/users/userSlice";
+import ServerSlice from "./features/servers/serverSlice"
 
 export const store = configureStore({
     reducer: {
-        channels: ChannelSlice,
-        users: UserSlice,
-        ui: UiSlice
+        ui: UiSlice,
+        servers: ServerSlice
     }
 })
 

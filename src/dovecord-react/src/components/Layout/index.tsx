@@ -6,8 +6,8 @@ import {Grid} from "./styles";
 import {getChannels, getChannelsId, getMessagesChannelId} from "../../services/services"
 
 import SignInSignOutButton from "../authentication/SignInSignOutButton";
-import ServerList from "../ServerList";
-import ServerName from "../ServerName";
+import ServerList from "../Server/ServerList";
+import ServerName from "../Server/ServerName";
 import ChannelInfo from "../ChannelInfo";
 import ChannelList from "../ChannelList";
 import UserInfo from "../User/UserInfo";
@@ -20,7 +20,7 @@ import {
     deleteMessageFromChannel,
     fetchChannelsAsync,
     setChannels
-} from "../../redux/features/channels/channelSlice";
+} from "../../redux/features/servers/serverSlice";
 import {createSignalRContext} from "react-signalr";
 import {Chat, ChatCallbacksNames} from "../../services/hub";
 import {AccountInfo} from "@azure/msal-browser";

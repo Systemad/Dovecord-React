@@ -4,8 +4,8 @@ import { Container, HashtagIcon, InviteIcon, SettingsIcon } from "./styles";
 import {ChannelDto} from "../../services/types";
 import {useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import {selectCurrentState} from "../../redux/features/servers/serverSlice";
 
-import {getCurrentChannel} from "../../redux/uiSlice";
 
 export interface Props {
     channel: ChannelDto;
@@ -13,9 +13,8 @@ export interface Props {
 }
 
 const ChannelButton: React.FC<Props> = ( {channel, click}) => {
-    const currentChannel = useAppSelector(getCurrentChannel);
-    const selected = channel.id === currentChannel?.id;
-
+    const currentChannel = useAppSelector(selectCurrentState);
+    const selected = channel.id === currentChannel.currentChannel?.id;
     return (
         <Container className={selected ? "active" : ""} onClick={() => click()}>
             <div>

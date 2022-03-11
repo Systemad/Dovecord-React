@@ -43,6 +43,12 @@ public class Startup
             // Advertise the API versions supported for the particular endpoint
             config.ReportApiVersions = true;
         });
+
+        services.AddVersionedApiExplorer(setup =>
+        {
+            setup.GroupNameFormat = "'v'VVV";
+            setup.SubstituteApiVersionInUrl = true;
+        });
         
         services.AddRouting(options =>
         {

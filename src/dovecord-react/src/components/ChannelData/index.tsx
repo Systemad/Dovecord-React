@@ -3,23 +3,18 @@ import React, {useRef, useEffect, useState, MouseEvent, FormEvent} from "react";
 import ChannelMessage, { Mention } from "../ChannelMessage";
 
 import { Container, Messages, InputWrapper, Input, SendIcon } from "./styles";
-import {MessageManipulationDto, UserDto, ChannelDto, PrivateMessageManipulationDto} from "../../services/types";
-import {postMessages, postPmessages} from "../../services/services";
+import {MessageManipulationDto, UserDto, ChannelDto} from "../../services/types";
 import { useAppSelector } from "../../redux/hooks";
-import { selectChannels } from "../../redux/features/channels/channelSlice"
-import {getCurrentChannel} from "../../redux/uiSlice";
-
+import {selectCurrentState, selectServers} from "../../redux/features/servers/serverSlice"
 
 const ChannelData = () => {
     const messagesRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const [message, setMessage] = useState('');
+    const currentState = useAppSelector(selectCurrentState);
 
-    const currentRoom = useAppSelector(getCurrentChannel);
-    const currentRoomData = useAppSelector(selectChannels);
-
-
-    const messages = currentRoomData.find((room) => room.channel.id === currentRoom?.id);
-
+    //const currentServer = useAppSelector(selectCurrentState);
+    const currentServer = useAppSelector(selectServers).find((server) => server.server.id === currentState.currentServer!.id);
+    const currentChannel = currentServer?.channels.find((channel) => channel.channel.id === currentState.currentChannel!.id);
 
     const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
         event.preventDefault();
@@ -28,11 +23,11 @@ const ChannelData = () => {
 
             if (isMessageProvided) {
                 let newMessage =  {
-                    channelId: currentRoom?.id, // SET CURRENT CHANNEL
+                    channelId: currentChannel!.channel.id, // SET CURRENT CHANNEL
                     content: message,
                 } as MessageManipulationDto;
 
-                await postMessages(newMessage);
+                await postMessage(newMessage);
                 setMessage('');
                 //props.sendMessage(user, message);
             }
@@ -45,22 +40,12 @@ const ChannelData = () => {
 
         // TODO: Check typecheck
         if (isMessageProvided) {
-            if(typeof currentRoom ===  {} as UserDto){
-                let newMessage =  {
-                    channelId: currentRoom?.id,
-                    content: message,
-                } as MessageManipulationDto;
-                await postMessages(newMessage);
-            }
+            let newMessage =  {
+                channelId: currentChannel!.channel.id, // SET CURRENT CHANNEL
+                content: message,
+            } as MessageManipulationDto;
 
-            if(typeof currentRoom ===  {} as ChannelDto){
-                let newpMessage = {
-                    receiverId: currentRoom?.id,
-                    content: message,
-                } as PrivateMessageManipulationDto
-                await postPmessages(newpMessage);
-            }
-
+            await postMessage(newMessage);
             setMessage('');
         }
         else {
@@ -102,7 +87,7 @@ const ChannelData = () => {
     return (
         <Container>
             <Messages ref={messagesRef}>
-                {messages?.messages.map((message) => (
+                {currentChannel?.messages.map((message) => (
                     <ChannelMessage
                         author={message.createdBy!}
                         date={message.createdOn!}

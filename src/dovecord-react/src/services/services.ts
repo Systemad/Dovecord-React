@@ -22,6 +22,9 @@ import {
   UserManipulationDto,
 } from "./types";
 
+/* tslint:disable */
+/* eslint-disable */
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const __DEV__ = process.env.NODE_ENV !== "production";
 

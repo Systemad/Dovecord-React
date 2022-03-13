@@ -7,15 +7,17 @@ import {useAppSelector} from "../../../redux/hooks";
 import {selectCurrentState} from "../../../redux/features/servers/serverSlice";
 
 export interface Props {
-    server: ServerDto,
-    click(): void;
+    server?: ServerDto,
     isHome?: boolean;
     hasNotifications?: boolean;
     mentions?: number;
 }
 
+export interface Props2 {
+    click(): void
+}
+
 const ServerButton: React.FC<Props> = ({
-    click,
     isHome,
     hasNotifications,
     mentions,
@@ -23,15 +25,14 @@ const ServerButton: React.FC<Props> = ({
 }) => {
 
     const currentServer = useAppSelector(selectCurrentState);
-    const selected = server.id === currentServer.currentServer?.id;
+    const selected = server?.id === currentServer.currentServer?.id;
 
     return (
         <Button
             isHome={isHome}
             hasNotifications={hasNotifications}
             mentions={mentions}
-            className={selected ? "active" : ""}
-            click={() => click()}>
+            className={selected ? "active" : ""}>
             {isHome && <img src={Logo} alt="Discord" />}
         </Button>
     );

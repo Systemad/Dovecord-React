@@ -13,8 +13,8 @@ const ChannelData = () => {
     const currentState = useAppSelector(selectCurrentState);
 
     //const currentServer = useAppSelector(selectCurrentState);
-    const currentServer = useAppSelector(selectServers).find((server) => server.server.id === currentState.currentServer!.id);
-    const currentChannel = currentServer?.channels.find((channel) => channel.channel.id === currentState.currentChannel!.id);
+    const currentServer = useAppSelector(selectServers).find((server) => server.server.id === currentState.currentServer?.id);
+    const currentChannel = currentServer?.channels.find((channel) => channel.channel.id === currentState.currentChannel?.id);
 
     const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
         event.preventDefault();
@@ -22,7 +22,7 @@ const ChannelData = () => {
             const isMessageProvided = message && message !== '';
 
             if (isMessageProvided) {
-                let newMessage =  {
+                const newMessage =  {
                     channelId: currentChannel!.channel.id, // SET CURRENT CHANNEL
                     content: message,
                 } as MessageManipulationDto;
@@ -40,7 +40,7 @@ const ChannelData = () => {
 
         // TODO: Check typecheck
         if (isMessageProvided) {
-            let newMessage =  {
+            const newMessage =  {
                 channelId: currentChannel!.channel.id, // SET CURRENT CHANNEL
                 content: message,
             } as MessageManipulationDto;
@@ -89,8 +89,8 @@ const ChannelData = () => {
             <Messages ref={messagesRef}>
                 {currentChannel?.messages.map((message) => (
                     <ChannelMessage
-                        author={message.createdBy!}
-                        date={message.createdOn!}
+                        author={message?.createdBy}
+                        date={message?.createdOn}
                         content={message.content}
                         key={message.id}
                         messageId={message.id}

@@ -10,7 +10,7 @@ import {
 
 type DeleteMessage = {
     channelId: string
-    serverId: string
+    serverId?: string
     messageId: string
 }
 
@@ -58,7 +58,7 @@ export const fetchServersAsync = createAsyncThunk(
         const servers = await getV1ServersApiMeServers();
         const serverData = servers.data;
 
-        let newState: State = {
+        const newState: State = {
             currentState: {},
             directMessages: [],
             loading: 'pending',
@@ -66,9 +66,9 @@ export const fetchServersAsync = createAsyncThunk(
         }
 
         for(let i = 0; i < serverData.length; i++){
-            let serverFetch = await getV1ServersServerId(serverData[i].id!);
+            const serverFetch = await getV1ServersServerId(serverData[i].id!);
 
-            let newServerState: ServerState =  {
+            const newServerState: ServerState =  {
                 channels: [],
                 loading: 'pending',
                 server: serverFetch.data,
@@ -97,7 +97,7 @@ export const fetchChannelsAsync = createAsyncThunk(
         const channels = await getV1ServersServerIdChannels(serverId);
         const channelData = channels.data;
 
-        let newServerState: ServerState =  {
+        const newServerState: ServerState =  {
             channels: [],
             loading: 'succeeded',
             server: serverInfoData,
@@ -105,7 +105,7 @@ export const fetchChannelsAsync = createAsyncThunk(
         }
 
         for(let i = 0; i < channelData.length; i++){
-            let channelState: ChannelState = {
+            const channelState: ChannelState = {
                 channel: channelData[i],
                 loading: 'succeeded',
                 messages: []

@@ -22,7 +22,6 @@
     "@types/react-dom": "^17.0.11",
     "@types/react-redux": "^7.1.22",
     "axios": "^0.26.0",
-    "eslint": "^8.9.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "history": "^5.2.0",
     "http-proxy-middleware": "^2.0.3",
@@ -70,6 +69,10 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.22"
+    "@types/styled-components": "^5.1.22",
+    "@typescript-eslint/eslint-plugin": "^5.14.0",
+    "@typescript-eslint/parser": "^5.14.0",
+    "eslint": "^8.11.0",
+    "eslint-plugin-react": "^7.29.3"
   }
 }

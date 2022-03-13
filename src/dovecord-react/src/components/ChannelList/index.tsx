@@ -1,3 +1,4 @@
+import React, {useEffect} from "react";
 import ChannelButton from "../ChannelButton";
 import { Container, Category, AddCategoryIcon } from "./styles";
 import {ChannelDto, ChannelMessageDto} from "../../services/types";
@@ -7,7 +8,6 @@ import {
 } from "../../redux/features/servers/serverSlice"
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import { setCurrentChannel } from "../../redux/features/servers/serverSlice";
-import {useEffect} from "react";
 
 type ChannelState = {
     channel: ChannelDto
@@ -19,7 +19,7 @@ const ChannelList = () => {
     const dispatch = useAppDispatch();
     const mainState = useAppSelector(selectMainState);
     const currentState = useAppSelector(selectCurrentState);
-    const currentServer = useAppSelector(selectServers).find((server) => server.server.id === currentState.currentServer!.id);
+    const currentServer = useAppSelector(selectServers).find((server) => server.server.id === currentState.currentServer?.id);
 
     const setChannel = async (channel: ChannelState) => {
         dispatch(setCurrentChannel(channel.channel));
@@ -28,8 +28,10 @@ const ChannelList = () => {
         }
     }
     useEffect(() => {
-        if(mainState.loading === 'idle'){
-            dispatch(fetchChannelsAsync(currentServer?.server.id!));
+        if(currentServer){
+            if(mainState.loading === 'idle'){
+                dispatch(fetchChannelsAsync(currentServer!.server.id!));
+            }
         }
     }, []);
 
@@ -42,6 +44,7 @@ const ChannelList = () => {
 
             {currentServer?.channels.map((channel) => (
                 <ChannelButton
+                    key={channel.channel.id}
                     click={() => setChannel(channel)}
                     channel={channel.channel} />
             ))}

@@ -4,6 +4,9 @@
  * @version 5
  */
 
+/* tslint:disable */
+/* eslint-disable */
+
 export interface Channel {
   /**
    *

@@ -3,13 +3,14 @@
  *
  * @version 5
  */
+/* tslint:disable */
+/* eslint-disable */
 import Axios, {
   AxiosRequestConfig,
   AxiosError,
   AxiosResponse,
   AxiosInstance,
 } from "axios";
-//@ts-ignore
 import qs from "qs";
 
 // Msal imports

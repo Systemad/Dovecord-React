@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import { Container, Avatar, Message, Header, Content, OpenMenu, MenuContainer } from "./styles";
 import { useHover } from '@mantine/hooks';
 import { Popover, Menu, Divider, Text } from '@mantine/core';
-import {deleteMessagesId} from "../../services/services";
+import {deleteV1MessagesId} from "../../services/services";
 export { Mention } from "./styles";
 
 export interface Props {
@@ -27,7 +27,8 @@ const ChannelMessage: React.FC<Props> = ({
     const [opened, setOpened] = useState(false);
 
     async function deleteMessage(){
-        await deleteMessagesId(messageId!);
+        if(messageId)
+            await deleteV1MessagesId(messageId);
     }
 
     return (

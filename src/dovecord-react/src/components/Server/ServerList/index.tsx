@@ -1,11 +1,11 @@
-import React from "react";
+import React, {useEffect} from "react";
 
 import ServerButton from "../ServerButton";
 
 import { Container, Separator } from "./styles";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {
-        fetchChannelMessagesAsync, fetchChannelsAsync,
+        fetchChannelMessagesAsync, fetchChannelsAsync, fetchServersAsync,
         selectCurrentState,
         selectServers,
         setCurrentChannel, setCurrentServer
@@ -18,7 +18,7 @@ const ServerList: React.FC = () => {
         const currentState = useAppSelector(selectCurrentState);
         //const currentServer = useAppSelector(selectCurrentState);
         const servers = useAppSelector(selectServers);
-        const currentServer = useAppSelector(selectServers).find((server) => server.server.id === currentState.currentServer!.id);
+        const currentServer = useAppSelector(selectServers).find((server) => server.server.id === currentState.currentServer?.id);
 
         const setServer = async (server: ServerDto) => {
                 dispatch(setCurrentServer(server));
@@ -27,17 +27,23 @@ const ServerList: React.FC = () => {
                 }
         }
 
+        useEffect(() => {
+                dispatch(fetchServersAsync());
+        }, [])
+
         /*
                             <ChannelButton
                         click={() => setChannel(server)}
                         channel={channel.channel} />
+                        onClick={() => setServer(server)}
          */
     return (
         <Container>
 
                 {servers?.map((server) => (
                     <ServerButton
-                        click={() => setServer(server)}
+                        key={server.server.id}
+                        server={server}
                     />
 
                 ))}

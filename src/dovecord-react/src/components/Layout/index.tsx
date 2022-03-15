@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {HubConnection} from "@microsoft/signalr";
 import {AuthenticatedTemplate, UnauthenticatedTemplate, useAccount, useMsal} from "@azure/msal-react";
 import {Grid} from "./styles";
-
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import SignInSignOutButton from "../authentication/SignInSignOutButton";
 import ServerList from "../Server/ServerList";
 import ServerName from "../Server/ServerName";
@@ -20,7 +20,6 @@ import {createSignalRContext} from "react-signalr";
 import {Chat, ChatCallbacksNames} from "../../services/hub";
 import {AccountInfo} from "@azure/msal-browser";
 import {loginRequest} from "../../auth/authConfig";
-
 type ChannelState = {
     channel: ChannelDto
     messages: ChannelMessageDto[]
@@ -85,20 +84,27 @@ const Layout: React.FC = () => {
 
     return (
         <>
-                <SignalRContext.Provider
-                    connectEnabled={true}
-                    accessTokenFactory={accessTokenFactory}
-                    dependencies={[accessTokenFactory]} //remove previous connection and create a new connection if changed
-                    url={"https://localhost:7045/chathub"}
-                >
-                    <Grid>
-                        <ServerList />
-                        <ServerName />
-                        <ChannelInfo />
-                        <ChannelList />
-                        <ChannelData />
-                    </Grid>
-                </SignalRContext.Provider>
+            <SignalRContext.Provider
+                connectEnabled={true}
+                accessTokenFactory={accessTokenFactory}
+                dependencies={[accessTokenFactory]} //remove previous connection and create a new connection if changed
+                url={"https://localhost:7045/chathub"}>
+
+                <Grid>
+                    <ServerList />
+                    <Routes>
+                        <Route path="/chat" element={
+                            <>
+                                <ServerList />
+                                <ServerName />
+                                <ChannelInfo />
+                                <ChannelList />
+                                <ChannelData />
+                            </>
+                        }/>
+                    </Routes>
+                </Grid>
+            </SignalRContext.Provider>
             <UnauthenticatedTemplate>
                 <SignInSignOutButton />
             </UnauthenticatedTemplate>

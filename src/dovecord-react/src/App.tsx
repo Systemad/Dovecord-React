@@ -39,13 +39,10 @@ function App({pca }: AppProps) {
 
 function Pages() {
   return (
-      <Routes>
-          <Route path="/" element={
-            <>
+      <>
                 <Layout/>
-            </>
-          }/>
-      </Routes>
+          
+    </>
   )
 }
 

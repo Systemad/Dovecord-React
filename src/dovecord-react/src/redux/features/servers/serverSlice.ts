@@ -61,7 +61,7 @@ export const fetchServersAsync = createAsyncThunk(
         const newState: State = {
             currentState: {},
             directMessages: [],
-            loading: 'pending',
+            loading: 'idle',
             servers: []
         }
 
@@ -70,7 +70,7 @@ export const fetchServersAsync = createAsyncThunk(
 
             const newServerState: ServerState =  {
                 channels: [],
-                loading: 'pending',
+                loading: 'idle',
                 server: serverFetch.data,
                 users: []
             }
@@ -160,10 +160,11 @@ export const serverSlice = createSlice({
             const serverId = state.currentState.currentServer!.id;
             const serverData = [...state.servers];
             const findServer = serverData.findIndex((server) => server.server.id === serverId);
-            const {channels} = action.payload;
+            const {channels, server} = action.payload;
             if(!state.servers[findServer]){ // Ensure nested array exists
                 state.servers[findServer].channels = [];
             }
+            state.servers[findServer].server = server;
             state.servers[findServer].channels = channels;
             state.servers[findServer].loading = "succeeded";
         })

@@ -1,10 +1,8 @@
 import { configureStore, combineReducers  } from '@reduxjs/toolkit'
-import UiSlice from "./uiSlice";
 import ServerSlice from "./features/servers/serverSlice"
 
 export const store = configureStore({
     reducer: {
-        ui: UiSlice,
         servers: ServerSlice
     }
 })

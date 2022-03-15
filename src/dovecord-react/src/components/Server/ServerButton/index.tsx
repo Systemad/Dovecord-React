@@ -5,30 +5,28 @@ import { Button } from "./styles";
 import {ServerDto} from "../../../services/types";
 import {useAppSelector} from "../../../redux/hooks";
 import {selectCurrentState} from "../../../redux/features/servers/serverSlice";
+import {useLocation} from "react-router-dom";
 
 export interface Props {
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
     server?: ServerDto,
     isHome?: boolean;
     hasNotifications?: boolean;
     mentions?: number;
 }
 
-export interface Props2 {
-    click(): void
-}
-
 const ServerButton: React.FC<Props> = ({
+    onClick,
     isHome,
     hasNotifications,
     mentions,
     server
 }) => {
-
-    const currentServer = useAppSelector(selectCurrentState);
-    const selected = server?.id === currentServer.currentServer?.id;
-
+    const currentServer = useAppSelector(selectCurrentState).currentServer;
+    const selected = server?.id === currentServer?.id;
     return (
         <Button
+            onClick={onClick}
             isHome={isHome}
             hasNotifications={hasNotifications}
             mentions={mentions}

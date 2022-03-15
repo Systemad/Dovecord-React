@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { SearchAlt } from "@styled-icons/boxicons-regular/SearchAlt"
-import {Props} from "../../Discover/DiscoverButton/DsicoverButton";
+import {Props} from "./DsicoverButton";
 
 export const Container = styled.div`
     grid-area: SL;
@@ -28,7 +28,7 @@ export const Separator = styled.div`
 `;
 
 
-export const SearchButton = styled.button`
+export const ButtonDiscover = styled.button<Props>`
     display: flex;
     align-items: center;
     justify-content: center;

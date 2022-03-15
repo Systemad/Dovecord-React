@@ -27,13 +27,6 @@ const ChannelList = () => {
             dispatch(fetchChannelMessagesAsync(channel.channel.id!));
         }
     }
-    useEffect(() => {
-        if(currentServer){
-            if(mainState.loading === 'idle'){
-                dispatch(fetchChannelsAsync(currentServer!.server.id!));
-            }
-        }
-    }, []);
 
     return (
         <Container>

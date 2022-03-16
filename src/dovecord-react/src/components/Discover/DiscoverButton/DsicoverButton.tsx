@@ -18,7 +18,9 @@ export const DiscoverButton: React.FC<Props> = ({
             navigate(to)
     }
     return (
-        <ButtonDiscover onClick={() => navigateDiscover()}>
+        <ButtonDiscover
+            className={discoverActive ? "active" : ""}
+            onClick={() => navigateDiscover()}>
             <SearchIcon />
         </ButtonDiscover>
     )

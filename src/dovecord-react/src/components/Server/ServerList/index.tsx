@@ -52,11 +52,11 @@ const ServerList: React.FC = () => {
                 }
         }
 
-        /*
-        useEffect(() => {
-                dispatch(fetchServersAsync());
-        }, [])
 
+        useEffect(() => {
+            dispatch(fetchServersAsync());
+        }, [])
+/*
                             <ChannelButton
                         click={() => setChannel(server)}
                         channel={channel.channel} />

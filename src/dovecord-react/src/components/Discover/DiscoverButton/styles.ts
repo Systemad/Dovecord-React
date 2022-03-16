@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { SearchAlt } from "@styled-icons/boxicons-regular/SearchAlt"
 import {Props} from "./DsicoverButton";
+import {Telescope} from "@styled-icons/ionicons-outline/Telescope";
 
 export const Container = styled.div`
     grid-area: SL;
@@ -95,7 +96,7 @@ export const ButtonDiscover = styled.button<Props>`
     }
 `;
 
-export const SearchIcon = styled(SearchAlt)`
+export const SearchIcon = styled(Telescope)`
     width: 24px;
     height: 24px;
     color: var(--gray);

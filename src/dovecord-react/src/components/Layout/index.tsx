@@ -20,6 +20,7 @@ import {createSignalRContext} from "react-signalr";
 import {Chat, ChatCallbacksNames} from "../../services/hub";
 import {AccountInfo} from "@azure/msal-browser";
 import {loginRequest} from "../../auth/authConfig";
+import {DiscoverView} from "../Discover";
 type ChannelState = {
     channel: ChannelDto
     messages: ChannelMessageDto[]
@@ -95,11 +96,16 @@ const Layout: React.FC = () => {
                     <Routes>
                         <Route path="/chat" element={
                             <>
-                                <ServerList />
                                 <ServerName />
                                 <ChannelInfo />
                                 <ChannelList />
                                 <ChannelData />
+                            </>
+                        }/>
+
+                        <Route path="/discover" element={
+                            <>
+                                <DiscoverView/>
                             </>
                         }/>
                     </Routes>

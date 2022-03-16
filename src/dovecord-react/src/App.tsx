@@ -12,6 +12,7 @@ import { Provider } from 'react-redux'
 import { MsalProvider, useMsal} from "@azure/msal-react";
 import { IPublicClientApplication } from "@azure/msal-browser";
 import { CustomNavigationClient } from "./auth/NavigationClient";
+import ServerList from "./components/Server/ServerList";
 
 type AppProps = {
   pca: IPublicClientApplication

@@ -2,20 +2,19 @@ import React from 'react';
 import { Card, Image, Text, Badge, Button, Group, useMantineTheme } from '@mantine/core';
 import {ServerDto} from "../../services/types";
 import {postV1ServersJoinServerId} from "../../services/services";
+import {useAppDispatch} from "../../redux/hooks";
+import {addServer} from "../../redux/features/servers/serverSlice";
 
 interface Props {
     server?: ServerDto
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 export const ServerCard: React.FC<Props> = ({
-    server
+    server,
+    onClick
 }) => {
     const theme = useMantineTheme();
-
-    const joinServer = async (server?: ServerDto) => {
-        if(server)
-            await postV1ServersJoinServerId(server.id!)
-    }
     const secondaryColor = theme.colorScheme === 'dark'
         ? theme.colors.dark[1]
         : theme.colors.gray[7];
@@ -36,7 +35,7 @@ export const ServerCard: React.FC<Props> = ({
                     INSERT SERVER DESCRIPTION
                 </Text>
 
-                <Button onClick={() => joinServer(server)} variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
+                <Button onClick={onClick} variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
                     Join Server
                 </Button>
             </Card>

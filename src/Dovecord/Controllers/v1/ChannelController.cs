@@ -27,7 +27,7 @@ public class ChannelController : ControllerBase
     
     [ProducesResponseType(typeof(IEnumerable<ChannelMessageDto>), 200)]
     [Produces("application/json")]
-    [HttpGet("channels/{channelId:guid}/messages", Name = "GetChannelsMessages")]
+    [HttpGet("{channelId:guid}/messages", Name = "GetChannelsMessages")]
     public async Task<IActionResult> GetChannelMessages(Guid channelId)
     {
         var command = new GetMessagesFromChannel.MessageListQuery(channelId);

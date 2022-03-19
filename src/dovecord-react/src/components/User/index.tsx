@@ -4,7 +4,7 @@ import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {UserData} from "./UserInfo/styles";
 import {fetchChannelsAsync} from "../../redux/features/servers/serverSlice";
 /*
-const UserComponent: React.FC = () => {
+export const UserComponent: React.FC = () => {
     const dispatch = useAppDispatch();
     const onlineUsers = useAppSelector(selectUsers)
     const offlineUsers = useAppSelector(selectUsers)

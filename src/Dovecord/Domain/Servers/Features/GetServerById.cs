@@ -10,9 +10,9 @@ namespace Dovecord.Domain.Servers.Features;
 
 public static class GetServerById
 {
-    public record GetServerByIdGetQuery(Guid Id) : IRequest<Server>;
+    public record GetServerByIdGetQuery(Guid Id) : IRequest<ServerDto>;
 
-    public class QueryHandler : IRequestHandler<GetServerByIdGetQuery, Server>
+    public class QueryHandler : IRequestHandler<GetServerByIdGetQuery, ServerDto>
     {
         private readonly DoveDbContext _context;
         private readonly IMapper _mapper;
@@ -23,12 +23,12 @@ public static class GetServerById
             _mapper = mapper;
         }
 
-        public async Task<Server> Handle(GetServerByIdGetQuery request, CancellationToken cancellationToken)
+        public async Task<ServerDto> Handle(GetServerByIdGetQuery request, CancellationToken cancellationToken)
         {
             var result = await _context.Servers
                 .Include(channels => channels.Channels)
                 .Include(members => members.Members)
-                //.ProjectTo<ServerDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<ServerDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
 
             if (result is null)

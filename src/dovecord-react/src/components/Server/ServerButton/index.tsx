@@ -2,10 +2,9 @@ import React from "react";
 
 import Logo from "../../../assets/Logo.svg";
 import { Button } from "./styles";
-import {ServerDto} from "../../../services/types";
 import {useAppSelector} from "../../../redux/hooks";
 import {selectCurrentState} from "../../../redux/features/servers/serverSlice";
-import {useLocation} from "react-router-dom";
+import {ServerDto} from "../../../redux/webApi";
 
 export interface Props {
     onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void

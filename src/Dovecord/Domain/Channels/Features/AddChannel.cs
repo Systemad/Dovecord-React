@@ -30,7 +30,7 @@ public static class AddChannel
         public async Task<ChannelDto> Handle(AddChannelCommand request, CancellationToken cancellationToken)
         {
             var serverToUpdate = await _context.Servers
-                .Where(x => x.Id == request.ChannelToAdd.ServerId)
+                //.Where(x => x.Id == request.ChannelToAdd.ServerId)
                 .Include(m => m.Channels)
                 .AsTracking()
                 .FirstAsync(cancellationToken);

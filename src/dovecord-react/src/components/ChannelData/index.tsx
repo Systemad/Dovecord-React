@@ -6,6 +6,7 @@ import { Container, Messages, InputWrapper, Input, SendIcon } from "./styles";
 import {MessageManipulationDto, UserDto, ChannelDto} from "../../services/types";
 import { useAppSelector } from "../../redux/hooks";
 import {selectCurrentState, selectServers} from "../../redux/features/servers/serverSlice"
+import {postV1Messages} from "../../services/services";
 
 const ChannelData = () => {
     const messagesRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -35,17 +36,16 @@ const ChannelData = () => {
 
     }
 
-    const Submit = async () => {
+    const Submit = () => {
         const isMessageProvided = message && message !== '';
 
-        // TODO: Check typecheck
         if (isMessageProvided) {
             const newMessage =  {
                 channelId: currentChannel!.channel.id, // SET CURRENT CHANNEL
                 content: message,
             } as MessageManipulationDto;
 
-            await postMessage(newMessage);
+            postV1Messages(newMessage).then(r => console.log(r));
             setMessage('');
         }
         else {

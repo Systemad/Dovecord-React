@@ -58,8 +58,10 @@ const Layout: React.FC = () => {
     SignalRContext.useSignalREffect(
         ChatCallbacksNames.MessageReceived,
         (message) => {
-            if(message)
+            if(message){
+                console.log("message receive");
                 dispatch(addMessageToChannel(message));
+            }
         }, []
     );
 
@@ -124,6 +126,7 @@ const Layout: React.FC = () => {
                         <ChannelInfo />
                         <ChannelList />
                         <ChannelData />
+                        <UserComponent />
                     </Grid>
  */
 export default Layout;

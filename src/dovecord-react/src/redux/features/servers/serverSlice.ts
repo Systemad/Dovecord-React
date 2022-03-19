@@ -26,20 +26,20 @@ type State = {
     currentState: CurrentState
 }
 
-type ServerState = {
+export type ServerState = {
     server: ServerDto;
     channels: ChannelState[]
     users: UserState[]
     loading?: 'idle' | 'pending' | 'succeeded' | 'failed'
 }
 
-type ChannelState = {
+export type ChannelState = {
     channel: ChannelDto
     messages: ChannelMessageDto[]
     loading?: 'idle' | 'pending' | 'succeeded' | 'failed'
 }
 
-type UserState = {
+export type UserState = {
     user: UserDto
     messages?: ChannelMessageDto[]
     loading?: 'idle' | 'pending' | 'succeeded' | 'failed'
@@ -128,6 +128,13 @@ export const serverSlice = createSlice({
         setCurrentChannel: (state, action: PayloadAction<ChannelDto>) => {
             state.currentState.currentChannel = action.payload;
         },
+        addServer: (state, action: PayloadAction<ServerState>) => {
+          state.servers.push(action.payload)
+        },
+        addChannel: (state, action: PayloadAction<ChannelState>) => {
+            const findServer = state.servers.findIndex((server) => server.server.id == action.payload.channel.serverId);
+            state.servers[findServer].channels.push(action.payload);
+        },
         addMessageToChannel: (state, action: PayloadAction<ChannelMessageDto>) => {
             const {serverId, channelId} = action.payload;
             const serverData = [...state.servers];
@@ -188,7 +195,7 @@ export const serverSlice = createSlice({
     }
 })
 
-export const {addMessageToChannel, deleteMessageFromChannel, setCurrentChannel, setCurrentServer } = serverSlice.actions;
+export const {addMessageToChannel, addServer, deleteMessageFromChannel, setCurrentChannel, setCurrentServer, addChannel} = serverSlice.actions;
 
 export const selectMainState = (state: RootState) => state.servers;
 export const selectCurrentState = (state: RootState) => state.servers.currentState;

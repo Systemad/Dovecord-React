@@ -28,8 +28,9 @@ const acquireAccessToken = async (msalInstance: any) => {
 
 // initialize an empty api service that we'll inject endpoints into later as needed
 export const emptySplitApi = createApi({
+    reducerPath: 'api',
     baseQuery: fetchBaseQuery({
-        baseUrl: '/',
+        baseUrl: 'https://localhost:7045',
         prepareHeaders: (headers) => {
             const token = acquireAccessToken(msalInstance);
 

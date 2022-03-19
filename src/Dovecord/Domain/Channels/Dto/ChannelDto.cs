@@ -1,4 +1,5 @@
 using Dovecord.Domain.Users;
+using Dovecord.Domain.Users.Dto;
 
 namespace Dovecord.Domain.Channels.Dto;
 
@@ -14,5 +15,5 @@ public class ChannelDto
     public Guid? ServerId { get; set; }
 
     // If DM, put both author and recipient. When querying go through all channels that has both members in    
-    public List<User>? Recipients { get; set; }
+    //public List<UserDto>? Recipients { get; set; }
 }

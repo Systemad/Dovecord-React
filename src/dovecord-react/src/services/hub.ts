@@ -28,7 +28,7 @@ export type ChatCallbacks = {
   [ChatCallbacksNames.DeleteMessageReceived]: (
     channelId?: string,
     messageId?: string,
-    serverId?: string,
+    serverId?: string
   ) => void;
 };
 

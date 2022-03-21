@@ -2,8 +2,7 @@ import {ChannelDto, ChannelMessageDto, ServerDto, UserDto} from "../../../servic
 import {createAsyncThunk, createSelector, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../../store";
 import {
-    getV1MessagesChannelId,
-    getV1ServersApiMeServers,
+    getV1MessagesChannelId, getV1ServersMeServers,
     getV1ServersServerId,
     getV1ServersServerIdChannels
 } from "../../../services/services";
@@ -21,7 +20,7 @@ type CurrentState = {
 
 type State = {
     servers: ServerState[]
-    directMessages: UserState[]
+    directMessages: ChannelState[]
     loading?: 'idle' | 'pending' | 'succeeded' | 'failed'
     currentState: CurrentState
 }
@@ -41,7 +40,7 @@ export type ChannelState = {
 
 export type UserState = {
     user: UserDto
-    messages?: ChannelMessageDto[]
+    //messages?: ChannelMessageDto[]
     loading?: 'idle' | 'pending' | 'succeeded' | 'failed'
 }
 
@@ -55,7 +54,7 @@ const initialState: State = {
 export const fetchServersAsync = createAsyncThunk(
     'servers/me',
     async () => {
-        const servers = await getV1ServersApiMeServers();
+        const servers = await getV1ServersMeServers();
         const serverData = servers.data;
 
         const newState: State = {
@@ -141,6 +140,12 @@ export const serverSlice = createSlice({
             const findServer = serverData.findIndex((server) => server.server.id === serverId);
             const channelToAdd = state.servers[findServer].channels.findIndex((channel) => channel.channel.id === channelId)
             state.servers[findServer].channels[channelToAdd].messages.push(action.payload);
+        },
+        addMessageToUserChannel: (state, action: PayloadAction<ChannelMessageDto>) => {
+            const {channelId} = action.payload;
+            const serverData = [...state.directMessages];
+            const channelToAdd = state.directMessages.findIndex((channel) => channel.channel.id === channelId)
+            state.directMessages[channelToAdd].messages.push(action.payload);
         },
         deleteMessageFromChannel: (state, action: PayloadAction<DeleteMessage>) => {
             const {serverId, channelId, messageId} = action.payload;

@@ -14,9 +14,7 @@
   "paths": {
     "/weatherforecast": {
       "get": {
-        "tags": [
-          "WeatherForecast"
-        ],
+        "tags": ["WeatherForecast"],
         "operationId": "WeatherForecast_Get",
         "parameters": [
           {
@@ -53,9 +51,7 @@
     },
     "/api/v1/channels/channels/{channelId}/messages": {
       "get": {
-        "tags": [
-          "Channel"
-        ],
+        "tags": ["Channel"],
         "operationId": "Channel_GetChannelMessages",
         "parameters": [
           {
@@ -93,9 +89,7 @@
     },
     "/api/v1/channels/{id}": {
       "get": {
-        "tags": [
-          "Channel"
-        ],
+        "tags": ["Channel"],
         "operationId": "Channel_GetChannel",
         "parameters": [
           {
@@ -128,9 +122,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Channel"
-        ],
+        "tags": ["Channel"],
         "operationId": "Channel_DeleteChannel",
         "parameters": [
           {
@@ -156,9 +148,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Channel"
-        ],
+        "tags": ["Channel"],
         "operationId": "Channel_UpdateChannel",
         "parameters": [
           {
@@ -198,9 +188,7 @@
     },
     "/api/v1/channels": {
       "post": {
-        "tags": [
-          "Channel"
-        ],
+        "tags": ["Channel"],
         "operationId": "Channel_AddChannel",
         "requestBody": {
           "x-name": "channelForCreation",
@@ -235,9 +223,7 @@
     },
     "/api/v1/messages": {
       "post": {
-        "tags": [
-          "Message"
-        ],
+        "tags": ["Message"],
         "operationId": "Message_SaveMessage",
         "requestBody": {
           "x-name": "message",
@@ -272,9 +258,7 @@
     },
     "/api/v1/messages/{id}": {
       "put": {
-        "tags": [
-          "Message"
-        ],
+        "tags": ["Message"],
         "operationId": "Message_UpdateMessage",
         "parameters": [
           {
@@ -309,9 +293,7 @@
         ]
       },
       "get": {
-        "tags": [
-          "Message"
-        ],
+        "tags": ["Message"],
         "operationId": "Message_GetMessage",
         "parameters": [
           {
@@ -344,9 +326,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Message"
-        ],
+        "tags": ["Message"],
         "operationId": "Message_DeleteMessageById",
         "parameters": [
           {
@@ -374,9 +354,7 @@
     },
     "/api/v1/messages/channel/{id}": {
       "get": {
-        "tags": [
-          "Message"
-        ],
+        "tags": ["Message"],
         "operationId": "Message_GetMessagesFromChannel",
         "parameters": [
           {
@@ -414,9 +392,7 @@
     },
     "/api/v1/servers": {
       "get": {
-        "tags": [
-          "Server"
-        ],
+        "tags": ["Server"],
         "operationId": "Server_GetServers",
         "responses": {
           "200": {
@@ -440,9 +416,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "Server"
-        ],
+        "tags": ["Server"],
         "operationId": "Server_AddServer",
         "requestBody": {
           "x-name": "serverForCreation",
@@ -477,9 +451,7 @@
     },
     "/api/v1/servers/api/me/servers": {
       "get": {
-        "tags": [
-          "Server"
-        ],
+        "tags": ["Server"],
         "operationId": "Server_GetServersOfUser",
         "responses": {
           "200": {
@@ -505,9 +477,7 @@
     },
     "/api/v1/servers/{serverId}": {
       "get": {
-        "tags": [
-          "Server"
-        ],
+        "tags": ["Server"],
         "operationId": "Server_GetServerById",
         "parameters": [
           {
@@ -542,9 +512,7 @@
     },
     "/api/v1/servers/{serverId}/channels": {
       "get": {
-        "tags": [
-          "Server"
-        ],
+        "tags": ["Server"],
         "operationId": "Server_GetChannels",
         "parameters": [
           {
@@ -582,9 +550,7 @@
     },
     "/api/v1/servers/{id}": {
       "delete": {
-        "tags": [
-          "Server"
-        ],
+        "tags": ["Server"],
         "operationId": "Server_DeleteServer",
         "parameters": [
           {
@@ -610,9 +576,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Server"
-        ],
+        "tags": ["Server"],
         "operationId": "Server_UpdateServer",
         "parameters": [
           {
@@ -652,9 +616,7 @@
     },
     "/api/v1/servers/join/{serverId}": {
       "post": {
-        "tags": [
-          "Server"
-        ],
+        "tags": ["Server"],
         "operationId": "Server_JoinServer",
         "parameters": [
           {
@@ -682,9 +644,7 @@
     },
     "/api/v1/servers/leave/{serverId}": {
       "post": {
-        "tags": [
-          "Server"
-        ],
+        "tags": ["Server"],
         "operationId": "Server_LeaveServer",
         "parameters": [
           {
@@ -712,9 +672,7 @@
     },
     "/api/v1/users": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "operationId": "User_GetUsers",
         "responses": {
           "200": {
@@ -738,9 +696,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "operationId": "User_AddUser",
         "requestBody": {
           "x-name": "userForCreation",
@@ -776,9 +732,7 @@
     },
     "/api/v1/users/{id}": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "operationId": "User_GetUser",
         "parameters": [
           {
@@ -811,9 +765,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "operationId": "User_DeleteUser",
         "parameters": [
           {
@@ -839,9 +791,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "operationId": "User_UpdateUser",
         "parameters": [
           {

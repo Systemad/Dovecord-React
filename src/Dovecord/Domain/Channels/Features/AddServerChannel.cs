@@ -10,11 +10,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Dovecord.Domain.Channels.Features;
 
-public static class AddChannel
+public static class AddServerChannel
 {
-    public record AddChannelCommand(ChannelManipulationDto ChannelToAdd) : IRequest<ChannelDto>;
+    public record AddServerChannelCommand(ChannelManipulationDto ChannelToAdd, Guid serverId) : IRequest<ChannelDto>;
 
-    public class Handler : IRequestHandler<AddChannelCommand, ChannelDto>
+    public class Handler : IRequestHandler<AddServerChannelCommand, ChannelDto>
     {
         private readonly DoveDbContext _context;
         private readonly IMapper _mapper;
@@ -27,7 +27,7 @@ public static class AddChannel
             _mediator = mediator;
         }
         
-        public async Task<ChannelDto> Handle(AddChannelCommand request, CancellationToken cancellationToken)
+        public async Task<ChannelDto> Handle(AddServerChannelCommand request, CancellationToken cancellationToken)
         {
             var serverToUpdate = await _context.Servers
                 //.Where(x => x.Id == request.ChannelToAdd.ServerId)
@@ -36,7 +36,7 @@ public static class AddChannel
                 .FirstAsync(cancellationToken);
 
             if (serverToUpdate is null)
-                throw new NotFoundException("Server", request.ChannelToAdd.ServerId);
+                throw new NotFoundException("Server", request.serverId);
             
             var channel = _mapper.Map<Channel>(request.ChannelToAdd);
             serverToUpdate.Channels.Add(channel);

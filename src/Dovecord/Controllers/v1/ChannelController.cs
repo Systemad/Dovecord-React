@@ -44,17 +44,18 @@ public class ChannelController : ControllerBase
         var result = await _mediator.Send(query);
         return Ok(result);
     }
-    
+    /*
     [ProducesResponseType(typeof(ChannelDto), 201)]
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost(Name = "AddChannel")]
     public async Task<IActionResult> AddChannel([FromBody] ChannelManipulationDto channelForCreation)
     {
-        var command = new AddChannel.AddChannelCommand(channelForCreation);
+        var command = new AddServerChannel.AddServerChannelCommand(channelForCreation);
         var commandResponse = await _mediator.Send(command);
         return CreatedAtAction(nameof(GetChannel), new {commandResponse.Id}, commandResponse);
     }
+    */
     
     [ProducesResponseType(204)]
     [Produces("application/json")]

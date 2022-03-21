@@ -10,9 +10,9 @@ namespace Dovecord.Domain.Users.Features;
 
 public static class GetUser
 {
-    public record UserQuery(Guid Id) : IRequest<UserDto>;
+    public record GetUserQuery(Guid Id) : IRequest<UserDto>;
 
-    public class QueryHandler : IRequestHandler<UserQuery, UserDto>
+    public class QueryHandler : IRequestHandler<GetUserQuery, UserDto>
     {
         private readonly DoveDbContext _context;
         private readonly IMapper _mapper;
@@ -23,7 +23,7 @@ public static class GetUser
             _mapper = mapper;
         }
 
-        public async Task<UserDto> Handle(UserQuery request, CancellationToken cancellationToken)
+        public async Task<UserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
             var result = await _context.Users
                 .ProjectTo<UserDto>(_mapper.ConfigurationProvider)

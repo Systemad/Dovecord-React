@@ -15,7 +15,7 @@ public class User
     public bool? System { get; set; }
     public bool? AccentColor { get; set; }
     
-    public ICollection<Server> Servers { get; set; }
+    public ICollection<Server>? Servers { get; set; }
     //[JsonIgnore]
     //[IgnoreDataMember]
     //public ICollection<ChannelMessage> SentMessages { get; set; }

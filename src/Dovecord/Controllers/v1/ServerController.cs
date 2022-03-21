@@ -38,7 +38,7 @@ public class ServerController : ControllerBase
     
     [ProducesResponseType(typeof(IEnumerable<ServerDto>), 200)]
     [Produces("application/json")]
-    [HttpGet("api/me/servers", Name = "GetServersOfUser")]
+    [HttpGet("me/servers", Name = "GetServersOfUser")]
     public async Task<IActionResult> GetServersOfUser()
     {
         var query = new GetServersOfUser.GetServersOfUserQuery();
@@ -76,6 +76,18 @@ public class ServerController : ControllerBase
         var commandResponse = await _mediator.Send(command);
         return Ok(commandResponse);
         //return CreatedAtAction(nameof(GetServerById), new {commandResponse.Id}, commandResponse);
+    }
+    
+    [ProducesResponseType(typeof(ChannelDto), 200)]
+    [Consumes("application/json")]
+    [Produces("application/json")]
+    [HttpPost("{serverId:guid}/channels", Name = "AddServerChannel")]
+    public async Task<IActionResult> AddServerChannel([FromBody] ChannelManipulationDto channelForCreation, Guid serverId)
+    {
+        var command = new AddServerChannel.AddServerChannelCommand(channelForCreation, serverId);
+        var commandResponse = await _mediator.Send(command);
+        return Ok(commandResponse);
+        //return CreatedAtAction(nameof(GetChannel), new {commandResponse.Id}, commandResponse);
     }
     
     [ProducesResponseType(204)]

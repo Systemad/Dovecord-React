@@ -1,3 +1,5 @@
+using Dovecord.Domain.Channels.Dto;
+using Dovecord.Domain.Channels.Features;
 using Dovecord.Domain.Users.Dto;
 using Dovecord.Domain.Users.Features;
 using MediatR;
@@ -38,7 +40,7 @@ public class UserController : ControllerBase
     [HttpGet("{id:guid}", Name = "GetUser")]
     public async Task<ActionResult> GetUser(Guid id)
     {
-        var query = new GetUser.UserQuery(id);
+        var query = new GetUser.GetUserQuery(id);
         var result = await _mediator.Send(query);
         return Ok(result);
     }
@@ -73,5 +75,17 @@ public class UserController : ControllerBase
         var command = new UpdateUser.UpdateUserCommand(id, user);
         await _mediator.Send(command);
         return NoContent();
+    }
+    
+    [ProducesResponseType(typeof(ChannelDto), 200)]
+    [Consumes("application/json")]
+    [Produces("application/json")]
+    [HttpPost("me/channels", Name = "AddUserChannel")]
+    public async Task<IActionResult> AddUserChannel([FromBody]Guid recipientId)
+    {
+        var command = new AddUserChannel.AddUserChannelCommand(recipientId);
+        var commandResponse = await _mediator.Send(command);
+        return Ok(commandResponse);
+        //return CreatedAtAction(nameof(GetChannel), new {commandResponse.Id}, commandResponse);
     }
 }

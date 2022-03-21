@@ -10,8 +10,8 @@ import {
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import { setCurrentChannel } from "../../redux/features/servers/serverSlice";
 import { Dialog, Group, Button, TextInput, Text } from '@mantine/core';
-import {postV1Channels} from "../../services/services";
 import {ChannelManipulationDto, MessageManipulationDto} from "../../services/types";
+import {postV1ServersServerIdChannels} from "../../services/services";
 
 const ChannelList = () => {
     const dispatch = useAppDispatch();
@@ -27,15 +27,14 @@ const ChannelList = () => {
         }
     }
 
-    const createServer = async () => {
+    const createChannel = async () => {
         if(value){
             const channelDto = {
                 name: value,
-                serverId: currentServer!.server.id!,
                 topic: "",
                 type: 0,
             } as ChannelManipulationDto
-            const newChannel = await postV1Channels(channelDto)
+            const newChannel = await postV1ServersServerIdChannels(currentServer!.server.id!, channelDto);
             if(newChannel){
                 const newChannelState: ChannelState = {
                     channel: newChannel.data,
@@ -73,7 +72,7 @@ const ChannelList = () => {
                         style={{ flex: 1 }}
                         onChange={(event) => setValue(event.currentTarget.value)}
                     />
-                    <Button onClick={() => createServer()}>Create Channel</Button>
+                    <Button onClick={() => createChannel()}>Create Channel</Button>
                 </Group>
             </Dialog>
 

@@ -12,12 +12,12 @@ import {
   PutV1MessagesIdQueryParams,
   WeatherForecast,
   ChannelMessageDto,
+  UserDto,
   ChannelDto,
   ChannelManipulationDto,
   MessageManipulationDto,
   ServerDto,
   ServerManipulationDto,
-  UserDto,
   UserCreationDto,
   UserManipulationDto,
 } from "./types";
@@ -128,12 +128,12 @@ export const deleteV1UsersId = (
 /** Key is end point string without base url */
 deleteV1UsersId.key = "/api/v1/users/{id}";
 
-export const getV1ChannelsChannelsChannelIdMessages = (
+export const getV1ChannelsChannelIdMessages = (
   channelId: string,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<ChannelMessageDto[]>> => {
   return Http.getRequest(
-    template(getV1ChannelsChannelsChannelIdMessages.key, { channelId }),
+    template(getV1ChannelsChannelIdMessages.key, { channelId }),
     undefined,
     undefined,
     _CONSTANT1,
@@ -142,8 +142,7 @@ export const getV1ChannelsChannelsChannelIdMessages = (
 };
 
 /** Key is end point string without base url */
-getV1ChannelsChannelsChannelIdMessages.key =
-  "/api/v1/channels/channels/{channelId}/messages";
+getV1ChannelsChannelIdMessages.key = "/api/v1/channels/{channelId}/messages";
 
 export const getV1ChannelsId = (
   id: string,
@@ -208,11 +207,11 @@ export const getV1Servers = (
 /** Key is end point string without base url */
 getV1Servers.key = "/api/v1/servers";
 
-export const getV1ServersApiMeServers = (
+export const getV1ServersMeServers = (
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<ServerDto[]>> => {
   return Http.getRequest(
-    getV1ServersApiMeServers.key,
+    getV1ServersMeServers.key,
     undefined,
     undefined,
     _CONSTANT1,
@@ -221,7 +220,7 @@ export const getV1ServersApiMeServers = (
 };
 
 /** Key is end point string without base url */
-getV1ServersApiMeServers.key = "/api/v1/servers/api/me/servers";
+getV1ServersMeServers.key = "/api/v1/servers/me/servers";
 
 export const getV1ServersServerId = (
   serverId: string,
@@ -302,22 +301,6 @@ export const getWeatherforecast = (
 /** Key is end point string without base url */
 getWeatherforecast.key = "/weatherforecast";
 
-export const postV1Channels = (
-  requestBody: ChannelManipulationDto,
-  configOverride?: AxiosRequestConfig
-): Promise<SwaggerResponse<any>> => {
-  return Http.postRequest(
-    postV1Channels.key,
-    undefined,
-    requestBody,
-    _CONSTANT1,
-    overrideConfig(_CONSTANT0, configOverride)
-  );
-};
-
-/** Key is end point string without base url */
-postV1Channels.key = "/api/v1/channels";
-
 export const postV1Messages = (
   requestBody: MessageManipulationDto,
   configOverride?: AxiosRequestConfig
@@ -382,6 +365,23 @@ export const postV1ServersLeaveServerId = (
 /** Key is end point string without base url */
 postV1ServersLeaveServerId.key = "/api/v1/servers/leave/{serverId}";
 
+export const postV1ServersServerIdChannels = (
+  serverId: string,
+  requestBody: ChannelManipulationDto,
+  configOverride?: AxiosRequestConfig
+): Promise<SwaggerResponse<ChannelDto>> => {
+  return Http.postRequest(
+    template(postV1ServersServerIdChannels.key, { serverId }),
+    undefined,
+    requestBody,
+    _CONSTANT1,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+postV1ServersServerIdChannels.key = "/api/v1/servers/{serverId}/channels";
+
 /**
  * @deprecated This endpoint deprecated and will be remove. Please use an alternative
  */
@@ -406,6 +406,22 @@ export const postV1Users = (
 
 /** Key is end point string without base url */
 postV1Users.key = "/api/v1/users";
+
+export const postV1UsersMeChannels = (
+  requestBody: string,
+  configOverride?: AxiosRequestConfig
+): Promise<SwaggerResponse<ChannelDto>> => {
+  return Http.postRequest(
+    postV1UsersMeChannels.key,
+    undefined,
+    requestBody,
+    _CONSTANT1,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+postV1UsersMeChannels.key = "/api/v1/users/me/channels";
 
 export const putV1ChannelsId = (
   id: string,

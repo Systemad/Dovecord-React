@@ -60,7 +60,13 @@ const Layout: React.FC = () => {
         (message) => {
             if(message){
                 console.log("message receive");
-                dispatch(addMessageToChannel(message));
+                if(message.serverId){
+                    dispatch(addMessageToChannel(message));
+                } else {
+
+                }
+
+
             }
         }, []
     );

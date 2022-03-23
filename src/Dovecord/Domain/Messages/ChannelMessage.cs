@@ -18,7 +18,7 @@ public class ChannelMessage
     public Channel Channel { get; set; }
         
     public Guid? ServerId { get; set; }
-    //public Server? Server { get; set; }
+    public Server? Server { get; set; }
 
     public Guid AuthorId { get; set; }
     public User Author { get; set; }

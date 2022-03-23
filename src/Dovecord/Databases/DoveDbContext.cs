@@ -22,6 +22,7 @@ public class DoveDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasPostgresExtension("uuid-ossp");
         /*
         modelBuilder.Entity<Channel>()
             .HasOne(s => s.Server)

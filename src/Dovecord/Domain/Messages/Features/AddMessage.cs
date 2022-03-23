@@ -29,33 +29,33 @@ public static class AddMessage
         
         public async Task<ChannelMessageDto> Handle(AddMessageCommand request, CancellationToken cancellationToken)
         {
+            var currentUserName = _currentUserService.Username;
+            var currentUserId = _currentUserService.UserId;
+            
             var message = _mapper.Map<ChannelMessage>(request.MessageToAdd);
-            message.AuthorId = Guid.Parse(_currentUserService.UserId);
-            message.CreatedBy = _currentUserService.Username;
+            message.AuthorId = Guid.Parse(currentUserId ?? string.Empty);
+            message.CreatedBy = currentUserName ?? null;
             message.CreatedOn = DateTime.Now;
             
             var channel = await _context.Channels
-                //.Where(x => x.Id == request.MessageToAdd.ChannelId)
-                .Include(m => m.Messages)
-                .AsTracking()
-                .FirstAsync(cancellationToken);
-            //.SingleOrDefaultAsync(cancellationToken);
-            
-            if (message.Type == 0)
-            {
-                var servee =
-                    await _context.Servers
-                        .Where(server => server.Channels
-                            .Any(channel => channel.Id == request.MessageToAdd.ChannelId)).FirstAsync();
-                if(servee is not null)
-                    message.ServerId = servee.Id;
-            }
+                .Where(x => x.Id == request.MessageToAdd.ChannelId)
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (channel is null)
                 throw new NotFoundException("Channel", channel.Id);
             
-            channel.Messages.Add(message);
-            
+            if (message.Type == 0)
+            {
+                var serverId =
+                    await _context.Servers
+                        .Where(server => server.Channels != null && server.Channels
+                            .Any(ch => ch.Id == request.MessageToAdd.ChannelId)).Select(i => i.Id)
+                        .FirstAsync();
+                message.ServerId = serverId;
+            }
+
+
+            await _context.ChannelMessages.AddAsync(message);
             await _context.SaveChangesAsync(cancellationToken);
 
             var returnmessage = await _context.ChannelMessages

@@ -30,19 +30,16 @@ public static class AddServerChannel
         public async Task<ChannelDto> Handle(AddServerChannelCommand request, CancellationToken cancellationToken)
         {
             var channel = _mapper.Map<Channel>(request.ChannelToAdd);
-            //channel.Id = Guid.NewGuid();
             channel.ServerId = request.serverId;
-
+            
             var serverToUpdate = await _context.Servers
-                //.Where(x => x.Id == request.ChannelToAdd.ServerId)
-                .Include(m => m.Channels)
-                .AsTracking()
-                .FirstAsync(cancellationToken);
+                .Where(x => x.Id == channel.ServerId)
+                .FirstOrDefaultAsync(cancellationToken);
             
             if (serverToUpdate is null)
                 throw new NotFoundException("Server", request.serverId);
             
-            serverToUpdate.Channels.Add(channel);
+            _context.Channels.Add(channel);
             await _context.SaveChangesAsync(cancellationToken);
             
             var newChannel = await _context.Channels

@@ -6,12 +6,12 @@ import {
     ChannelState,
     fetchChannelMessagesAsync,
     selectCurrentState, selectServers,
-} from "../../redux/features/servers/serverSlice"
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import { setCurrentChannel } from "../../redux/features/servers/serverSlice";
+} from "../../../redux/features/servers/serverSlice"
+import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import { setCurrentChannel } from "../../../redux/features/servers/serverSlice";
 import { Dialog, Group, Button, TextInput, Text } from '@mantine/core';
-import {ChannelManipulationDto, MessageManipulationDto} from "../../services/types";
-import {postV1ServersServerIdChannels} from "../../services/services";
+import {ChannelManipulationDto, MessageManipulationDto} from "../../../services/types";
+import {postV1ServersServerIdChannels} from "../../../services/services";
 
 const ChannelList = () => {
     const dispatch = useAppDispatch();

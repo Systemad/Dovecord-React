@@ -1,6 +1,7 @@
 using System.Reflection;
 using Dovecord.Application.PipelineBehaviors;
 using Dovecord.Domain.Messages.Validators;
+using Dovecord.Middleware;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -14,7 +15,8 @@ public static class WebApiServiceExtension
         services.AddSingleton<ICurrentUserService, CurrentUserService>();
         services.AddHttpContextAccessor();
         services.AddMediatR(typeof(Startup));
-        services.AddMvc().AddFluentValidation();
+        services.AddMvc(options => options.Filters.Add<ErrorHandlerFilterAttribute>())
+            .AddFluentValidation(cfg => { cfg.AutomaticValidationEnabled = false; });
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));

@@ -29,22 +29,25 @@ public static class AddServerChannel
         
         public async Task<ChannelDto> Handle(AddServerChannelCommand request, CancellationToken cancellationToken)
         {
+            var channel = _mapper.Map<Channel>(request.ChannelToAdd);
+            //channel.Id = Guid.NewGuid();
+            channel.ServerId = request.serverId;
+
             var serverToUpdate = await _context.Servers
                 //.Where(x => x.Id == request.ChannelToAdd.ServerId)
                 .Include(m => m.Channels)
                 .AsTracking()
                 .FirstAsync(cancellationToken);
-
+            
             if (serverToUpdate is null)
                 throw new NotFoundException("Server", request.serverId);
             
-            var channel = _mapper.Map<Channel>(request.ChannelToAdd);
             serverToUpdate.Channels.Add(channel);
             await _context.SaveChangesAsync(cancellationToken);
+            
             var newChannel = await _context.Channels
                 .ProjectTo<ChannelDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(c => c.Id == channel.Id, cancellationToken);
-            
             return newChannel;
         }
     }

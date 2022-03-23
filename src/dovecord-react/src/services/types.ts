@@ -64,6 +64,11 @@ export interface ChannelMessageDto {
    * - Format: guid
    */
   serverId?: string;
+  /**
+   *
+   * - Format: int32
+   */
+  type?: number;
 }
 
 export interface GetWeatherforecastQueryParams {
@@ -77,6 +82,11 @@ export interface MessageManipulationDto {
    */
   channelId?: string;
   content?: string;
+  /**
+   *
+   * - Format: int32
+   */
+  type?: number;
 }
 
 export interface PutV1MessagesIdQueryParams {

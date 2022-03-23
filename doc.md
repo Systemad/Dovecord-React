@@ -20,11 +20,11 @@ Response:
     "content": "ZACK",
     "channel_id": "878825516801589288",
     "author": {
-    "id": "120218905305284612",
-    "username": "danvxz",
-    "avatar": "74683424a69438f1c03b6737b703c4b8",
-    "discriminator": "2630",
-    "public_flags": 0
+        "id": "120218905305284612",
+        "username": "danvxz",
+        "avatar": "74683424a69438f1c03b6737b703c4b8",
+        "discriminator": "2630",
+        "public_flags": 0
     },
     "attachments": [],
     "embeds": [],

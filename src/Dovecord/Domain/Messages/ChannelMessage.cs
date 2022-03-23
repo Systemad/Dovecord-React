@@ -12,13 +12,14 @@ public class ChannelMessage
     public DateTime CreatedOn { get; set; }
     public bool IsEdit { get; set; }
     public DateTime? LastModifiedOn { get; set; }
+    public int Type { get; set; } // 0 Channel message, 1 PM
     
     public Guid ChannelId { get; set; }
     public Channel Channel { get; set; }
         
     public Guid? ServerId { get; set; }
-    public Server? Server { get; set; }
+    //public Server? Server { get; set; }
 
-    public Guid? AuthorId { get; set; }
-    public User? Author { get; set; }
+    public Guid AuthorId { get; set; }
+    public User Author { get; set; }
 }

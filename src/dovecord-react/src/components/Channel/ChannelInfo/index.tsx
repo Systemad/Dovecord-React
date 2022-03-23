@@ -7,8 +7,8 @@ import {
     Separator,
     Description,
 } from "./styles";
-import {useAppSelector} from "../../redux/hooks";
-import {selectCurrentState} from "../../redux/features/servers/serverSlice";
+import {useAppSelector} from "../../../redux/hooks";
+import {selectCurrentState} from "../../../redux/features/servers/serverSlice";
 
 const ChannelInfo = ( /*props: {channel: ChannelDto} */) => {
     const currentChannel = useAppSelector(selectCurrentState).currentChannel;

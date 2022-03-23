@@ -7,7 +7,7 @@ import {
     getV1ServersServerIdChannels
 } from "../../../services/services";
 
-type DeleteMessage = {
+export type DeleteMessage = {
     channelId: string
     serverId?: string
     messageId: string
@@ -106,7 +106,7 @@ export const fetchChannelsAsync = createAsyncThunk(
         for(let i = 0; i < channelData.length; i++){
             const channelState: ChannelState = {
                 channel: channelData[i],
-                loading: 'succeeded',
+                loading: 'idle',
                 messages: []
             }
             newServerState.channels.push(channelState);
@@ -143,7 +143,6 @@ export const serverSlice = createSlice({
         },
         addMessageToUserChannel: (state, action: PayloadAction<ChannelMessageDto>) => {
             const {channelId} = action.payload;
-            const serverData = [...state.directMessages];
             const channelToAdd = state.directMessages.findIndex((channel) => channel.channel.id === channelId)
             state.directMessages[channelToAdd].messages.push(action.payload);
         },
@@ -200,7 +199,13 @@ export const serverSlice = createSlice({
     }
 })
 
-export const {addMessageToChannel, addServer, deleteMessageFromChannel, setCurrentChannel, setCurrentServer, addChannel} = serverSlice.actions;
+export const {addMessageToChannel,
+    addMessageToUserChannel,
+    addServer,
+    deleteMessageFromChannel,
+    setCurrentChannel,
+    setCurrentServer,
+    addChannel} = serverSlice.actions;
 
 export const selectMainState = (state: RootState) => state.servers;
 export const selectCurrentState = (state: RootState) => state.servers.currentState;

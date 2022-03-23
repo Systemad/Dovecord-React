@@ -10,6 +10,7 @@ public class ChannelMessageDto
     public string? CreatedBy { get; set; }
     public bool IsEdit { get; set; }
     public DateTime? LastModifiedOn { get; set; }
+    public int Type { get; set; }
     public string? Content { get; set; }
     public UserDto Author { get; set; }
     public Guid ChannelId { get; set; }

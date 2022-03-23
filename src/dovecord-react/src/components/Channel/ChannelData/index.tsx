@@ -3,10 +3,10 @@ import React, {useRef, useEffect, useState, MouseEvent, FormEvent} from "react";
 import ChannelMessage, { Mention } from "../ChannelMessage";
 
 import { Container, Messages, InputWrapper, Input, SendIcon } from "./styles";
-import {MessageManipulationDto, UserDto, ChannelDto} from "../../services/types";
-import { useAppSelector } from "../../redux/hooks";
-import {selectCurrentState, selectServers} from "../../redux/features/servers/serverSlice"
-import {postV1Messages} from "../../services/services";
+import {MessageManipulationDto, UserDto, ChannelDto} from "../../../services/types";
+import { useAppSelector } from "../../../redux/hooks";
+import {selectCurrentState, selectServers} from "../../../redux/features/servers/serverSlice"
+import {postV1Messages} from "../../../services/services";
 
 const ChannelData = () => {
     const messagesRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -43,9 +43,11 @@ const ChannelData = () => {
             const newMessage =  {
                 channelId: currentChannel!.channel.id, // SET CURRENT CHANNEL
                 content: message,
+                type: 0
             } as MessageManipulationDto;
 
-            postV1Messages(newMessage).then(r => console.log(r));
+            console.log(newMessage);
+            postV1Messages(newMessage); //.then(r => console.log(r));
             setMessage('');
         }
         else {

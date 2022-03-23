@@ -1,10 +1,10 @@
 import React, {MouseEventHandler} from "react";
 
 import { Container, HashtagIcon, InviteIcon, SettingsIcon } from "./styles";
-import {ChannelDto} from "../../services/types";
+import {ChannelDto} from "../../../services/types";
 import {useParams} from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {selectCurrentState} from "../../redux/features/servers/serverSlice";
+import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import {selectCurrentState} from "../../../redux/features/servers/serverSlice";
 
 
 export interface Props {

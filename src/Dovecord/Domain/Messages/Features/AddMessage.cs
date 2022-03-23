@@ -27,51 +27,42 @@ public static class AddMessage
             _mapper = mapper;
         }
         
-        /*
-         *     public string? Content { get; set; }
-    public Guid ChannelId { get; set; }
-         */
-        
-        /*
-         *     public Guid Id { get; set; }
-    public string? Content { get; set; }
-    public string? CreatedBy { get; set; }
-    public DateTime CreatedOn { get; set; }
-    public bool IsEdit { get; set; }
-    public DateTime? LastModifiedOn { get; set; }
-    
-    public Guid ChannelId { get; set; }
-    public Channel Channel { get; set; }
-        
-    public Guid? ServerId { get; set; }
-
-    public Guid? AuthorId { get; set; }
-         */
         public async Task<ChannelMessageDto> Handle(AddMessageCommand request, CancellationToken cancellationToken)
         {
             var message = _mapper.Map<ChannelMessage>(request.MessageToAdd);
             message.AuthorId = Guid.Parse(_currentUserService.UserId);
             message.CreatedBy = _currentUserService.Username;
             message.CreatedOn = DateTime.Now;
-
+            
             var channel = await _context.Channels
                 //.Where(x => x.Id == request.MessageToAdd.ChannelId)
                 .Include(m => m.Messages)
                 .AsTracking()
                 .FirstAsync(cancellationToken);
             //.SingleOrDefaultAsync(cancellationToken);
+            
+            if (message.Type == 0)
+            {
+                var servee =
+                    await _context.Servers
+                        .Where(server => server.Channels
+                            .Any(channel => channel.Id == request.MessageToAdd.ChannelId)).FirstAsync();
+                if(servee is not null)
+                    message.ServerId = servee.Id;
+            }
 
             if (channel is null)
                 throw new NotFoundException("Channel", channel.Id);
             
             channel.Messages.Add(message);
             
-            //if(channel.Type == 0)
             await _context.SaveChangesAsync(cancellationToken);
 
-            return await _context.ChannelMessages
+            var returnmessage = await _context.ChannelMessages
                 .ProjectTo<ChannelMessageDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(c => c.Id == message.Id, cancellationToken);
+
+            return returnmessage;
         }
     }
 }

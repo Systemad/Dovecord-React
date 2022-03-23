@@ -1,40 +1,25 @@
 import React, {useEffect, useState} from "react";
-import {HubConnection} from "@microsoft/signalr";
 import {AuthenticatedTemplate, UnauthenticatedTemplate, useAccount, useMsal} from "@azure/msal-react";
 import {Grid} from "./styles";
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes} from 'react-router-dom';
 import SignInSignOutButton from "../authentication/SignInSignOutButton";
 import ServerList from "../Server/ServerList";
 import ServerName from "../Server/ServerName";
-import ChannelInfo from "../ChannelInfo";
-import ChannelList from "../ChannelList";
-import ChannelData from "../ChannelData";
+import ChannelInfo from "../Channel/ChannelInfo";
+import ChannelList from "../Channel/ChannelList";
+import ChannelData from "../Channel/ChannelData";
 import {ChannelDto, ChannelMessageDto} from "../../services/types";
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import {useAppDispatch} from "../../redux/hooks";
 import {
-    addMessageToChannel,
-    deleteMessageFromChannel,
-    fetchChannelsAsync, selectCurrentState
+    addMessageToChannel, addMessageToUserChannel,
+    deleteMessageFromChannel, DeleteMessage
 } from "../../redux/features/servers/serverSlice";
 import {createSignalRContext} from "react-signalr";
 import {Chat, ChatCallbacksNames} from "../../services/hub";
 import {AccountInfo} from "@azure/msal-browser";
 import {loginRequest} from "../../auth/authConfig";
 import {DiscoverView} from "../Discover";
-type ChannelState = {
-    channel: ChannelDto
-    messages: ChannelMessageDto[]
-}
-
-type ChannelsState = {
-    channels: ChannelState[],
-}
-
-type DeleteMessage = {
-    channelId: string
-    messageId: string
-    serverId?: string
-}
+import ServerComponent from "../Server";
 
 const SignalRContext = createSignalRContext<Chat>();
 
@@ -54,19 +39,16 @@ const Layout: React.FC = () => {
         return token.accessToken;
     }
 
-
     SignalRContext.useSignalREffect(
         ChatCallbacksNames.MessageReceived,
         (message) => {
             if(message){
                 console.log("message receive");
-                if(message.serverId){
+                if(message.type === 0){
                     dispatch(addMessageToChannel(message));
-                } else {
-
+                } else if(message.type === 1) {
+                    dispatch(addMessageToUserChannel(message))
                 }
-
-
             }
         }, []
     );
@@ -104,7 +86,7 @@ const Layout: React.FC = () => {
                     <Routes>
                         <Route path="/chat" element={
                             <>
-                                <ServerName />
+                                <ServerComponent/>
                                 <ChannelInfo />
                                 <ChannelList />
                                 <ChannelData />

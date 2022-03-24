@@ -101,9 +101,6 @@ const Layout: React.FC = () => {
                     </Routes>
                 </Grid>
             </SignalRContext.Provider>
-            <UnauthenticatedTemplate>
-                <SignInSignOutButton />
-            </UnauthenticatedTemplate>
         </>
     );
 };

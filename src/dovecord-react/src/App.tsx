@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-
+import { AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
 import Layout from "./components/Layout";
 import GlobalStyles from "./styles/GlobalStyles";
 import './App.css';
@@ -9,10 +9,12 @@ import { store } from './redux/store'
 import { Provider } from 'react-redux'
 
 // MSAL imports
-import { MsalProvider, useMsal} from "@azure/msal-react";
+import {MsalProvider, useIsAuthenticated, useMsal} from "@azure/msal-react";
 import { IPublicClientApplication } from "@azure/msal-browser";
 import { CustomNavigationClient } from "./auth/NavigationClient";
 import ServerList from "./components/Server/ServerList";
+import SignInSignOutButton from "./components/authentication/SignInSignOutButton";
+import {LoginDisplay} from "./components/authentication/LoginDisplay/LoginDisplay";
 
 type AppProps = {
   pca: IPublicClientApplication
@@ -39,10 +41,17 @@ function App({pca }: AppProps) {
 }
 
 function Pages() {
+    const isAuthenticated = useIsAuthenticated();
+
   return (
       <>
-                <Layout/>
-          
+          <AuthenticatedTemplate>
+              <Layout/>
+          </AuthenticatedTemplate>
+
+          <UnauthenticatedTemplate>
+              <LoginDisplay/>
+          </UnauthenticatedTemplate>
     </>
   )
 }

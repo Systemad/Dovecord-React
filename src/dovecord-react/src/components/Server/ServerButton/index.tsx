@@ -1,7 +1,7 @@
 import React from "react";
 
 import Logo from "../../../assets/Logo.svg";
-import { Button } from "./styles";
+import { Button, Pill } from "./styles";
 import {useAppSelector} from "../../../redux/hooks";
 import {selectCurrentState} from "../../../redux/features/servers/serverSlice";
 import {ServerDto} from "../../../redux/webApi";
@@ -24,14 +24,18 @@ const ServerButton: React.FC<Props> = ({
     const currentServer = useAppSelector(selectCurrentState).currentServer;
     const selected = server?.id === currentServer?.id;
     return (
-        <Button
-            onClick={onClick}
-            isHome={isHome}
-            hasNotifications={hasNotifications}
-            mentions={mentions}
-            className={selected ? "active" : ""}>
-            {isHome && <img src={Logo} alt="Discord" />}
-        </Button>
+        <>
+            <Pill/>
+            <Button
+                onClick={onClick}
+                isHome={isHome}
+                hasNotifications={hasNotifications}
+                mentions={mentions}
+                className={selected ? "active" : ""}>
+                {isHome && <img src={Logo} alt="Discord" />}
+
+            </Button>
+        </>
     );
 };
 

@@ -24,11 +24,15 @@ export const ServerCard: React.FC<Props> = ({
         <div style={{ width: 200, margin: 'auto' }}>
             <Card shadow="sm">
                 <Card.Section>
-
+                    <Image src="https://unsplash.it/800/600?image=11" height={160} alt="Norway" />
                 </Card.Section>
 
                 <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
                     <Text weight={500}>{server?.name}</Text>
+
+                    <Badge color="pink" variant="light">
+                        Already joined
+                    </Badge>
                 </Group>
 
                 <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>

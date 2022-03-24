@@ -22,9 +22,9 @@ export const SignInButton = () => {
 
     return (
         <div>
-
-                <Button onClick={() => handleLogin("popup")} key="loginPopup">Sign in using Popup</Button>
-                <Button onClick={() => handleLogin("redirect")} key="loginRedirect">Sign in using Redirect</Button>
+            <Button onClick={() => handleLogin("redirect")} key="loginRedirect">Sign in</Button>
         </div>
     )
 };
+
+// <Button onClick={() => handleLogin("popup")} key="loginPopup">Sign in using Popup</Button>

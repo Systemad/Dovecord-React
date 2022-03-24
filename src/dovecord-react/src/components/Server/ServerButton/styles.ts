@@ -64,10 +64,22 @@ export const Button = styled.button<Props>`
 
     transition: border-radius 0.2s, background-color 0.2s;
 
-    &:active,
+    &.active {
+      border-radius: 16px;
+
+    }
     &:hover {
         border-radius: 16px;
         background-color: ${(props) =>
             props.isHome ? "var(--purple)" : "var(--discord)"};
     }
 `;
+
+export const Pill = styled.span`
+  position: absolute;
+  display: block;
+  width: 8px;
+  border-radius: 0 4px 4px 0;
+  margin-left: -4px;
+  background-color: blue;
+`

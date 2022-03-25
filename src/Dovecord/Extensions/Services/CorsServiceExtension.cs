@@ -11,7 +11,7 @@ public static class CorsServiceExtension
                 {
                     // React and Blazor client
                     builder.AllowAnyOrigin()
-                        .WithOrigins("https://localhost:44480")
+                        .WithOrigins("https://dovecord1.azurewebsites.net")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials();

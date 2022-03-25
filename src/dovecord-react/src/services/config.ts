@@ -19,7 +19,7 @@ import { PublicClientApplication } from "@azure/msal-browser";
 import { msalConfig } from "../auth/authConfig";
 
 const baseConfig: AxiosRequestConfig = {
-  baseURL: "https://localhost:7045", // <--- Add your base url
+  baseURL: "https://dovecord1.azurewebsites.net", // <--- Add your base url
   headers: {
     "Content-Encoding": "UTF-8",
     Accept: "application/json",

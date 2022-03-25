@@ -7,7 +7,7 @@ namespace Dovecord;
 
 public class Program
 {
-    public async static Task Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var host = CreateHostBuilder(args).Build();
         host.AddLoggingConfiguration();

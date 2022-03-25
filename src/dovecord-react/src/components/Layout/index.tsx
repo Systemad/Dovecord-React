@@ -79,7 +79,7 @@ const Layout: React.FC = () => {
                 connectEnabled={true}
                 accessTokenFactory={accessTokenFactory}
                 dependencies={[accessTokenFactory]} //remove previous connection and create a new connection if changed
-                url={"https://localhost:7045/chathub"}>
+                url={"https://dovecord1.azurewebsites.net/chathub"}>
 
                 <Grid>
                     <ServerList />

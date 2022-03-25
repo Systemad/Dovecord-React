@@ -11,7 +11,7 @@
     "WebUI": {
       "commandName": "Project",
       "launchBrowser": false,
-      "applicationUrl": "https://localhost:7045;http://localhost:5053",
+      "applicationUrl": "https://dovecord1.azurewebsites.net;https://dovecord1.azurewebsites.net",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"

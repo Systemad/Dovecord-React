@@ -1,5 +1,5 @@
 {
-  "x-generator": "NSwag v13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.15.10.0 (NJsonSchema v10.6.10.0 (Newtonsoft.Json v13.0.0.0))",
   "openapi": "3.0.0",
   "info": {
     "title": "Dovecord API",
@@ -14,7 +14,9 @@
   "paths": {
     "/weatherforecast": {
       "get": {
-        "tags": ["WeatherForecast"],
+        "tags": [
+          "WeatherForecast"
+        ],
         "operationId": "WeatherForecast_Get",
         "parameters": [
           {
@@ -49,9 +51,11 @@
         ]
       }
     },
-    "/api/v1/channels/channels/{channelId}/messages": {
+    "/api/v1/channels/{channelId}/messages": {
       "get": {
-        "tags": ["Channel"],
+        "tags": [
+          "Channel"
+        ],
         "operationId": "Channel_GetChannelMessages",
         "parameters": [
           {
@@ -89,7 +93,9 @@
     },
     "/api/v1/channels/{id}": {
       "get": {
-        "tags": ["Channel"],
+        "tags": [
+          "Channel"
+        ],
         "operationId": "Channel_GetChannel",
         "parameters": [
           {
@@ -122,7 +128,9 @@
         ]
       },
       "delete": {
-        "tags": ["Channel"],
+        "tags": [
+          "Channel"
+        ],
         "operationId": "Channel_DeleteChannel",
         "parameters": [
           {
@@ -148,7 +156,9 @@
         ]
       },
       "put": {
-        "tags": ["Channel"],
+        "tags": [
+          "Channel"
+        ],
         "operationId": "Channel_UpdateChannel",
         "parameters": [
           {
@@ -186,44 +196,11 @@
         ]
       }
     },
-    "/api/v1/channels": {
-      "post": {
-        "tags": ["Channel"],
-        "operationId": "Channel_AddChannel",
-        "requestBody": {
-          "x-name": "channelForCreation",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChannelManipulationDto"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ChannelDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
     "/api/v1/messages": {
       "post": {
-        "tags": ["Message"],
+        "tags": [
+          "Message"
+        ],
         "operationId": "Message_SaveMessage",
         "requestBody": {
           "x-name": "message",
@@ -258,7 +235,9 @@
     },
     "/api/v1/messages/{id}": {
       "put": {
-        "tags": ["Message"],
+        "tags": [
+          "Message"
+        ],
         "operationId": "Message_UpdateMessage",
         "parameters": [
           {
@@ -293,7 +272,9 @@
         ]
       },
       "get": {
-        "tags": ["Message"],
+        "tags": [
+          "Message"
+        ],
         "operationId": "Message_GetMessage",
         "parameters": [
           {
@@ -326,7 +307,9 @@
         ]
       },
       "delete": {
-        "tags": ["Message"],
+        "tags": [
+          "Message"
+        ],
         "operationId": "Message_DeleteMessageById",
         "parameters": [
           {
@@ -354,7 +337,9 @@
     },
     "/api/v1/messages/channel/{id}": {
       "get": {
-        "tags": ["Message"],
+        "tags": [
+          "Message"
+        ],
         "operationId": "Message_GetMessagesFromChannel",
         "parameters": [
           {
@@ -392,7 +377,9 @@
     },
     "/api/v1/servers": {
       "get": {
-        "tags": ["Server"],
+        "tags": [
+          "Server"
+        ],
         "operationId": "Server_GetServers",
         "responses": {
           "200": {
@@ -416,7 +403,9 @@
         ]
       },
       "post": {
-        "tags": ["Server"],
+        "tags": [
+          "Server"
+        ],
         "operationId": "Server_AddServer",
         "requestBody": {
           "x-name": "serverForCreation",
@@ -449,9 +438,51 @@
         ]
       }
     },
-    "/api/v1/servers/api/me/servers": {
+    "/api/v1/servers/{serverId}/users": {
       "get": {
-        "tags": ["Server"],
+        "tags": [
+          "Server"
+        ],
+        "operationId": "Server_GetUsersOfServer",
+        "parameters": [
+          {
+            "name": "serverId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/servers/me/servers": {
+      "get": {
+        "tags": [
+          "Server"
+        ],
         "operationId": "Server_GetServersOfUser",
         "responses": {
           "200": {
@@ -477,7 +508,9 @@
     },
     "/api/v1/servers/{serverId}": {
       "get": {
-        "tags": ["Server"],
+        "tags": [
+          "Server"
+        ],
         "operationId": "Server_GetServerById",
         "parameters": [
           {
@@ -512,7 +545,9 @@
     },
     "/api/v1/servers/{serverId}/channels": {
       "get": {
-        "tags": ["Server"],
+        "tags": [
+          "Server"
+        ],
         "operationId": "Server_GetChannels",
         "parameters": [
           {
@@ -546,11 +581,60 @@
             "bearer": []
           }
         ]
+      },
+      "post": {
+        "tags": [
+          "Server"
+        ],
+        "operationId": "Server_AddServerChannel",
+        "parameters": [
+          {
+            "name": "serverId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 2
+          }
+        ],
+        "requestBody": {
+          "x-name": "channelForCreation",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChannelManipulationDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
     "/api/v1/servers/{id}": {
       "delete": {
-        "tags": ["Server"],
+        "tags": [
+          "Server"
+        ],
         "operationId": "Server_DeleteServer",
         "parameters": [
           {
@@ -576,7 +660,9 @@
         ]
       },
       "put": {
-        "tags": ["Server"],
+        "tags": [
+          "Server"
+        ],
         "operationId": "Server_UpdateServer",
         "parameters": [
           {
@@ -616,7 +702,9 @@
     },
     "/api/v1/servers/join/{serverId}": {
       "post": {
-        "tags": ["Server"],
+        "tags": [
+          "Server"
+        ],
         "operationId": "Server_JoinServer",
         "parameters": [
           {
@@ -644,7 +732,9 @@
     },
     "/api/v1/servers/leave/{serverId}": {
       "post": {
-        "tags": ["Server"],
+        "tags": [
+          "Server"
+        ],
         "operationId": "Server_LeaveServer",
         "parameters": [
           {
@@ -672,7 +762,9 @@
     },
     "/api/v1/users": {
       "get": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "operationId": "User_GetUsers",
         "responses": {
           "200": {
@@ -696,7 +788,9 @@
         ]
       },
       "post": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "operationId": "User_AddUser",
         "requestBody": {
           "x-name": "userForCreation",
@@ -732,7 +826,9 @@
     },
     "/api/v1/users/{id}": {
       "get": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "operationId": "User_GetUser",
         "parameters": [
           {
@@ -765,7 +861,9 @@
         ]
       },
       "delete": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "operationId": "User_DeleteUser",
         "parameters": [
           {
@@ -791,7 +889,9 @@
         ]
       },
       "put": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "operationId": "User_UpdateUser",
         "parameters": [
           {
@@ -820,6 +920,44 @@
         "responses": {
           "204": {
             "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users/me/channels": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_AddUserChannel",
+        "requestBody": {
+          "x-name": "recipientId",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "format": "guid"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -878,12 +1016,16 @@
             "format": "date-time",
             "nullable": true
           },
+          "type": {
+            "type": "integer",
+            "format": "int32"
+          },
           "content": {
             "type": "string",
             "nullable": true
           },
           "author": {
-            "$ref": "#/components/schemas/User"
+            "$ref": "#/components/schemas/UserDto"
           },
           "channelId": {
             "type": "string",
@@ -896,7 +1038,7 @@
           }
         }
       },
-      "User": {
+      "UserDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -904,178 +1046,13 @@
             "type": "string",
             "format": "guid"
           },
-          "username": {
+          "name": {
             "type": "string",
             "nullable": true
           },
           "isOnline": {
             "type": "boolean",
             "nullable": true
-          },
-          "bot": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "system": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "accentColor": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "servers": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Server"
-            }
-          }
-        }
-      },
-      "Server": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "iconUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "ownerUserId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "channels": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/Channel"
-            }
-          },
-          "members": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/User"
-            }
-          }
-        }
-      },
-      "Channel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "type": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "topic": {
-            "type": "string",
-            "nullable": true
-          },
-          "serverId": {
-            "type": "string",
-            "format": "guid",
-            "nullable": true
-          },
-          "server": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Server"
-              }
-            ]
-          },
-          "messages": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/ChannelMessage"
-            }
-          },
-          "recipients": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/User"
-            }
-          }
-        }
-      },
-      "ChannelMessage": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "content": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdBy": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdOn": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "isEdit": {
-            "type": "boolean"
-          },
-          "lastModifiedOn": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "channelId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "channel": {
-            "$ref": "#/components/schemas/Channel"
-          },
-          "serverId": {
-            "type": "string",
-            "format": "guid",
-            "nullable": true
-          },
-          "server": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Server"
-              }
-            ]
-          },
-          "authorId": {
-            "type": "string",
-            "format": "guid",
-            "nullable": true
-          },
-          "author": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/User"
-              }
-            ]
           }
         }
       },
@@ -1103,13 +1080,6 @@
             "type": "string",
             "format": "guid",
             "nullable": true
-          },
-          "recipients": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/User"
-            }
           }
         }
       },
@@ -1123,16 +1093,10 @@
           },
           "type": {
             "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "format": "int32"
           },
           "topic": {
             "type": "string",
-            "nullable": true
-          },
-          "serverId": {
-            "type": "string",
-            "format": "guid",
             "nullable": true
           }
         }
@@ -1144,6 +1108,10 @@
           "content": {
             "type": "string",
             "nullable": true
+          },
+          "type": {
+            "type": "integer",
+            "format": "int32"
           },
           "channelId": {
             "type": "string",
@@ -1160,10 +1128,9 @@
             "format": "guid"
           },
           "name": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
-          "topic": {
+          "iconUrl": {
             "type": "string",
             "nullable": true
           },
@@ -1173,16 +1140,14 @@
           },
           "channels": {
             "type": "array",
-            "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/Channel"
+              "$ref": "#/components/schemas/ChannelDto"
             }
           },
           "members": {
             "type": "array",
-            "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/User"
+              "$ref": "#/components/schemas/UserDto"
             }
           }
         }
@@ -1197,32 +1162,10 @@
           }
         }
       },
-      "UserDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "isOnline": {
-            "type": "boolean",
-            "nullable": true
-          }
-        }
-      },
       "UserCreationDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
           "isOnline": {
             "type": "boolean",
             "nullable": true

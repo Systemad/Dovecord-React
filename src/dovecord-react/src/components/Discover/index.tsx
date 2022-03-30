@@ -3,17 +3,18 @@ import {getV1Servers, postV1ServersJoinServerId} from "../../services/services";
 import {ServerDto} from "../../services/types";
 import {ServerCard} from "./ServerCard";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {addServer, selectServers, ServerState} from "../../redux/features/servers/serverSlice";
-import { Container, Container2, Cards, CardsItem, CardImage, CardText, CardTitle, CardContainer } from "./styles"
-import { Card, Image, Text, Badge, Button, Group, useMantineTheme } from '@mantine/core';
+//import {addServer, selectServers, ServerState} from "../../redux/features/servers/serverSlice";
+import { Container } from "./styles"
+import { useMantineTheme } from '@mantine/core';
 
 export const DiscoverView: React.FC = () => {
     const [servers, setServers] = useState<ServerDto[]>([])
-    const serversState = useAppSelector(selectServers);
+    //const serversState = useAppSelector(selectServers);
 
     const dispatch = useAppDispatch();
 
     const joinServer = async (serverClicked?: ServerDto) => {
+        /*
         if(serverClicked){
             const findServer = serversState.find((server) => server.server.id === serverClicked.id)
             if(!findServer){
@@ -27,6 +28,7 @@ export const DiscoverView: React.FC = () => {
                 dispatch(addServer(addNewServer));
             }
         }
+         */
     }
 
     useEffect(() => {

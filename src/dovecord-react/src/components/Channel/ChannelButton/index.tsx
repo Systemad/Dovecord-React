@@ -1,25 +1,20 @@
-import React, {MouseEventHandler} from "react";
+import React, {MouseEvent} from "react";
 
 import { Container, HashtagIcon, InviteIcon, SettingsIcon } from "./styles";
 import {ChannelDto} from "../../../services/types";
-import {useParams} from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
-import {selectCurrentState} from "../../../redux/features/servers/serverSlice";
-
 
 export interface Props {
-    channel: ChannelDto;
-    click(): void;
+    onClick?: (event: MouseEvent<HTMLButtonElement>) => void,
+    channel?: ChannelDto,
+    selected?: boolean
 }
 
-const ChannelButton: React.FC<Props> = ( {channel, click}) => {
-    const currentChannel = useAppSelector(selectCurrentState);
-    const selected = channel.id === currentChannel.currentChannel?.id;
+const ChannelButton = ({channel, onClick, selected}: Props) => {
     return (
-        <Container className={selected ? "active" : ""} onClick={() => click()}>
+        <Container className={selected ? "active" : ""}>
             <div>
                 <HashtagIcon />
-                <span>{channel.name}</span>
+                <span onClick={onClick}>{channel?.name}</span>
             </div>
             <div>
                 <InviteIcon />

@@ -30,6 +30,7 @@ public static class AddUser
         {
             var user = _mapper.Map<User>(request.UserToAdd);
             user.Id = Guid.Parse(_currentUserService.UserId);
+            user.Username = _currentUserService.Username;
             _context.Users.Add(user);
             await _context.SaveChangesAsync(cancellationToken);
 

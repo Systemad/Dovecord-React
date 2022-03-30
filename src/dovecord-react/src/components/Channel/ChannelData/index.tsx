@@ -5,17 +5,17 @@ import ChannelMessage, { Mention } from "../ChannelMessage";
 import { Container, Messages, InputWrapper, Input, SendIcon } from "./styles";
 import {MessageManipulationDto, UserDto, ChannelDto} from "../../../services/types";
 import { useAppSelector } from "../../../redux/hooks";
-import {selectCurrentState, selectServers} from "../../../redux/features/servers/serverSlice"
+//import {selectCurrentState, selectServers} from "../../../redux/features/servers/serverSlice"
 import {postV1Messages} from "../../../services/services";
 
 const ChannelData = () => {
     const messagesRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const [message, setMessage] = useState('');
-    const currentState = useAppSelector(selectCurrentState);
+    //const currentState = useAppSelector(selectCurrentState);
 
     //const currentServer = useAppSelector(selectCurrentState);
-    const currentServer = useAppSelector(selectServers).find((server) => server.server.id === currentState.currentServer?.id);
-    const currentChannel = currentServer?.channels.find((channel) => channel.channel.id === currentState.currentChannel?.id);
+    //const currentServer = useAppSelector(selectServers).find((server) => server.server.id === currentState.currentServer?.id);
+    //const currentChannel = currentServer?.channels.find((channel) => channel.channel.id === currentState.currentChannel?.id);
 
     const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
         event.preventDefault();
@@ -24,7 +24,7 @@ const ChannelData = () => {
 
             if (isMessageProvided) {
                 const newMessage =  {
-                    channelId: currentChannel!.channel.id, // SET CURRENT CHANNEL
+                    //channelId: currentChannel!.channel.id, // SET CURRENT CHANNEL
                     content: message,
                 } as MessageManipulationDto;
 
@@ -41,7 +41,7 @@ const ChannelData = () => {
 
         if (isMessageProvided) {
             const newMessage =  {
-                channelId: currentChannel!.channel.id, // SET CURRENT CHANNEL
+                //channelId: currentChannel!.channel.id, // SET CURRENT CHANNEL
                 content: message,
                 type: 0
             } as MessageManipulationDto;
@@ -88,17 +88,7 @@ const ChannelData = () => {
      */
     return (
         <Container>
-            <Messages ref={messagesRef}>
-                {currentChannel?.messages.map((message) => (
-                    <ChannelMessage
-                        author={message?.createdBy}
-                        date={message?.createdOn}
-                        content={message.content}
-                        key={message.id}
-                        messageId={message.id}
-                    />
-                ))}
-            </Messages>
+
 
             <InputWrapper>
                 <Input
@@ -113,3 +103,17 @@ const ChannelData = () => {
 };
 
 export default ChannelData;
+
+/*
+            <Messages ref={messagesRef}>
+                {currentChannel?.messages.map((message) => (
+                    <ChannelMessage
+                        author={message?.createdBy}
+                        date={message?.createdOn}
+                        content={message.content}
+                        key={message.id}
+                        messageId={message.id}
+                    />
+                ))}
+            </Messages>
+ */

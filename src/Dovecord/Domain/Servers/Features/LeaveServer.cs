@@ -37,7 +37,6 @@ public static class LeaveServer
             {
                 var addUser = new AddUser.AddUserCommand(new UserCreationDto
                 {
-                    Name = _currentUserService.Username,
                     IsOnline = true
                 });
                 await _mediator.Send(addUser);

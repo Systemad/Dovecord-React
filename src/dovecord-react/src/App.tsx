@@ -15,6 +15,8 @@ import { CustomNavigationClient } from "./auth/NavigationClient";
 import ServerList from "./components/Server/ServerList";
 import SignInSignOutButton from "./components/authentication/SignInSignOutButton";
 import {LoginDisplay} from "./components/authentication/LoginDisplay/LoginDisplay";
+import styled from "styled-components";
+import {DiscoverView} from "./components/Discover";
 
 type AppProps = {
   pca: IPublicClientApplication
@@ -46,7 +48,22 @@ function Pages() {
   return (
       <>
           <AuthenticatedTemplate>
-              <Layout/>
+              <Grid>
+                  <ServerList />
+                  <Routes>
+                      <Route path="/:id" element={
+                          <>
+                              <Layout/>
+                          </>
+                      }/>
+
+                      <Route path="/discover" element={
+                          <>
+                              <DiscoverView/>
+                          </>
+                      }/>
+                  </Routes>
+              </Grid>
           </AuthenticatedTemplate>
 
           <UnauthenticatedTemplate>
@@ -57,3 +74,17 @@ function Pages() {
 }
 
 export default App;
+
+
+export const Grid = styled.div`
+    display: grid;
+
+    grid-template-columns: 71px 240px auto 240px;
+    grid-template-rows: 46px auto 52px;
+    grid-template-areas:
+        "SL SN CI CI"
+        "SL CL CD UL"
+        "SL UI CD UL";
+
+    height: 100%;
+`;

@@ -3,12 +3,12 @@ import React from "react";
 import Logo from "../../../assets/Logo.svg";
 import { Button, Pill } from "./styles";
 import {useAppSelector} from "../../../redux/hooks";
-import {selectCurrentState} from "../../../redux/features/servers/serverSlice";
-import {ServerDto} from "../../../redux/webApi";
+import {ServerDto} from "../../../services/web-api-client";
+//import {selectCurrentState} from "../../../redux/features/servers/serverSlice";
 
 export interface Props {
     onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
-    server?: ServerDto,
+    selected?: boolean,
     isHome?: boolean;
     hasNotifications?: boolean;
     mentions?: number;
@@ -19,10 +19,8 @@ const ServerButton: React.FC<Props> = ({
     isHome,
     hasNotifications,
     mentions,
-    server
+    selected
 }) => {
-    const currentServer = useAppSelector(selectCurrentState).currentServer;
-    const selected = server?.id === currentServer?.id;
     return (
         <>
             <Pill/>
@@ -33,7 +31,6 @@ const ServerButton: React.FC<Props> = ({
                 mentions={mentions}
                 className={selected ? "active" : ""}>
                 {isHome && <img src={Logo} alt="Discord" />}
-
             </Button>
         </>
     );

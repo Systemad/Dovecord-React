@@ -4,7 +4,7 @@ import ChannelInfo from "./ChannelInfo";
 import ChannelList from "./ChannelList";
 
 
-export const UserComponent = () => {
+export const ChannelComponent = () => {
     /*
     useEffect(() => {
 
@@ -19,4 +19,4 @@ export const UserComponent = () => {
     );
 };
 
-export default UserComponent;
+export default ChannelComponent;

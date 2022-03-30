@@ -1,6 +1,7 @@
 using System.Reflection;
 using Dovecord.Application.PipelineBehaviors;
 using Dovecord.Domain.Messages.Validators;
+using Dovecord.Domain.Users.Services;
 using Dovecord.Middleware;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -19,6 +20,7 @@ public static class WebApiServiceExtension
             .AddFluentValidation(cfg => { cfg.AutomaticValidationEnabled = false; });
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+        services.AddScoped<IStatusService, StatusService>();
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
         return services;

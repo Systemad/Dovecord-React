@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 // MSAL imports
 import { PublicClientApplication, EventType, EventMessage, AuthenticationResult } from "@azure/msal-browser";
 import { msalConfig } from "./auth/authConfig";
@@ -28,11 +28,11 @@ msalInstance.addEventCallback((event: EventMessage) => {
 });
 
 ReactDOM.render(
-  <Router>
+  <BrowserRouter>
     <React.StrictMode>
       <App pca={msalInstance}/>
     </React.StrictMode>
-  </Router>,
+  </BrowserRouter>,
   document.getElementById('root')
 );
 

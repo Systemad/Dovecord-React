@@ -251,6 +251,22 @@ export const getV1ServersServerIdChannels = (
 /** Key is end point string without base url */
 getV1ServersServerIdChannels.key = "/api/v1/servers/{serverId}/channels";
 
+export const getV1ServersServerIdUsers = (
+  serverId: string,
+  configOverride?: AxiosRequestConfig
+): Promise<SwaggerResponse<UserDto[]>> => {
+  return Http.getRequest(
+    template(getV1ServersServerIdUsers.key, { serverId }),
+    undefined,
+    undefined,
+    _CONSTANT1,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+getV1ServersServerIdUsers.key = "/api/v1/servers/{serverId}/users";
+
 export const getV1Users = (
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<UserDto[]>> => {

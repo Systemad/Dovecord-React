@@ -33,21 +33,6 @@ public static class GetServerChannels
 
         public async Task<List<ChannelDto>> Handle(GetServerChannelsQuery request, CancellationToken cancellationToken)
         {
-            
-            var currentUserId = Guid.Parse(_currentUserService.UserId);
-            
-            var updateUser = new UpdateUser.UpdateUserCommand(currentUserId, new UserManipulationDto { IsOnline = true });
-            var userExist = await _mediator.Send(updateUser);
-            if (!userExist)
-            {
-                var addUser = new AddUser.AddUserCommand(new UserCreationDto
-                {
-                    Name = _currentUserService.Username,
-                    IsOnline = true
-                });
-                await _mediator.Send(addUser);
-            }
-            
             var filteredServer = await _context.Servers
                 .Where(server => server.Id == request.serverId)
                 .Select(servers => servers.Channels)

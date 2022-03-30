@@ -1,12 +1,46 @@
 import {ChannelDto, ChannelMessageDto, ServerDto, UserDto} from "../../../services/types";
-import {createAsyncThunk, createSelector, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createEntityAdapter, createSelector, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../../store";
 import {
     getV1MessagesChannelId, getV1ServersMeServers,
     getV1ServersServerId,
-    getV1ServersServerIdChannels
+    getV1ServersServerIdChannels, getV1ServersServerIdUsers, getV1Users
 } from "../../../services/services";
 
+
+type CurrentState = {
+    currentServer?: ServerDto,
+    currentChannel?: ChannelDto
+}
+
+type State = {
+    currentState: CurrentState
+}
+
+const initialState: State = {
+    currentState: {}
+}
+
+export const serverSlice = createSlice({
+    name: 'servers',
+    initialState,
+    reducers: {
+        setCurrentServer: (state, action: PayloadAction<ServerDto>) => {
+            state.currentState.currentServer = action.payload;
+        },
+        setCurrentChannel: (state, action: PayloadAction<ChannelDto>) => {
+            state.currentState.currentChannel = action.payload;
+        }
+    }
+})
+
+export const {
+    setCurrentChannel,
+    setCurrentServer} = serverSlice.actions;
+
+export default serverSlice.reducer
+
+/*
 export type DeleteMessage = {
     channelId: string
     serverId?: string
@@ -19,24 +53,15 @@ type CurrentState = {
 }
 
 type State = {
-    servers: ServerState[]
-    directMessages: ChannelState[]
+    servers?: ServerState[]
+    directMessages?: ChannelState[]
     loading?: 'idle' | 'pending' | 'succeeded' | 'failed'
     currentState: CurrentState
 }
 
-export type ServerState = {
-    server: ServerDto;
-    channels: ChannelState[]
-    users: UserState[]
-    loading?: 'idle' | 'pending' | 'succeeded' | 'failed'
-}
+export type ServerState = ServerDto & { loading?: 'idle' | 'pending' | 'succeeded' | 'failed' }
 
-export type ChannelState = {
-    channel: ChannelDto
-    messages: ChannelMessageDto[]
-    loading?: 'idle' | 'pending' | 'succeeded' | 'failed'
-}
+export type ChannelState = ChannelDto & { loading?: 'idle' | 'pending' | 'succeeded' | 'failed' }
 
 export type UserState = {
     user: UserDto
@@ -44,7 +69,11 @@ export type UserState = {
     loading?: 'idle' | 'pending' | 'succeeded' | 'failed'
 }
 
-const initialState: State = {
+const serverAdapter = createEntityAdapter<ServerState>();
+//const channelAdapter = createEntityAdapter<ChannelState>();
+//const messageAdapter = createEntityAdapter<ChannelMessageDto>();
+
+const initState: State = {
     servers: [],
     directMessages: [],
     loading: 'idle',
@@ -65,17 +94,23 @@ export const fetchServersAsync = createAsyncThunk(
         }
 
         for(let i = 0; i < serverData.length; i++){
-            const serverFetch = await getV1ServersServerId(serverData[i].id!);
+            //const serverFetch = await getV1ServersServerId(serverData[i].id!);
 
-            const newServerState: ServerState =  {
-                channels: [],
+            const newServerState: ServerState = serverData[i];
+            newServerState.loading = 'idle';
+
+                {
+                id: serverData[i].id,
+                name: serverData[i].name,
+                ownerUserId: serverData[i].ownerUserId;
+                channels: serverData[i].channels,
                 loading: 'idle',
-                server: serverFetch.data,
-                users: []
+                users: []// serverFetch.data.members
             }
-            newState.servers.push(newServerState);
+
+            newState.servers?.push(newServerState);
         }
-        return newState;
+        //return newState;
     }
 )
 
@@ -96,10 +131,12 @@ export const fetchChannelsAsync = createAsyncThunk(
         const channels = await getV1ServersServerIdChannels(serverId);
         const channelData = channels.data;
 
+        //const users = await getV1ServersServerIdUsers(serverId);
+        //const userData = users.data;
+
         const newServerState: ServerState =  {
             channels: [],
             loading: 'succeeded',
-            server: serverInfoData,
             users: []
         }
 
@@ -115,6 +152,7 @@ export const fetchChannelsAsync = createAsyncThunk(
     }
 )
 
+const initialState = serverAdapter.getInitialState();
 
 
 export const serverSlice = createSlice({
@@ -128,11 +166,16 @@ export const serverSlice = createSlice({
             state.currentState.currentChannel = action.payload;
         },
         addServer: (state, action: PayloadAction<ServerState>) => {
-          state.servers.push(action.payload)
+          state.servers?.push(action.payload)
         },
         addChannel: (state, action: PayloadAction<ChannelState>) => {
-            const findServer = state.servers.findIndex((server) => server.server.id == action.payload.channel.serverId);
-            state.servers[findServer].channels.push(action.payload);
+            const serverId = action.payload.serverId;
+            const server = state.servers?.find((server) => server?.id === serverId);
+            //const channels = action.payload
+            //state.servers?[serverId].channels?.push(action.payload)
+            state.servers?[server]. .channels?.push(action.payload)
+            //if(findServer)
+            //    state.servers?[findServer]. .channels.push(action.payload);
         },
         addMessageToChannel: (state, action: PayloadAction<ChannelMessageDto>) => {
             const {serverId, channelId} = action.payload;
@@ -159,11 +202,17 @@ export const serverSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchServersAsync.pending, (state, action) => {
-            state.loading = 'pending'
+            //const serverEntries = action.payload.
+            //state. = 'pending'
         })
         builder.addCase(fetchServersAsync.fulfilled, (state, action) => {
-            state.servers = action.payload.servers;
+            const serverEntries = action.payload.map(server => {
+                return {id: server.id, channels: server.channels}
+            })
+            serverAdapter.setAll(state, serverEntries);
+            //state.servers = action.payload.;
         })
+
         builder.addCase(fetchChannelsAsync.pending, (state, action) => {
             state.loading = 'pending'
         })
@@ -179,6 +228,7 @@ export const serverSlice = createSlice({
             state.servers[findServer].channels = channels;
             state.servers[findServer].loading = "succeeded";
         })
+
         builder.addCase(fetchChannelMessagesAsync.pending, (state, action) => {
             //const hey = store.getState().ui.currentChannel
             //const data = [...state.servers];
@@ -186,6 +236,12 @@ export const serverSlice = createSlice({
             //data[channel].loading = 'pending'
         })
         builder.addCase(fetchChannelMessagesAsync.fulfilled, (state, action) => {
+            const serverId = action.meta.arg;
+            const channelEntry = state.entities[serverId]?.channels;
+            if(channelEntry){
+                serverAdapter.setAll(channelEntry.m: action.payload)
+            }
+
             const serverId = state.currentState.currentServer!.id;
             const channelId = state.currentState.currentChannel!.id;
 
@@ -195,6 +251,7 @@ export const serverSlice = createSlice({
 
             state.servers[findServer].channels[channelToAdd].messages = action.payload;
             state.servers[findServer].channels[channelToAdd].loading = 'succeeded'
+
         })
     }
 })
@@ -216,3 +273,5 @@ export const selectServersStatus = (state: RootState) => state.servers.loading;
 //export const getCurrentChannel = (state: RootState) => state.servers.currentChannel;
 
 export default serverSlice.reducer
+
+*/

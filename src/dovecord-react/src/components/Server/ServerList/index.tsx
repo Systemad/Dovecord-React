@@ -4,39 +4,43 @@ import ServerButton from "../ServerButton";
 
 import {Container, Separator} from "./styles";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
-import {
-    fetchChannelsAsync, fetchServersAsync,
-    selectCurrentState,
-    selectServers, ServerState,
-    setCurrentServer
-} from "../../../redux/features/servers/serverSlice";
+//import {
+//    fetchChannelsAsync, fetchServersAsync,
+//    selectCurrentState,
+//    selectServers, ServerState,
+//    setCurrentServer
+//} from "../../../redux/features/servers/serverSlice";
 import {useLocation, useNavigate} from "react-router-dom";
 import {DiscoverButton} from "../../Discover/DiscoverButton/DsicoverButton";
+import {useServerGetServersOfUserQuery} from "../../../redux/webApi";
+import {ServerDto} from "../../../services/web-api-client";
+import {setCurrentServer} from "../../../redux/features/servers/serverSlice";
 
-const ServerList: React.FC = () => {
+const ServerList = () => {
         const dispatch = useAppDispatch()
-        const currentState = useAppSelector(selectCurrentState);
-
+        //const currentState = useAppSelector(selectCurrentState);
+        const {data: servers, isLoading} = useServerGetServersOfUserQuery();
         //const currentServer = useAppSelector(selectCurrentState);
-        const servers = useAppSelector(selectServers);
-        const currentServer = useAppSelector(selectServers).find((server) => server.server.id === currentState.currentServer?.id);
+        //const servers = useAppSelector(selectServers);
+        //const currentServer = useAppSelector(selectServers).find((server) => server.server.id === currentState.currentServer?.id);
 
+        const navigate = useNavigate();
         const { pathname } = useLocation()
         const discoverActive = pathname.startsWith('/discover')
-        const navigate = useNavigate();
-        const setServer = async (server: ServerState) => {
-            dispatch(setCurrentServer(server.server));
-            if(server.loading === 'idle'){
-                dispatch(fetchChannelsAsync(server.server.id!));
+
+        const setServer = async (server?: string) => {
+           //dispatch(setCurrentServer(server));
+               //dispatch(fetchChannelsAsync(server.server.id!));
+            if(server) {
+                navigate(server);
             }
-            navigate("/chat");
-        }
-        useEffect(() => {
-            dispatch(fetchServersAsync());
-        }, [])
+       }
+    if(isLoading){
+        return <p>loading</p>
+    }
+
     return (
         <Container>
-
                 <ServerButton isHome />
                 <DiscoverButton
                     discoverActive={discoverActive}
@@ -45,21 +49,28 @@ const ServerList: React.FC = () => {
 
                 <Separator />
 
-                {servers?.map((server) => (
-                    <ServerButton
-                        onClick={() => setServer(server)}
-                        key={server.server.id}
-                        server={server.server}
-                    />
-
-                ))}
-
+            {servers?.map((server) => (
+                <ServerButton
+                    onClick={() => setServer(server.id)}
+                    key={server.id}
+                    selected={server.id === pathname}
+                />
+            ))};
         </Container>
     );
 };
 
 export default ServerList;
 
+/*
+
+                {servers?.map((server) => (
+                    <ServerButton
+                        onClick={() => setServer(server)}
+                        key={server.server.id}
+                        server={server.server}
+                    />
+ */
 /*
             <ServerButton isHome />
 

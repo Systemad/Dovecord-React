@@ -3,6 +3,7 @@ using Dovecord.Domain.Channels.Features;
 using Dovecord.Domain.Servers;
 using Dovecord.Domain.Servers.Dto;
 using Dovecord.Domain.Servers.Features;
+using Dovecord.Domain.Users.Dto;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,16 @@ public class ServerController : ControllerBase
     public async Task<IActionResult> GetServers()
     {
         var query = new GetServerList.ServerListQuery();
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+    
+    [ProducesResponseType(typeof(IEnumerable<UserDto>), 200)]
+    [Produces("application/json")]
+    [HttpGet("{serverId:guid}/users", Name = "GetUsersOfServer")]
+    public async Task<IActionResult> GetUsersOfServer(Guid serverId)
+    {
+        var query = new GetServerUsers.GetServerUsersQuery(serverId);
         var result = await _mediator.Send(query);
         return Ok(result);
     }

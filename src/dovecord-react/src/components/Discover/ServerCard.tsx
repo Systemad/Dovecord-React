@@ -3,7 +3,7 @@ import { Card, Image, Text, Badge, Button, Group, useMantineTheme } from '@manti
 import {ServerDto} from "../../services/types";
 import {postV1ServersJoinServerId} from "../../services/services";
 import {useAppDispatch} from "../../redux/hooks";
-import {addServer} from "../../redux/features/servers/serverSlice";
+//import {addServer} from "../../redux/features/servers/serverSlice";
 
 interface Props {
     server?: ServerDto

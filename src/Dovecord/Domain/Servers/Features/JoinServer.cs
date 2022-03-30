@@ -31,13 +31,14 @@ public static class JoinServer
 
         public async Task<bool> Handle(JoinServerCommand request, CancellationToken cancellationToken)
         {
-            var updateUser = new UpdateUser.UpdateUserCommand(Guid.Parse(_currentUserService.UserId), new UserManipulationDto { IsOnline = true });
+            var updateUser = new UpdateUser.UpdateUserCommand(
+                Guid.Parse(_currentUserService.UserId),
+                new UserManipulationDto { IsOnline = true });
             var userExist = await _mediator.Send(updateUser);
             if (!userExist)
             {
                 var addUser = new AddUser.AddUserCommand(new UserCreationDto
                 {
-                    Name = _currentUserService.Username,
                     IsOnline = true
                 });
                 await _mediator.Send(addUser);

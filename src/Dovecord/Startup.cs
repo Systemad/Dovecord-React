@@ -64,7 +64,7 @@ public class Startup
         services.AddHealthChecks();
         
         services.AddSpaStaticFiles(configuration => 
-            configuration.RootPath = "ClientApp/dist");
+            configuration.RootPath = "dovecord-react/dist");
 
         services.AddOpenApiServiceOath();
     }
@@ -98,7 +98,7 @@ public class Startup
         app.UseSerilogRequestLogging();
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapHub<ChatHub>("/chathub");
+            endpoints.MapHub<BaseHub>("/chathub");
             endpoints.MapHealthChecks("/api/health");
             endpoints.MapControllers();
         });

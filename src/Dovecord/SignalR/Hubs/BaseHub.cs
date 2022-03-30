@@ -2,6 +2,7 @@
 using Dovecord.Domain.Entities;
 using Dovecord.Domain.Users.Dto;
 using Dovecord.Domain.Users.Features;
+using Dovecord.Domain.Users.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
@@ -12,41 +13,40 @@ namespace Dovecord.SignalR.Hubs;
 
 [Authorize]
 [RequiredScope("API.Access")]
-public class ChatHub : Hub<IChatClient>
+public class BaseHub : Hub<IBaseHub>
 {
-    private readonly IMediator _mediator;
-    public ChatHub(IMediator mediator)
+    private readonly IStatusService _statusService;
+    public BaseHub(IStatusService statusService)
     {
-        _mediator = mediator;
+        _statusService = statusService;
     }
 
-    private string Username => Context?.User?.Identity?.Name ?? "Unknown";
+    private string Username => Context?.User?.Identity?.Name; //?? "Unknown";
     private Guid UserId => Guid.Parse(Context?.User.FindFirstValue(ClaimTypes.NameIdentifier));
     
     public override async Task OnConnectedAsync()
     {
-        Console.WriteLine("UserId: " + UserId);
-        Console.WriteLine("Connection Id: " + Context.ConnectionId);
-        var updateUser = new UpdateUser.UpdateUserCommand(UserId, new UserManipulationDto { IsOnline = true });
-        var userExist = await _mediator.Send(updateUser);
-        if (!userExist)
+        /*
+        if (!(UserId == Guid.Empty) && !string.IsNullOrEmpty(Username))
         {
-            var addUser = new AddUser.AddUserCommand(new UserCreationDto
-            {
-                Name = Username,
-                IsOnline = true
-            });
-            await _mediator.Send(addUser);
+            await _statusService.OnStartSession(UserId, Username);
+            //await Clients.All.UpdateData();
         }
-        await Clients.All.UpdateData();
+        */
+
+        await base.OnConnectedAsync();
     }
 
     public override async Task OnDisconnectedAsync(Exception? ex)
     {
-        //Context.GetHttpContext().Session.LoadAsync()
-        var updateUser = new UpdateUser.UpdateUserCommand(UserId, new UserManipulationDto { IsOnline = false });
-        await _mediator.Send(updateUser);
-        await Clients.All.UpdateData();
+        /*
+        if (!(UserId == Guid.Empty) && !string.IsNullOrEmpty(Username))
+        {
+            await _statusService.OnStopSession(UserId);
+            //await Clients.All.UpdateData();
+        }
+        */
+        await base.OnDisconnectedAsync(ex);
     }
 
     /*
@@ -55,8 +55,8 @@ public class ChatHub : Hub<IChatClient>
         await Clients.All.DeleteMessageReceived(messageId);
     }
     */
-    public async Task UserTyping(bool isTyping)
-        => await Clients.Others.UserTyping(new ActorAction(Username, isTyping));
+    //public async Task UserTyping(bool isTyping)
+    //    => await Clients.Others.UserTyping(new ActorAction(Username, isTyping));
         
     public async Task JoinChannel(Guid channelId)
     {

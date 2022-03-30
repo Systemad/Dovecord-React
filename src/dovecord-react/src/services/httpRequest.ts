@@ -5,10 +5,8 @@
  */
 import axios, { AxiosRequestConfig, CancelToken } from "axios";
 import { getAxiosInstance, Security, SwaggerResponse } from "./config";
-
 /* tslint:disable */
 /* eslint-disable */
-
 /**
  * Cancellation handled here, you can cancel request by call promise.cancel()
  *

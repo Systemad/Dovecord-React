@@ -23,6 +23,7 @@ const acquireAccessToken = async (msalInstance: any) => {
     console.log("msal acquireAccessToken: fetch token");
     const authResult = await msalInstance.acquireTokenSilent(request);
 
+    //console.log(authResult.accessToken);
     return authResult.accessToken;
 };
 
@@ -31,9 +32,8 @@ export const emptySplitApi = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({
         baseUrl: 'https://localhost:7045',
-        prepareHeaders: (headers) => {
-            const token = acquireAccessToken(msalInstance);
-
+        prepareHeaders: async (headers) => {
+            const token = await acquireAccessToken(msalInstance);
             // If we have a token set in state, let's assume that we should be passing it.
             if (token) {
                 headers.set('authorization', `Bearer ${token}`)

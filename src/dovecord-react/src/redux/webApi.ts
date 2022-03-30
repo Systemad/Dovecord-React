@@ -15,7 +15,7 @@ const injectedRtkApi = api.injectEndpoints({
       ChannelGetChannelMessagesApiArg
     >({
       query: (queryArg) => ({
-        url: `/api/v1/channels/channels/${queryArg.channelId}/messages`,
+        url: `/api/v1/channels/${queryArg.channelId}/messages`,
       }),
     }),
     channelGetChannel: build.query<
@@ -40,16 +40,6 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/api/v1/channels/${queryArg.id}`,
         method: "PUT",
-        body: queryArg.channelManipulationDto,
-      }),
-    }),
-    channelAddChannel: build.mutation<
-      ChannelAddChannelApiResponse,
-      ChannelAddChannelApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/api/v1/channels`,
-        method: "POST",
         body: queryArg.channelManipulationDto,
       }),
     }),
@@ -110,11 +100,19 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.serverManipulationDto,
       }),
     }),
+    serverGetUsersOfServer: build.query<
+      ServerGetUsersOfServerApiResponse,
+      ServerGetUsersOfServerApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/servers/${queryArg.serverId}/users`,
+      }),
+    }),
     serverGetServersOfUser: build.query<
       ServerGetServersOfUserApiResponse,
       ServerGetServersOfUserApiArg
     >({
-      query: () => ({ url: `/api/v1/servers/api/me/servers` }),
+      query: () => ({ url: `/api/v1/servers/me/servers` }),
     }),
     serverGetServerById: build.query<
       ServerGetServerByIdApiResponse,
@@ -128,6 +126,16 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({
         url: `/api/v1/servers/${queryArg.serverId}/channels`,
+      }),
+    }),
+    serverAddServerChannel: build.mutation<
+      ServerAddServerChannelApiResponse,
+      ServerAddServerChannelApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/servers/${queryArg.serverId}/channels`,
+        method: "POST",
+        body: queryArg.channelManipulationDto,
       }),
     }),
     serverDeleteServer: build.mutation<
@@ -199,6 +207,16 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.userManipulationDto,
       }),
     }),
+    userAddUserChannel: build.mutation<
+      UserAddUserChannelApiResponse,
+      UserAddUserChannelApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/users/me/channels`,
+        method: "POST",
+        body: queryArg.body,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -224,10 +242,6 @@ export type ChannelDeleteChannelApiArg = {
 export type ChannelUpdateChannelApiResponse = unknown;
 export type ChannelUpdateChannelApiArg = {
   id: string;
-  channelManipulationDto: ChannelManipulationDto;
-};
-export type ChannelAddChannelApiResponse = /** status 201  */ ChannelDto;
-export type ChannelAddChannelApiArg = {
   channelManipulationDto: ChannelManipulationDto;
 };
 export type MessageSaveMessageApiResponse =
@@ -259,6 +273,10 @@ export type ServerAddServerApiResponse = /** status 201  */ ServerDto;
 export type ServerAddServerApiArg = {
   serverManipulationDto: ServerManipulationDto;
 };
+export type ServerGetUsersOfServerApiResponse = /** status 200  */ UserDto[];
+export type ServerGetUsersOfServerApiArg = {
+  serverId: string;
+};
 export type ServerGetServersOfUserApiResponse = /** status 200  */ ServerDto[];
 export type ServerGetServersOfUserApiArg = void;
 export type ServerGetServerByIdApiResponse = /** status 200  */ ServerDto;
@@ -268,6 +286,11 @@ export type ServerGetServerByIdApiArg = {
 export type ServerGetChannelsApiResponse = /** status 200  */ ChannelDto[];
 export type ServerGetChannelsApiArg = {
   serverId: string;
+};
+export type ServerAddServerChannelApiResponse = /** status 200  */ ChannelDto;
+export type ServerAddServerChannelApiArg = {
+  serverId: string;
+  channelManipulationDto: ChannelManipulationDto;
 };
 export type ServerDeleteServerApiResponse = unknown;
 export type ServerDeleteServerApiArg = {
@@ -305,52 +328,20 @@ export type UserUpdateUserApiArg = {
   id: string;
   userManipulationDto: UserManipulationDto;
 };
+export type UserAddUserChannelApiResponse = /** status 200  */ ChannelDto;
+export type UserAddUserChannelApiArg = {
+  body: string;
+};
 export type WeatherForecast = {
   date?: string;
   temperatureC?: number;
   temperatureF?: number;
   summary?: string | null;
 };
-export type ChannelMessage = {
+export type UserDto = {
   id?: string;
-  content?: string | null;
-  createdBy?: string | null;
-  createdOn?: string;
-  isEdit?: boolean;
-  lastModifiedOn?: string | null;
-  channelId?: string;
-  channel?: Channel;
-  serverId?: string | null;
-  server?: Server | null;
-  authorId?: string | null;
-  author?: User | null;
-};
-export type Channel = {
-  id?: string;
-  type?: number;
   name?: string | null;
-  topic?: string | null;
-  serverId?: string | null;
-  server?: Server | null;
-  messages?: ChannelMessage[] | null;
-  recipients?: User[] | null;
-};
-export type Server = {
-  id?: string;
-  name?: string;
-  iconUrl?: string | null;
-  ownerUserId?: string;
-  channels?: Channel[] | null;
-  members?: User[] | null;
-};
-export type User = {
-  id?: string;
-  username?: string | null;
   isOnline?: boolean | null;
-  bot?: boolean | null;
-  system?: boolean | null;
-  accentColor?: boolean | null;
-  servers?: Server[];
 };
 export type ChannelMessageDto = {
   id?: string;
@@ -358,8 +349,9 @@ export type ChannelMessageDto = {
   createdBy?: string | null;
   isEdit?: boolean;
   lastModifiedOn?: string | null;
+  type?: number;
   content?: string | null;
-  author?: User;
+  author?: UserDto;
   channelId?: string;
   serverId?: string | null;
 };
@@ -369,36 +361,29 @@ export type ChannelDto = {
   name?: string | null;
   topic?: string | null;
   serverId?: string | null;
-  recipients?: User[] | null;
 };
 export type ChannelManipulationDto = {
   name?: string | null;
-  type?: number | null;
+  type?: number;
   topic?: string | null;
-  serverId?: string | null;
 };
 export type MessageManipulationDto = {
   content?: string | null;
+  type?: number;
   channelId?: string;
 };
 export type ServerDto = {
   id?: string;
-  name?: string | null;
-  topic?: string | null;
+  name?: string;
+  iconUrl?: string | null;
   ownerUserId?: string;
-  channels?: Channel[] | null;
-  members?: User[] | null;
+  channels?: ChannelDto[];
+  members?: UserDto[];
 };
 export type ServerManipulationDto = {
   name?: string | null;
 };
-export type UserDto = {
-  id?: string;
-  name?: string | null;
-  isOnline?: boolean | null;
-};
 export type UserCreationDto = {
-  name?: string | null;
   isOnline?: boolean | null;
 };
 export type UserManipulationDto = {
@@ -410,7 +395,6 @@ export const {
   useChannelGetChannelQuery,
   useChannelDeleteChannelMutation,
   useChannelUpdateChannelMutation,
-  useChannelAddChannelMutation,
   useMessageSaveMessageMutation,
   useMessageUpdateMessageMutation,
   useMessageGetMessageQuery,
@@ -418,9 +402,11 @@ export const {
   useMessageGetMessagesFromChannelQuery,
   useServerGetServersQuery,
   useServerAddServerMutation,
+  useServerGetUsersOfServerQuery,
   useServerGetServersOfUserQuery,
   useServerGetServerByIdQuery,
   useServerGetChannelsQuery,
+  useServerAddServerChannelMutation,
   useServerDeleteServerMutation,
   useServerUpdateServerMutation,
   useServerJoinServerMutation,
@@ -430,4 +416,5 @@ export const {
   useUserGetUserQuery,
   useUserDeleteUserMutation,
   useUserUpdateUserMutation,
+  useUserAddUserChannelMutation,
 } = injectedRtkApi;

@@ -1,25 +1,19 @@
 import React, {useEffect, useState} from "react";
-import {AuthenticatedTemplate, UnauthenticatedTemplate, useAccount, useMsal} from "@azure/msal-react";
-import {Grid} from "./styles";
-import { Route, Routes} from 'react-router-dom';
-import SignInSignOutButton from "../authentication/SignInSignOutButton";
-import ServerList from "../Server/ServerList";
-import ServerName from "../Server/ServerName";
-import ChannelInfo from "../Channel/ChannelInfo";
-import ChannelList from "../Channel/ChannelList";
-import ChannelData from "../Channel/ChannelData";
-import {ChannelDto, ChannelMessageDto} from "../../services/types";
+import {useAccount, useMsal} from "@azure/msal-react";
 import {useAppDispatch} from "../../redux/hooks";
-import {
-    addMessageToChannel, addMessageToUserChannel,
-    deleteMessageFromChannel, DeleteMessage
-} from "../../redux/features/servers/serverSlice";
+//import {
+//    addMessageToChannel, addMessageToUserChannel,
+//    deleteMessageFromChannel, DeleteMessage
+//} from "../../redux/features/servers/serverSlice";
 import {createSignalRContext} from "react-signalr";
 import {Chat, ChatCallbacksNames} from "../../services/hub";
 import {AccountInfo} from "@azure/msal-browser";
 import {loginRequest} from "../../auth/authConfig";
-import {DiscoverView} from "../Discover";
 import ServerComponent from "../Server";
+import ChannelInfo from "../Channel/ChannelInfo";
+import ChannelList from "../Channel/ChannelList";
+import ChannelData from "../Channel/ChannelData";
+import UserList from "../User/UserList";
 
 const SignalRContext = createSignalRContext<Chat>();
 
@@ -45,14 +39,14 @@ const Layout: React.FC = () => {
             if(message){
                 console.log("message receive");
                 if(message.type === 0){
-                    dispatch(addMessageToChannel(message));
+                    //dispatch(addMessageToChannel(message));
                 } else if(message.type === 1) {
-                    dispatch(addMessageToUserChannel(message))
+                    //dispatch(addMessageToUserChannel(message))
                 }
             }
         }, []
     );
-
+    /*
     SignalRContext.useSignalREffect(
         ChatCallbacksNames.DeleteMessageReceived,
         (channelId, messageId, serverId) => {
@@ -72,34 +66,22 @@ const Layout: React.FC = () => {
             dispatch(deleteMessageFromChannel(deleteMessage));
         }, []
     );
-
+    */
     return (
         <>
             <SignalRContext.Provider
                 connectEnabled={true}
                 accessTokenFactory={accessTokenFactory}
-                dependencies={[accessTokenFactory]} //remove previous connection and create a new connection if changed
+                dependencies={[]} //remove previous connection and create a new connection if changed
                 url={"https://localhost:7045/chathub"}>
+                <>
+                    <ServerComponent/>
+                    <ChannelInfo />
+                    <ChannelList />
+                    <ChannelData />
+                    <UserList/>
+                </>
 
-                <Grid>
-                    <ServerList />
-                    <Routes>
-                        <Route path="/chat" element={
-                            <>
-                                <ServerComponent/>
-                                <ChannelInfo />
-                                <ChannelList />
-                                <ChannelData />
-                            </>
-                        }/>
-
-                        <Route path="/discover" element={
-                            <>
-                                <DiscoverView/>
-                            </>
-                        }/>
-                    </Routes>
-                </Grid>
             </SignalRContext.Provider>
         </>
     );

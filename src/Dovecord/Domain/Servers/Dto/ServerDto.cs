@@ -12,6 +12,6 @@ public class ServerDto
     public string? IconUrl { get; set; }
     public Guid OwnerUserId { get; set; }
     
-    public ICollection<ChannelDto>? Channels { get; set; }
-    public ICollection<UserDto>? Members { get; set; }
+    public ICollection<ChannelDto> Channels { get; set; }
+    public ICollection<UserDto> Members { get; set; }
 }

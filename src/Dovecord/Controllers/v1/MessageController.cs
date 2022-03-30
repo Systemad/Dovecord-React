@@ -21,12 +21,12 @@ public class MessageController : ControllerBase
     private readonly ILogger<MessageController> _logger;
     private readonly IMediator _mediator;
     private readonly ICurrentUserService _currentUserService;
-    private readonly IHubContext<ChatHub, IChatClient> _hubContext;
+    private readonly IHubContext<BaseHub, IBaseHub> _hubContext;
 
     public MessageController(ILogger<MessageController> logger,
         IMediator mediator,
         ICurrentUserService currentUserService,
-        IHubContext<ChatHub, IChatClient> hubContext)
+        IHubContext<BaseHub, IBaseHub> hubContext)
     {
         _logger = logger;
         _mediator = mediator;

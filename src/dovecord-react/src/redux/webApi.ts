@@ -339,12 +339,12 @@ export type WeatherForecast = {
   summary?: string | null;
 };
 export type UserDto = {
-  id?: string;
+  id: string;
   name?: string | null;
   isOnline?: boolean | null;
 };
 export type ChannelMessageDto = {
-  id?: string;
+  id: string;
   createdOn?: string;
   createdBy?: string | null;
   isEdit?: boolean;
@@ -356,21 +356,21 @@ export type ChannelMessageDto = {
   serverId?: string | null;
 };
 export type ChannelDto = {
-  id?: string;
+  id: string;
   type?: number;
   name?: string | null;
   topic?: string | null;
   serverId?: string | null;
 };
 export type ChannelManipulationDto = {
-  name?: string | null;
+  name: string | null;
   type?: number;
   topic?: string | null;
 };
 export type MessageManipulationDto = {
   content?: string | null;
   type?: number;
-  channelId?: string;
+  channelId: string;
 };
 export type ServerDto = {
   id?: string;
@@ -381,7 +381,7 @@ export type ServerDto = {
   members?: UserDto[];
 };
 export type ServerManipulationDto = {
-  name?: string | null;
+  name: string | null;
 };
 export type UserCreationDto = {
   isOnline?: boolean | null;

@@ -3,21 +3,20 @@ import React, {useState} from "react";
 import { Container, Avatar, Message, Header, Content, OpenMenu, MenuContainer } from "./styles";
 import { useHover } from '@mantine/hooks';
 import { Popover, Menu, Divider, Text } from '@mantine/core';
-import {deleteV1MessagesId} from "../../../services/services";
 export { Mention } from "./styles";
 
 export interface Props {
-    author?: string;
-    date?: string;
+    createdBy?: string | null;
+    createdOn?: string;
     content?: string | React.ReactElement | React.ReactNode;
     hasMention?: boolean;
     isBot?: boolean;
-    messageId?: string;
+    messageId: string;
 }
 
 const ChannelMessage: React.FC<Props> = ({
-    author,
-    date,
+    createdBy,
+    createdOn,
     content,
     hasMention,
     isBot,
@@ -27,8 +26,8 @@ const ChannelMessage: React.FC<Props> = ({
     const [opened, setOpened] = useState(false);
 
     async function deleteMessage(){
-        if(messageId)
-            await deleteV1MessagesId(messageId);
+        //if(messageId)
+        //    await deleteV1MessagesId(messageId);
     }
 
     return (
@@ -37,11 +36,11 @@ const ChannelMessage: React.FC<Props> = ({
 
             <Message>
                 <Header>
-                    <strong>{author}</strong>
+                    <strong>{createdBy}</strong>
 
                     {isBot && <span>Bot</span>}
 
-                    <time>{date}</time>
+                    <time>{createdOn}</time>
                     <Popover
                         opened={opened}
                         onClose={() => setOpened(false)}

@@ -4,16 +4,9 @@ import ServerButton from "../ServerButton";
 
 import {Container, Separator} from "./styles";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
-//import {
-//    fetchChannelsAsync, fetchServersAsync,
-//    selectCurrentState,
-//    selectServers, ServerState,
-//    setCurrentServer
-//} from "../../../redux/features/servers/serverSlice";
 import {useLocation, useNavigate} from "react-router-dom";
 import {DiscoverButton} from "../../Discover/DiscoverButton/DsicoverButton";
-import {useServerGetServersOfUserQuery} from "../../../redux/webApi";
-import {ServerDto} from "../../../services/web-api-client";
+import {ServerDto, useServerGetServersOfUserQuery} from "../../../redux/webApi";
 import {setCurrentServer} from "../../../redux/features/servers/serverSlice";
 
 const ServerList = () => {
@@ -28,12 +21,16 @@ const ServerList = () => {
         const { pathname } = useLocation()
         const discoverActive = pathname.startsWith('/discover')
 
-        const setServer = async (server?: string) => {
-           //dispatch(setCurrentServer(server));
-               //dispatch(fetchChannelsAsync(server.server.id!));
-            if(server) {
-                navigate(server);
+        const setServer = async (server?: ServerDto) => {
+            if(server){
+                dispatch(setCurrentServer(server));
+                navigate("/");
             }
+
+               //dispatch(fetchChannelsAsync(server.server.id!));
+            //if(server) {
+            //    navigate(server);
+            //}
        }
     if(isLoading){
         return <p>loading</p>
@@ -51,7 +48,7 @@ const ServerList = () => {
 
             {servers?.map((server) => (
                 <ServerButton
-                    onClick={() => setServer(server.id)}
+                    onClick={() => setServer(server)}
                     key={server.id}
                     selected={server.id === pathname}
                 />

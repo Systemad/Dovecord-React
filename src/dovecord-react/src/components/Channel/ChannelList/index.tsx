@@ -1,41 +1,38 @@
 import React, {useEffect, useState} from "react";
 import ChannelButton from "../ChannelButton";
 import { Container, Category, AddCategoryIcon } from "./styles";
-//import {
-//    addChannel,
-//    ChannelState,
-//    fetchChannelMessagesAsync,
-//    selectCurrentState, selectServers,
-//} from "../../../redux/features/servers/serverSlice"
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
-//import { setCurrentChannel } from "../../../redux/features/servers/serverSlice";
 import { Dialog, Group, Button, TextInput, Text } from '@mantine/core';
-import {ChannelManipulationDto, MessageManipulationDto} from "../../../services/types";
-import {postV1ServersServerIdChannels} from "../../../services/services";
-import {useServerGetChannelsQuery} from "../../../redux/webApi";
-import {useLocation} from "react-router-dom";
-import {ServerDto} from "../../../services/web-api-client";
+import {ChannelDto, useServerGetChannelsQuery} from "../../../redux/webApi";
+import {
+    getCurrentChannel,
+    getCurrentServer,
+    setCurrentChannel,
+    setCurrentServer
+} from "../../../redux/features/servers/serverSlice";
+import {skipToken} from "@reduxjs/toolkit/query";
 
 interface Props {
-    server?: ServerDto
+    server?: string
 }
 
-const ChannelList = ({server}: Props) => {
+const ChannelList = () => {
+    const currentServer = useAppSelector(getCurrentServer);
+    const currentChannel = useAppSelector(getCurrentChannel);
     const dispatch = useAppDispatch();
-    //const currentState = useAppSelector(selectCurrentState);
-    //const currentServer = useAppSelector(selectServers).find((server) => server.server.id === currentState.currentServer?.id);
-    //const { pathname } = useLocation()
-    const {data: channels, isLoading} = useServerGetChannelsQuery(server?.id);
+    const serverId = currentServer?.id;
+
+    const {data: channels} = useServerGetChannelsQuery(serverId ? {serverId: serverId} : skipToken);
     const [opened, setOpened] = useState(false);
     const [value, setValue] = useState('');
-    /*
-    const setChannel = async (channel: ChannelState) => {
-        dispatch(setCurrentChannel(channel.channel));
-        if(channel.loading === 'idle'){
-            dispatch(fetchChannelMessagesAsync(channel.channel.id!));
-        }
+
+    const setChannel = async (channel: ChannelDto) => {
+        dispatch(setCurrentChannel(channel));
+        //if(channel.loading === 'idle'){
+        //    dispatch(fetchChannelMessagesAsync(channel.channel.id!));
+        //}
     }
-    */
+
     /*
     const createChannel = async () => {
         if(value){
@@ -86,6 +83,14 @@ const ChannelList = ({server}: Props) => {
                     { /*<Button onClick={() => createChannel()}>Create Channel</Button>*/ }
                 </Group>
             </Dialog>
+
+            {channels?.map((channel) => (
+                <ChannelButton
+                    key={channel.id}
+                    onClick={() => setChannel(channel)}
+                    channel={channel}
+                    selected={currentChannel?.id == channel.id}/>
+            ))}
 
         </Container>
     );

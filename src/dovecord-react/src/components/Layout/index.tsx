@@ -6,7 +6,6 @@ import {useAppDispatch} from "../../redux/hooks";
 //    deleteMessageFromChannel, DeleteMessage
 //} from "../../redux/features/servers/serverSlice";
 import {createSignalRContext} from "react-signalr";
-import {Chat, ChatCallbacksNames} from "../../services/hub";
 import {AccountInfo} from "@azure/msal-browser";
 import {loginRequest} from "../../auth/authConfig";
 import ServerComponent from "../Server";
@@ -14,14 +13,15 @@ import ChannelInfo from "../Channel/ChannelInfo";
 import ChannelList from "../Channel/ChannelList";
 import ChannelData from "../Channel/ChannelData";
 import UserList from "../User/UserList";
-
-const SignalRContext = createSignalRContext<Chat>();
+import {useLocation} from "react-router-dom";
 
 const Layout: React.FC = () => {
     const dispatch = useAppDispatch();
     const { instance, accounts, inProgress } = useMsal();
     const account = useAccount(accounts[0] || {});
     //const currentServer = useAppSelector(selectCurrentState).currentServer.
+
+    const { pathname } = useLocation()
 
     const tokenRequest = {
         account: instance.getActiveAccount() as AccountInfo,
@@ -33,19 +33,6 @@ const Layout: React.FC = () => {
         return token.accessToken;
     }
 
-    SignalRContext.useSignalREffect(
-        ChatCallbacksNames.MessageReceived,
-        (message) => {
-            if(message){
-                console.log("message receive");
-                if(message.type === 0){
-                    //dispatch(addMessageToChannel(message));
-                } else if(message.type === 1) {
-                    //dispatch(addMessageToUserChannel(message))
-                }
-            }
-        }, []
-    );
     /*
     SignalRContext.useSignalREffect(
         ChatCallbacksNames.DeleteMessageReceived,
@@ -69,20 +56,11 @@ const Layout: React.FC = () => {
     */
     return (
         <>
-            <SignalRContext.Provider
-                connectEnabled={true}
-                accessTokenFactory={accessTokenFactory}
-                dependencies={[]} //remove previous connection and create a new connection if changed
-                url={"https://localhost:7045/chathub"}>
-                <>
-                    <ServerComponent/>
-                    <ChannelInfo />
-                    <ChannelList />
-                    <ChannelData />
-                    <UserList/>
-                </>
-
-            </SignalRContext.Provider>
+            <ServerComponent/>
+            <ChannelInfo />
+            <ChannelList />
+            <ChannelData />
+            <UserList/>
         </>
     );
 };

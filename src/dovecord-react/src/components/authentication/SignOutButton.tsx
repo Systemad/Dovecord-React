@@ -3,7 +3,7 @@ import{ useState } from "react";
 import { useMsal } from "@azure/msal-react";
 
 import { loginRequest } from "../../auth/authConfig";
-import Button from '@mui/material/Button';
+import {Button} from "@mantine/core";
 
 export const SignOutButton = () => {
     const { instance } = useMsal();

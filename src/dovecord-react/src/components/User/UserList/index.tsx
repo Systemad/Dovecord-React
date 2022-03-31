@@ -3,7 +3,7 @@ import React from "react";
 import { Container, Role, User, Avatar } from "./styles";
 
 import {useAppDispatch} from "../../../redux/hooks";
-import {UserDto} from "../../../services/types";
+import {UserDto} from "../../../redux/webApi";
 
 interface UserProps {
     user: UserDto;

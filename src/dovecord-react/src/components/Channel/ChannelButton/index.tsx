@@ -1,8 +1,7 @@
 import React, {MouseEvent} from "react";
 
 import { Container, HashtagIcon, InviteIcon, SettingsIcon } from "./styles";
-import {ChannelDto} from "../../../services/types";
-
+import {ChannelDto} from "../../../redux/webApi";
 export interface Props {
     onClick?: (event: MouseEvent<HTMLButtonElement>) => void,
     channel?: ChannelDto,

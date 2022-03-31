@@ -1,6 +1,5 @@
 // Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import {AxiosInstance} from "axios";
 import {PublicClientApplication} from "@azure/msal-browser";
 import {loginRequest, msalConfig} from "../auth/authConfig";
 
@@ -41,5 +40,6 @@ export const emptySplitApi = createApi({
             return headers
         },
     }),
+    refetchOnMountOrArgChange: false,
     endpoints: () => ({}),
 })

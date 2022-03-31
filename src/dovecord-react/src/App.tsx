@@ -51,7 +51,7 @@ function Pages() {
               <Grid>
                   <ServerList />
                   <Routes>
-                      <Route path="/:id" element={
+                      <Route path="/" element={
                           <>
                               <Layout/>
                           </>

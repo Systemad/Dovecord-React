@@ -3,16 +3,25 @@ import React, {useRef, useEffect, useState, MouseEvent, FormEvent} from "react";
 import ChannelMessage, { Mention } from "../ChannelMessage";
 
 import { Container, Messages, InputWrapper, Input, SendIcon } from "./styles";
-import {MessageManipulationDto, UserDto, ChannelDto} from "../../../services/types";
 import { useAppSelector } from "../../../redux/hooks";
+import {
+    MessageManipulationDto,
+    useMessageGetMessagesFromChannelQuery,
+    useServerGetChannelsQuery
+} from "../../../redux/webApi";
+import {getCurrentChannel} from "../../../redux/features/servers/serverSlice";
+import {skipToken} from "@reduxjs/toolkit/query";
 //import {selectCurrentState, selectServers} from "../../../redux/features/servers/serverSlice"
-import {postV1Messages} from "../../../services/services";
 
 const ChannelData = () => {
     const messagesRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const [message, setMessage] = useState('');
-    //const currentState = useAppSelector(selectCurrentState);
+    const currentChannel = useAppSelector(getCurrentChannel);
+    const channelId = currentChannel?.id;
+    const {data: messages, isLoading} = useMessageGetMessagesFromChannelQuery(channelId ? {id: currentChannel?.id} : skipToken);
 
+    //const {data: channels} = useServerGetChannelsQuery(serverId ? {serverId: serverId} : skipToken);
+    //const {data: channels} = useServerGetChannelsQuery({serverId: currentChannel.id ?? skipToken});
     //const currentServer = useAppSelector(selectCurrentState);
     //const currentServer = useAppSelector(selectServers).find((server) => server.server.id === currentState.currentServer?.id);
     //const currentChannel = currentServer?.channels.find((channel) => channel.channel.id === currentState.currentChannel?.id);
@@ -47,7 +56,7 @@ const ChannelData = () => {
             } as MessageManipulationDto;
 
             console.log(newMessage);
-            postV1Messages(newMessage); //.then(r => console.log(r));
+            //postV1Messages(newMessage); //.then(r => console.log(r));
             setMessage('');
         }
         else {
@@ -88,7 +97,17 @@ const ChannelData = () => {
      */
     return (
         <Container>
-
+            <Messages ref={messagesRef}>
+                {messages?.map((message) => (
+                    <ChannelMessage
+                        createdBy={message?.createdBy}
+                        createdOn={message?.createdOn}
+                        content={message?.content}
+                        key={message?.id}
+                        messageId={message.id}
+                    />
+                ))}
+            </Messages>
 
             <InputWrapper>
                 <Input

@@ -1,11 +1,6 @@
-import {ChannelDto, ChannelMessageDto, ServerDto, UserDto} from "../../../services/types";
 import {createAsyncThunk, createEntityAdapter, createSelector, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../../store";
-import {
-    getV1MessagesChannelId, getV1ServersMeServers,
-    getV1ServersServerId,
-    getV1ServersServerIdChannels, getV1ServersServerIdUsers, getV1Users
-} from "../../../services/services";
+import {ChannelDto, ServerDto} from "../../webApi";
 
 
 type CurrentState = {
@@ -13,23 +8,17 @@ type CurrentState = {
     currentChannel?: ChannelDto
 }
 
-type State = {
-    currentState: CurrentState
-}
-
-const initialState: State = {
-    currentState: {}
-}
+const initialState = {} as CurrentState;
 
 export const serverSlice = createSlice({
     name: 'servers',
     initialState,
     reducers: {
         setCurrentServer: (state, action: PayloadAction<ServerDto>) => {
-            state.currentState.currentServer = action.payload;
+            state.currentServer = action.payload;
         },
         setCurrentChannel: (state, action: PayloadAction<ChannelDto>) => {
-            state.currentState.currentChannel = action.payload;
+            state.currentChannel = action.payload;
         }
     }
 })
@@ -38,6 +27,8 @@ export const {
     setCurrentChannel,
     setCurrentServer} = serverSlice.actions;
 
+export const getCurrentChannel = (state: RootState) => state.serverSlice.currentChannel;
+export const getCurrentServer = (state: RootState) => state.serverSlice.currentServer;
 export default serverSlice.reducer
 
 /*

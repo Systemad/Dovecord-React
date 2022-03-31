@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from "react";
-import {getV1Servers, postV1ServersJoinServerId} from "../../services/services";
-import {ServerDto} from "../../services/types";
 import {ServerCard} from "./ServerCard";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 //import {addServer, selectServers, ServerState} from "../../redux/features/servers/serverSlice";
 import { Container } from "./styles"
 import { useMantineTheme } from '@mantine/core';
+import {ServerDto, useServerGetServersQuery} from "../../redux/webApi";
 
 export const DiscoverView: React.FC = () => {
-    const [servers, setServers] = useState<ServerDto[]>([])
+    //const [servers, setServers] = useState<ServerDto[]>([])
     //const serversState = useAppSelector(selectServers);
 
     const dispatch = useAppDispatch();
 
+    const {data: servers} = useServerGetServersQuery();
     const joinServer = async (serverClicked?: ServerDto) => {
         /*
         if(serverClicked){
@@ -31,13 +31,6 @@ export const DiscoverView: React.FC = () => {
          */
     }
 
-    useEffect(() => {
-        const getServers = async ()  => {
-            const fetchServers = await getV1Servers();
-            setServers(fetchServers.data);
-        }
-        getServers().then(r => console.log(r));
-    }, [])
 
     const theme = useMantineTheme();
 

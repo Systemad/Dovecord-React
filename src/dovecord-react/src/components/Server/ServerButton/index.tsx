@@ -2,8 +2,6 @@ import React from "react";
 
 import Logo from "../../../assets/Logo.svg";
 import { Button, Pill } from "./styles";
-import {useAppSelector} from "../../../redux/hooks";
-import {ServerDto} from "../../../services/web-api-client";
 //import {selectCurrentState} from "../../../redux/features/servers/serverSlice";
 
 export interface Props {

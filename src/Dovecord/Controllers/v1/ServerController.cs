@@ -122,7 +122,6 @@ public class ServerController : ControllerBase
     }
     
     [ProducesResponseType(204)]
-    [Produces("application/json")]
     [HttpPost("join/{serverId:guid}", Name = "JoinServer")]
     public async Task<IActionResult> JoinServer(Guid serverId)
     {
@@ -132,7 +131,6 @@ public class ServerController : ControllerBase
     }
     
     [ProducesResponseType(204)]
-    [Produces("application/json")]
     [HttpPost("leave/{serverId:guid}", Name = "LeaveServer")]
     public async Task<IActionResult> LeaveServer(Guid serverId)
     {

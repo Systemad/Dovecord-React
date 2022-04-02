@@ -4,14 +4,14 @@ import {ChannelDto, ServerDto} from "../../webApi";
 
 
 type CurrentState = {
-    currentServer?: ServerDto,
-    currentChannel?: ChannelDto
+    currentServer: ServerDto,
+    currentChannel: ChannelDto
 }
 
 const initialState = {} as CurrentState;
 
 export const serverSlice = createSlice({
-    name: 'servers',
+    name: 'serverState',
     initialState,
     reducers: {
         setCurrentServer: (state, action: PayloadAction<ServerDto>) => {

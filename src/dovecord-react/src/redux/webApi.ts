@@ -1,4 +1,7 @@
 import { emptySplitApi as api } from "C:/Users/yeahg/RiderProjects/Dovecord-React/src/dovecord-react/src/redux/emptyApi";
+import {connection} from "./signalr";
+import * as signalR from "@microsoft/signalr";
+
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
     weatherForecastGet: build.query<
@@ -82,7 +85,32 @@ const injectedRtkApi = api.injectEndpoints({
       MessageGetMessagesFromChannelApiResponse,
       MessageGetMessagesFromChannelApiArg
     >({
-      query: (queryArg) => ({ url: `/api/v1/messages/channel/${queryArg.id}` }),
+      keepUnusedDataFor: 3600,
+      query: (queryArg) => ({ url: `/api/v1/messages/channel/${queryArg.id}`}),
+      async onCacheEntryAdded(
+          arg,
+          { cacheDataLoaded, cacheEntryRemoved, updateCachedData },
+      ) {
+        try {
+          await cacheDataLoaded;
+
+          connection.start().then(r => console.log("connection started"));
+          // the /chat-messages endpoint responded already
+          connection.on("MessageReceived", (message: ChannelMessageDto) => {
+            console.log("MessageReceived: " + message.channelId)
+            const channelId = message.channelId;
+            if(channelId !== arg.id) return;
+            updateCachedData((draft) => {
+              draft.push(message);
+            });
+          });
+
+          await cacheEntryRemoved;
+        } catch {
+          // if cacheEntryRemoved resolved before cacheDataLoaded,
+          // cacheDataLoaded throws
+        }
+      },
     }),
     serverGetServers: build.query<
       ServerGetServersApiResponse,
@@ -112,7 +140,8 @@ const injectedRtkApi = api.injectEndpoints({
       ServerGetServersOfUserApiResponse,
       ServerGetServersOfUserApiArg
     >({
-      query: () => ({ url: `/api/v1/servers/me/servers` }),
+      keepUnusedDataFor: 3600,
+      query: () => ({ url: `/api/v1/servers/me/servers`}),
     }),
     serverGetServerById: build.query<
       ServerGetServerByIdApiResponse,
@@ -124,9 +153,9 @@ const injectedRtkApi = api.injectEndpoints({
       ServerGetChannelsApiResponse,
       ServerGetChannelsApiArg
     >({
+      keepUnusedDataFor: 3600,
       query: (queryArg) => ({
-        url: `/api/v1/servers/${queryArg.serverId}/channels`,
-      }),
+        url: `/api/v1/servers/${queryArg.serverId}/channels`}),
     }),
     serverAddServerChannel: build.mutation<
       ServerAddServerChannelApiResponse,
@@ -352,7 +381,7 @@ export type ChannelMessageDto = {
   type?: number;
   content?: string | null;
   author?: UserDto;
-  channelId?: string;
+  channelId: string;
   serverId?: string | null;
 };
 export type ChannelDto = {
@@ -373,7 +402,7 @@ export type MessageManipulationDto = {
   channelId: string;
 };
 export type ServerDto = {
-  id?: string;
+  id: string;
   name?: string;
   iconUrl?: string | null;
   ownerUserId?: string;

@@ -11,8 +11,8 @@ using Serilog;
 
 namespace Dovecord.SignalR.Hubs;
 
-[Authorize]
-[RequiredScope("API.Access")]
+//[Authorize]
+//[RequiredScope("API.Access")]
 public class BaseHub : Hub<IBaseHub>
 {
     private readonly IStatusService _statusService;

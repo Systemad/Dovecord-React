@@ -1,8 +1,9 @@
-// Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import * as signalR from "@microsoft/signalr";
 import {PublicClientApplication} from "@azure/msal-browser";
 import {loginRequest, msalConfig} from "../auth/authConfig";
 
+const url = "https://localhost:7045/chathub";
+// TODO: Fix authentication
 const msalInstance = new PublicClientApplication(msalConfig);
 
 const acquireAccessToken = async (msalInstance: any) => {
@@ -19,27 +20,22 @@ const acquireAccessToken = async (msalInstance: any) => {
         account: activeAccount || accounts[0],
     };
 
-    console.log("msal acquireAccessToken: fetch token");
+    console.log("signalr token fetch");
     const authResult = await msalInstance.acquireTokenSilent(request);
 
     //console.log(authResult.accessToken);
     return authResult.accessToken;
 };
 
-// initialize an empty api service that we'll inject endpoints into later as needed
-export const emptySplitApi = createApi({
-    reducerPath: 'api',
-    baseQuery: fetchBaseQuery({
-        baseUrl: 'https://localhost:7045',
-        prepareHeaders: async (headers) => {
-            const token = await acquireAccessToken(msalInstance);
-            // If we have a token set in state, let's assume that we should be passing it.
-            if (token) {
-                headers.set('authorization', `Bearer ${token}`)
-            }
-            return headers
-        },
-    }),
-    endpoints: () => ({}),
-    refetchOnMountOrArgChange: false,
-})
+const options: signalR.IHttpConnectionOptions = {
+    accessTokenFactory: async () => {
+        const x = await acquireAccessToken(msalInstance);
+        console.log(x.accessToken);
+        return x.accessToken;
+    }
+};
+
+export const connection = new signalR.HubConnectionBuilder()
+    .withAutomaticReconnect()
+    .withUrl(url /*, options*/)
+    .build();

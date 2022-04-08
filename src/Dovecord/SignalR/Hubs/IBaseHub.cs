@@ -1,4 +1,6 @@
-﻿using Dovecord.Domain.Messages.Dto;
+﻿using Dovecord.Domain.Channels.Dto;
+using Dovecord.Domain.Messages.Dto;
+using Dovecord.Domain.Servers.Dto;
 using Dovecord.Domain.Users.Dto;
 
 namespace Dovecord.SignalR.Hubs;
@@ -12,4 +14,8 @@ public interface IBaseHub
     Task MessageReceived(ChannelMessageDto message);
 
     Task DeleteMessageReceived(string channelId, string messageId);
+    Task ChannelCreated(ChannelDto channelDto);
+    Task ChannelDeleted(ChannelDto channelDto);
+    Task ServerAction(ServerDto serverDto);
+    Task ServerLeft(ServerDto serverDto);
 }

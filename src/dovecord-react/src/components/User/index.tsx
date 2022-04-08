@@ -1,22 +1,20 @@
 import React, {useEffect} from "react";
 import UserInfo from "./UserInfo";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {UserData} from "./UserInfo/styles";
-//import {fetchChannelsAsync, selectCurrentState, selectServers} from "../../redux/features/servers/serverSlice";
+import {getCurrentServer} from "../../redux/features/servers/serverSlice";
+import {useServerGetUsersOfServerQuery, useUserGetMeQuery} from "../../redux/webApi";
+import {skipToken} from "@reduxjs/toolkit/query";
 import UserList from "./UserList";
-import {useAccount, useMsal} from "@azure/msal-react";
 
-export const UserComponent: React.FC = () => {
+export const UserComponent = () => {
 
-    const dispatch = useAppDispatch();
+    const currentServer = useAppSelector(getCurrentServer);
+    const serverId = currentServer?.id;
+    const {data: users} = useServerGetUsersOfServerQuery(serverId ? {serverId: serverId} : skipToken);
+    const onlineUsers = users?.filter(user => user.isOnline == true);
+    const offlineUsers = users?.filter(user => user.isOnline == false);
 
-
-
-    //const currentState = useAppSelector(selectCurrentState);
-    //const currentServer = useAppSelector(selectServers).find((server) => server.server.id === currentState.currentServer?.id);
-
-    //const onlineUsers = currentServer?.users.filter(user => user.isOnline == true);
-    //const offlineUsers = currentServer?.users.filter(user => user.isOnline == false);
+    const {data: user} = useUserGetMeQuery();
     //const usersStatus = useAppSelector(selectUsersStatus)
 
     //const users = UserDto;
@@ -32,18 +30,13 @@ export const UserComponent: React.FC = () => {
      */
     return (
         <>
-
-            <UserInfo/>
+            <UserInfo user={user}/>
+            <UserList
+                onlineUsers={onlineUsers}
+                offlineUsers={offlineUsers}
+            />
         </>
     );
 };
 
 export default UserComponent;
-
-
-/*
-            <UserList
-                onlineUsers={onlineUsers}
-                offlineUsers={offlineUsers}
-            />
- */

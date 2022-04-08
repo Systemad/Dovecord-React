@@ -1046,11 +1046,22 @@
             "type": "string",
             "format": "guid"
           },
-          "name": {
+          "username": {
             "type": "string",
             "nullable": true
           },
           "isOnline": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "bot": {
+            "type": "boolean"
+          },
+          "system": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "accentColor": {
             "type": "boolean",
             "nullable": true
           }

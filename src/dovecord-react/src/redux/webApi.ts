@@ -1,45 +1,46 @@
 import { emptySplitApi as api } from "C:/Users/yeahg/RiderProjects/Dovecord-React/src/dovecord-react/src/redux/emptyApi";
-import {connection} from "./signalr";
+
+import connection from "./signalr"
 import * as signalR from "@microsoft/signalr";
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
     weatherForecastGet: build.query<
-      WeatherForecastGetApiResponse,
-      WeatherForecastGetApiArg
-    >({
+        WeatherForecastGetApiResponse,
+        WeatherForecastGetApiArg
+        >({
       query: (queryArg) => ({
         url: `/weatherforecast`,
         params: { "api-version": queryArg["api-version"] },
       }),
     }),
     channelGetChannelMessages: build.query<
-      ChannelGetChannelMessagesApiResponse,
-      ChannelGetChannelMessagesApiArg
-    >({
+        ChannelGetChannelMessagesApiResponse,
+        ChannelGetChannelMessagesApiArg
+        >({
       query: (queryArg) => ({
         url: `/api/v1/channels/${queryArg.channelId}/messages`,
       }),
     }),
     channelGetChannel: build.query<
-      ChannelGetChannelApiResponse,
-      ChannelGetChannelApiArg
-    >({
+        ChannelGetChannelApiResponse,
+        ChannelGetChannelApiArg
+        >({
       query: (queryArg) => ({ url: `/api/v1/channels/${queryArg.id}` }),
     }),
     channelDeleteChannel: build.mutation<
-      ChannelDeleteChannelApiResponse,
-      ChannelDeleteChannelApiArg
-    >({
+        ChannelDeleteChannelApiResponse,
+        ChannelDeleteChannelApiArg
+        >({
       query: (queryArg) => ({
         url: `/api/v1/channels/${queryArg.id}`,
         method: "DELETE",
       }),
     }),
     channelUpdateChannel: build.mutation<
-      ChannelUpdateChannelApiResponse,
-      ChannelUpdateChannelApiArg
-    >({
+        ChannelUpdateChannelApiResponse,
+        ChannelUpdateChannelApiArg
+        >({
       query: (queryArg) => ({
         url: `/api/v1/channels/${queryArg.id}`,
         method: "PUT",
@@ -47,9 +48,9 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     messageSaveMessage: build.mutation<
-      MessageSaveMessageApiResponse,
-      MessageSaveMessageApiArg
-    >({
+        MessageSaveMessageApiResponse,
+        MessageSaveMessageApiArg
+        >({
       query: (queryArg) => ({
         url: `/api/v1/messages`,
         method: "POST",
@@ -57,9 +58,9 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     messageUpdateMessage: build.mutation<
-      MessageUpdateMessageApiResponse,
-      MessageUpdateMessageApiArg
-    >({
+        MessageUpdateMessageApiResponse,
+        MessageUpdateMessageApiArg
+        >({
       query: (queryArg) => ({
         url: `/api/v1/messages/${queryArg.id}`,
         method: "PUT",
@@ -67,24 +68,24 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     messageGetMessage: build.query<
-      MessageGetMessageApiResponse,
-      MessageGetMessageApiArg
-    >({
+        MessageGetMessageApiResponse,
+        MessageGetMessageApiArg
+        >({
       query: (queryArg) => ({ url: `/api/v1/messages/${queryArg.id}` }),
     }),
     messageDeleteMessageById: build.mutation<
-      MessageDeleteMessageByIdApiResponse,
-      MessageDeleteMessageByIdApiArg
-    >({
+        MessageDeleteMessageByIdApiResponse,
+        MessageDeleteMessageByIdApiArg
+        >({
       query: (queryArg) => ({
         url: `/api/v1/messages/${queryArg.id}`,
         method: "DELETE",
       }),
     }),
     messageGetMessagesFromChannel: build.query<
-      MessageGetMessagesFromChannelApiResponse,
-      MessageGetMessagesFromChannelApiArg
-    >({
+        MessageGetMessagesFromChannelApiResponse,
+        MessageGetMessagesFromChannelApiArg
+        >({
       keepUnusedDataFor: 3600,
       query: (queryArg) => ({ url: `/api/v1/messages/channel/${queryArg.id}`}),
       async onCacheEntryAdded(
@@ -93,19 +94,22 @@ const injectedRtkApi = api.injectEndpoints({
       ) {
         try {
           await cacheDataLoaded;
-
-          connection.start().then(r => console.log("connection started"));
-          // the /chat-messages endpoint responded already
           connection.on("MessageReceived", (message: ChannelMessageDto) => {
             console.log("MessageReceived: " + message.channelId)
             const channelId = message.channelId;
             if(channelId !== arg.id) return;
             updateCachedData((draft) => {
-              draft.push(message);
+              const index = draft.findIndex(msg => msg.id === message.id);
+              if(index > -1) {
+                draft[index] = message;
+              } else {
+                draft.push(message);
+              }
             });
           });
 
           await cacheEntryRemoved;
+          await connection.stop();
         } catch {
           // if cacheEntryRemoved resolved before cacheDataLoaded,
           // cacheDataLoaded throws
@@ -113,15 +117,15 @@ const injectedRtkApi = api.injectEndpoints({
       },
     }),
     serverGetServers: build.query<
-      ServerGetServersApiResponse,
-      ServerGetServersApiArg
-    >({
+        ServerGetServersApiResponse,
+        ServerGetServersApiArg
+        >({
       query: () => ({ url: `/api/v1/servers` }),
     }),
     serverAddServer: build.mutation<
-      ServerAddServerApiResponse,
-      ServerAddServerApiArg
-    >({
+        ServerAddServerApiResponse,
+        ServerAddServerApiArg
+        >({
       query: (queryArg) => ({
         url: `/api/v1/servers`,
         method: "POST",
@@ -129,38 +133,92 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     serverGetUsersOfServer: build.query<
-      ServerGetUsersOfServerApiResponse,
-      ServerGetUsersOfServerApiArg
-    >({
+        ServerGetUsersOfServerApiResponse,
+        ServerGetUsersOfServerApiArg
+        >({
       query: (queryArg) => ({
         url: `/api/v1/servers/${queryArg.serverId}/users`,
       }),
     }),
     serverGetServersOfUser: build.query<
-      ServerGetServersOfUserApiResponse,
-      ServerGetServersOfUserApiArg
-    >({
+        ServerGetServersOfUserApiResponse,
+        ServerGetServersOfUserApiArg
+        >({
       keepUnusedDataFor: 3600,
       query: () => ({ url: `/api/v1/servers/me/servers`}),
+      async onCacheEntryAdded(
+          arg,
+          { cacheDataLoaded, cacheEntryRemoved, updateCachedData },
+      ) {
+        try {
+          await cacheDataLoaded;
+          connection.on("ServerAction", (server: ServerDto) => {
+            console.log("ServerAction: " + server.id)
+            const serverId = server.id;
+            //if(serverId !== arg.s) return;
+            updateCachedData((draft) => {
+              const index = draft.findIndex(srv => srv.id === serverId);
+              if(index > -1) {
+                draft[index] = server;
+              } else {
+                draft.push(server);
+              }
+            });
+          });
+
+          await cacheEntryRemoved;
+          await connection.stop();
+        } catch {
+          // if cacheEntryRemoved resolved before cacheDataLoaded,
+          // cacheDataLoaded throws
+        }
+      },
     }),
     serverGetServerById: build.query<
-      ServerGetServerByIdApiResponse,
-      ServerGetServerByIdApiArg
-    >({
+        ServerGetServerByIdApiResponse,
+        ServerGetServerByIdApiArg
+        >({
       query: (queryArg) => ({ url: `/api/v1/servers/${queryArg.serverId}` }),
     }),
     serverGetChannels: build.query<
-      ServerGetChannelsApiResponse,
-      ServerGetChannelsApiArg
-    >({
+        ServerGetChannelsApiResponse,
+        ServerGetChannelsApiArg
+        >({
       keepUnusedDataFor: 3600,
       query: (queryArg) => ({
         url: `/api/v1/servers/${queryArg.serverId}/channels`}),
+      async onCacheEntryAdded(
+          arg,
+          { cacheDataLoaded, cacheEntryRemoved, updateCachedData },
+      ) {
+        try {
+          await cacheDataLoaded;
+          connection.on("ChannelCreated", (channel: ChannelDto) => {
+            console.log("ChannelCreated: " + channel.id)
+            const serverId = channel.serverId;
+            if(serverId !== arg.serverId) return;
+            updateCachedData((draft) => {
+              const index = draft.findIndex(chn => chn.id === channel.id);
+              if(index > -1) {
+                draft[index] = channel;
+              } else {
+                draft.push(channel);
+              }
+            });
+          });
+
+          await cacheEntryRemoved;
+          await connection.stop();
+        } catch {
+          // if cacheEntryRemoved resolved before cacheDataLoaded,
+          // cacheDataLoaded throws
+        }
+      },
     }),
     serverAddServerChannel: build.mutation<
-      ServerAddServerChannelApiResponse,
-      ServerAddServerChannelApiArg
-    >({
+        ServerAddServerChannelApiResponse,
+        ServerAddServerChannelApiArg
+        >({
       query: (queryArg) => ({
         url: `/api/v1/servers/${queryArg.serverId}/channels`,
         method: "POST",
@@ -168,18 +226,18 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     serverDeleteServer: build.mutation<
-      ServerDeleteServerApiResponse,
-      ServerDeleteServerApiArg
-    >({
+        ServerDeleteServerApiResponse,
+        ServerDeleteServerApiArg
+        >({
       query: (queryArg) => ({
         url: `/api/v1/servers/${queryArg.id}`,
         method: "DELETE",
       }),
     }),
     serverUpdateServer: build.mutation<
-      ServerUpdateServerApiResponse,
-      ServerUpdateServerApiArg
-    >({
+        ServerUpdateServerApiResponse,
+        ServerUpdateServerApiArg
+        >({
       query: (queryArg) => ({
         url: `/api/v1/servers/${queryArg.id}`,
         method: "PUT",
@@ -187,22 +245,25 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     serverJoinServer: build.mutation<
-      ServerJoinServerApiResponse,
-      ServerJoinServerApiArg
-    >({
+        ServerJoinServerApiResponse,
+        ServerJoinServerApiArg
+        >({
       query: (queryArg) => ({
         url: `/api/v1/servers/join/${queryArg.serverId}`,
         method: "POST",
       }),
     }),
     serverLeaveServer: build.mutation<
-      ServerLeaveServerApiResponse,
-      ServerLeaveServerApiArg
-    >({
+        ServerLeaveServerApiResponse,
+        ServerLeaveServerApiArg
+        >({
       query: (queryArg) => ({
         url: `/api/v1/servers/leave/${queryArg.serverId}`,
         method: "POST",
       }),
+    }),
+    userGetMe: build.query<UserGetMeApiResponse, UserGetMeApiArg>({
+      query: () => ({ url: `/api/v1/users/me` }),
     }),
     userGetUsers: build.query<UserGetUsersApiResponse, UserGetUsersApiArg>({
       query: () => ({ url: `/api/v1/users` }),
@@ -218,18 +279,18 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({ url: `/api/v1/users/${queryArg.id}` }),
     }),
     userDeleteUser: build.mutation<
-      UserDeleteUserApiResponse,
-      UserDeleteUserApiArg
-    >({
+        UserDeleteUserApiResponse,
+        UserDeleteUserApiArg
+        >({
       query: (queryArg) => ({
         url: `/api/v1/users/${queryArg.id}`,
         method: "DELETE",
       }),
     }),
     userUpdateUser: build.mutation<
-      UserUpdateUserApiResponse,
-      UserUpdateUserApiArg
-    >({
+        UserUpdateUserApiResponse,
+        UserUpdateUserApiArg
+        >({
       query: (queryArg) => ({
         url: `/api/v1/users/${queryArg.id}`,
         method: "PUT",
@@ -237,9 +298,9 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     userAddUserChannel: build.mutation<
-      UserAddUserChannelApiResponse,
-      UserAddUserChannelApiArg
-    >({
+        UserAddUserChannelApiResponse,
+        UserAddUserChannelApiArg
+        >({
       query: (queryArg) => ({
         url: `/api/v1/users/me/channels`,
         method: "POST",
@@ -251,12 +312,12 @@ const injectedRtkApi = api.injectEndpoints({
 });
 export { injectedRtkApi as webApi };
 export type WeatherForecastGetApiResponse =
-  /** status 200  */ WeatherForecast[];
+/** status 200  */ WeatherForecast[];
 export type WeatherForecastGetApiArg = {
   "api-version"?: string | null;
 };
 export type ChannelGetChannelMessagesApiResponse =
-  /** status 200  */ ChannelMessageDto[];
+/** status 200  */ ChannelMessageDto[];
 export type ChannelGetChannelMessagesApiArg = {
   channelId: string;
 };
@@ -274,7 +335,7 @@ export type ChannelUpdateChannelApiArg = {
   channelManipulationDto: ChannelManipulationDto;
 };
 export type MessageSaveMessageApiResponse =
-  /** status 201  */ ChannelMessageDto;
+/** status 201  */ ChannelMessageDto;
 export type MessageSaveMessageApiArg = {
   messageManipulationDto: MessageManipulationDto;
 };
@@ -292,7 +353,7 @@ export type MessageDeleteMessageByIdApiArg = {
   id: string;
 };
 export type MessageGetMessagesFromChannelApiResponse =
-  /** status 200  */ ChannelMessageDto[];
+/** status 200  */ ChannelMessageDto[];
 export type MessageGetMessagesFromChannelApiArg = {
   id: string;
 };
@@ -338,6 +399,8 @@ export type ServerLeaveServerApiResponse = unknown;
 export type ServerLeaveServerApiArg = {
   serverId: string;
 };
+export type UserGetMeApiResponse = /** status 200  */ UserDto;
+export type UserGetMeApiArg = void;
 export type UserGetUsersApiResponse = /** status 200  */ UserDto[];
 export type UserGetUsersApiArg = void;
 export type UserAddUserApiResponse = /** status 201  */ UserDto;
@@ -369,8 +432,11 @@ export type WeatherForecast = {
 };
 export type UserDto = {
   id: string;
-  name?: string | null;
+  username?: string | null;
   isOnline?: boolean | null;
+  bot?: boolean;
+  system?: boolean | null;
+  accentColor?: boolean | null;
 };
 export type ChannelMessageDto = {
   id: string;
@@ -381,18 +447,18 @@ export type ChannelMessageDto = {
   type?: number;
   content?: string | null;
   author?: UserDto;
-  channelId: string;
+  channelId?: string;
   serverId?: string | null;
 };
 export type ChannelDto = {
-  id: string;
+  id?: string;
   type?: number;
   name?: string | null;
   topic?: string | null;
   serverId?: string | null;
 };
 export type ChannelManipulationDto = {
-  name: string | null;
+  name?: string | null;
   type?: number;
   topic?: string | null;
 };
@@ -440,6 +506,7 @@ export const {
   useServerUpdateServerMutation,
   useServerJoinServerMutation,
   useServerLeaveServerMutation,
+  useUserGetMeQuery,
   useUserGetUsersQuery,
   useUserAddUserMutation,
   useUserGetUserQuery,

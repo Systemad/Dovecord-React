@@ -8,16 +8,16 @@ import {
     Description,
 } from "./styles";
 import {useAppSelector} from "../../../redux/hooks";
-//import {selectCurrentState} from "../../../redux/features/servers/serverSlice";
+import {getCurrentChannel} from "../../../redux/features/servers/serverSlice";
 
-const ChannelInfo = ( /*props: {channel: ChannelDto} */) => {
-    const currentChannel = "hey"; //useAppSelector(selectCurrentState).currentChannel;
+const ChannelInfo = () => {
+    const currentChannel = useAppSelector(getCurrentChannel);
     return (
         <Container>
             <HashtagIcon />
-            <Title>{currentChannel /*?.name*/}</Title>
+            <Title>{currentChannel?.name}</Title>
             <Separator />
-            <Description>{currentChannel /*?.id*/}</Description>
+            <Description>{currentChannel?.topic}</Description>
         </Container>
     );
 };

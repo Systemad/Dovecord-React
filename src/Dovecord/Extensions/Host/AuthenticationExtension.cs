@@ -9,7 +9,11 @@ public static class AuthenticationExtension
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
             .AddMicrosoftIdentityWebApi(configuration.GetSection("AzureAdB2C"));
 
         services.Configure<JwtBearerOptions>(

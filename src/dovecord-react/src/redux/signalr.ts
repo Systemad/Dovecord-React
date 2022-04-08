@@ -3,7 +3,6 @@ import {PublicClientApplication} from "@azure/msal-browser";
 import {loginRequest, msalConfig} from "../auth/authConfig";
 
 const url = "https://localhost:7045/chathub";
-// TODO: Fix authentication
 const msalInstance = new PublicClientApplication(msalConfig);
 
 const acquireAccessToken = async (msalInstance: any) => {
@@ -23,19 +22,12 @@ const acquireAccessToken = async (msalInstance: any) => {
     console.log("signalr token fetch");
     const authResult = await msalInstance.acquireTokenSilent(request);
 
-    //console.log(authResult.accessToken);
     return authResult.accessToken;
 };
 
-const options: signalR.IHttpConnectionOptions = {
-    accessTokenFactory: async () => {
-        const x = await acquireAccessToken(msalInstance);
-        console.log(x.accessToken);
-        return x.accessToken;
-    }
-};
-
-export const connection = new signalR.HubConnectionBuilder()
+const connection = new signalR.HubConnectionBuilder()
     .withAutomaticReconnect()
-    .withUrl(url /*, options*/)
+    .withUrl(url, {accessTokenFactory: () => acquireAccessToken(msalInstance)})
     .build();
+
+export default connection;

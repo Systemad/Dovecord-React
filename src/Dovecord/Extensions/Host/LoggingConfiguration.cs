@@ -21,6 +21,7 @@ public static class LoggingConfiguration
             .Enrich.FromLogContext()
             .Enrich.WithProperty("EnvironmentName", env.EnvironmentName)
             .Enrich.WithProperty("ApplicationName", env.ApplicationName)
+            .Enrich.WithProperty("Microsoft.AspNetCore.SignalR", "SignalR")
             .Enrich.WithExceptionDetails()
             .Enrich.WithProcessId()
             .Enrich.WithThreadId()

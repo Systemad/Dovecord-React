@@ -50,12 +50,11 @@ public static class AddMessage
                     await _context.Servers
                         .Where(server => server.Channels != null && server.Channels
                             .Any(ch => ch.Id == request.MessageToAdd.ChannelId)).Select(i => i.Id)
-                        .FirstAsync();
+                        .FirstAsync(cancellationToken);
                 message.ServerId = serverId;
             }
 
-
-            await _context.ChannelMessages.AddAsync(message);
+            await _context.ChannelMessages.AddAsync(message, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
             var returnmessage = await _context.ChannelMessages

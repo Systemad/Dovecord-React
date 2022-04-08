@@ -1,11 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useAccount, useMsal} from "@azure/msal-react";
 import {useAppDispatch} from "../../redux/hooks";
-//import {
-//    addMessageToChannel, addMessageToUserChannel,
-//    deleteMessageFromChannel, DeleteMessage
-//} from "../../redux/features/servers/serverSlice";
-import {createSignalRContext} from "react-signalr";
 import {AccountInfo} from "@azure/msal-browser";
 import {loginRequest} from "../../auth/authConfig";
 import ServerComponent from "../Server";
@@ -14,7 +9,9 @@ import ChannelList from "../Channel/ChannelList";
 import ChannelData from "../Channel/ChannelData";
 import UserList from "../User/UserList";
 import {useLocation} from "react-router-dom";
-
+import connection from "../../redux/signalr";
+import * as signalR from "@microsoft/signalr"
+import UserComponent from "../User";
 const Layout: React.FC = () => {
     const dispatch = useAppDispatch();
     const { instance, accounts, inProgress } = useMsal();
@@ -33,34 +30,24 @@ const Layout: React.FC = () => {
         return token.accessToken;
     }
 
-    /*
-    SignalRContext.useSignalREffect(
-        ChatCallbacksNames.DeleteMessageReceived,
-        (channelId, messageId, serverId) => {
-            let deleteMessage: DeleteMessage = {
-                channelId: "",
-                messageId: "",
-                serverId: "",
-            }
+    const startConnection = async () => {
+        if(connection.state === signalR.HubConnectionState.Connected)
+            return;
 
-            if(channelId && messageId && serverId){
-                deleteMessage = {
-                    channelId: channelId,
-                    messageId: messageId,
-                    serverId: serverId
-                }
-            }
-            dispatch(deleteMessageFromChannel(deleteMessage));
-        }, []
-    );
-    */
+        if(connection.state === signalR.HubConnectionState.Disconnected)
+            await connection.start();
+    }
+    useEffect(() => {
+        startConnection().then(r => console.log(r));
+    }, []);
+
     return (
         <>
             <ServerComponent/>
             <ChannelInfo />
             <ChannelList />
             <ChannelData />
-            <UserList/>
+            <UserComponent/>
         </>
     );
 };

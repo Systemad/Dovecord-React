@@ -7,20 +7,19 @@ import {UserDto} from "../../../redux/webApi";
 
 interface UserProps {
     user: UserDto;
-    isBot?: boolean;
     //click(): void;
 }
 
 
 // Set avatar badge like avatar but for online status
-const UserRow: React.FC<UserProps> = ({ user, isBot }) => {
+const UserRow: React.FC<UserProps> = ({ user }) => {
     return (
         <User>
-            <Avatar className={isBot ? "bot" : ""} />
+            <Avatar className={user.bot ? "bot" : ""} />
 
-            <strong>{user.name}</strong>
+            <strong>{user.username}</strong>
 
-            {isBot && <span>Bot</span>}
+            {user.bot && <span>Bot</span>}
         </User>
     );
 };
@@ -49,16 +48,14 @@ const UserList: React.FC<UserListProps> = ({onlineUsers, offlineUsers}) => {
             {onlineUsers?.map((user) => (
                 <UserRow
                     key={user.id}
-                    user={user}
-                    isBot={false}/>
+                    user={user}/>
                 ))}
 
-            <Role>OFFLINE - {offlineUsers?.length}</Role>
+            <Role>Offline - {offlineUsers?.length}</Role>
                 {offlineUsers?.map((user) => (
                     <UserRow
                         key={user.id}
-                        user={user}
-                        isBot={false}/>
+                        user={user}/>
                 ))}
         </Container>
     );

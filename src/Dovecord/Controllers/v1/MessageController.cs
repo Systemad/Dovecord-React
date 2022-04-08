@@ -2,6 +2,7 @@ using Dovecord.Domain.Messages.Dto;
 using Dovecord.Domain.Messages.Features;
 using Dovecord.Extensions.Services;
 using Dovecord.SignalR;
+using Dovecord.SignalR.Helpers;
 using Dovecord.SignalR.Hubs;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -42,11 +43,7 @@ public class MessageController : ControllerBase
     {
         var command = new AddMessage.AddMessageCommand(message);
         var commandResponse = await _mediator.Send(command);
-        // TODO: Extract?
-        // Click on Server, Users joined group by ID
-        // Send message to that server id??
-        await _hubContext.Clients.All.MessageReceived(commandResponse);
-        //await _hubContext.Clients.Group(message.ChannelId.ToString()).MessageReceived(commandResponse);
+        await HubHelpers.SendMessageToTopic(commandResponse, _hubContext);
         return CreatedAtAction(nameof(GetMessage), new {commandResponse.Id}, commandResponse);
     }
     

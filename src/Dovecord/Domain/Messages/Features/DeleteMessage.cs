@@ -29,7 +29,7 @@ public static class DeleteMessage
             if (message is null)
                 throw new NotFoundException("Message", request.Id);
             
-            if (message.Author.Id !=  Guid.Parse(_currentUserService.UserId))
+            if (message.Author.Id != Guid.Parse(_currentUserService.UserId))
                 return false;
             
             _context.ChannelMessages.Remove(message);

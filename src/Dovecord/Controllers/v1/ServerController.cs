@@ -1,12 +1,16 @@
+using System.Security.Claims;
 using Dovecord.Domain.Channels.Dto;
 using Dovecord.Domain.Channels.Features;
 using Dovecord.Domain.Servers;
 using Dovecord.Domain.Servers.Dto;
 using Dovecord.Domain.Servers.Features;
 using Dovecord.Domain.Users.Dto;
+using Dovecord.SignalR.Helpers;
+using Dovecord.SignalR.Hubs;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
 
 namespace Dovecord.Controllers.v1;
@@ -20,11 +24,13 @@ public class ServerController : ControllerBase
 {
     private readonly ILogger<ServerController> _logger;
     private readonly IMediator _mediator;
+    private readonly IHubContext<BaseHub, IBaseHub> _hubContext;
     
-    public ServerController(ILogger<ServerController> logger, IMediator mediator)
+    public ServerController(ILogger<ServerController> logger, IMediator mediator, IHubContext<BaseHub, IBaseHub> hubContext)
     {
         _logger = logger;
         _mediator = mediator;
+        _hubContext = hubContext;
     }   
 
     [ProducesResponseType(typeof(IEnumerable<ServerDto>), 200)]
@@ -97,6 +103,7 @@ public class ServerController : ControllerBase
     {
         var command = new AddServerChannel.AddServerChannelCommand(channelForCreation, serverId);
         var commandResponse = await _mediator.Send(command);
+        await HubHelpers.SendChannelCreated(commandResponse, _hubContext);
         return Ok(commandResponse);
         //return CreatedAtAction(nameof(GetChannel), new {commandResponse.Id}, commandResponse);
     }
@@ -127,6 +134,12 @@ public class ServerController : ControllerBase
     {
         var command = new JoinServer.JoinServerCommand(serverId);
         await _mediator.Send(command);
+        
+        var joinedServer = await _mediator.Send(new GetServerById.GetServerByIdGetQuery(serverId));
+        await HubHelpers.JoinedServer(joinedServer,
+            ControllerContext.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier), _hubContext);
+            
+        //public string? UserId => _httpContext.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         return NoContent();
     }
     
@@ -134,8 +147,9 @@ public class ServerController : ControllerBase
     [HttpPost("leave/{serverId:guid}", Name = "LeaveServer")]
     public async Task<IActionResult> LeaveServer(Guid serverId)
     {
-        var command = new JoinServer.JoinServerCommand(serverId);
+        var command = new LeaveServer.LeaveServerCommand(serverId);
         await _mediator.Send(command);
+
         // TODO: Leave error message, if leaver is owner, tell them to delete server within server settings
         
         return NoContent();

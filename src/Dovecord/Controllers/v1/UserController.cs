@@ -27,6 +27,16 @@ public class UserController : ControllerBase
     
     [ProducesResponseType(typeof(IEnumerable<UserDto>), 200)]
     [Produces("application/json")]
+    [HttpGet("me", Name = "GetMe")]
+    public async Task<IActionResult> GetMe()
+    {
+        var query = new GetMe.GetMeQuery();
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+    
+    [ProducesResponseType(typeof(IEnumerable<UserDto>), 200)]
+    [Produces("application/json")]
     [HttpGet(Name = "GetUsers")]
     public async Task<IActionResult> GetUsers()
     {

@@ -10,15 +10,20 @@ import {
     HeadphoneIcon,
     SettingsIcon,
 } from "./styles";
+import {UserDto} from "../../../redux/webApi";
 
-const UserInfo: React.FC = () => {
+interface Props {
+    user?: UserDto;
+}
+
+const UserInfo: React.FC<Props> = ({user}) => {
     return (
         <Container>
             <Profile>
                 <Avatar />
                 <UserData>
-                    <strong>Gabriel Fernandes</strong>
-                    <span>#5059</span>
+                    <strong>{user?.username}</strong>
+                    <span>{user?.id[1]}</span>
                 </UserData>
             </Profile>
 

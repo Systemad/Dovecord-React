@@ -5,6 +5,7 @@ using Dovecord.Domain.Users.Dto;
 using Dovecord.Domain.Users.Features;
 using Dovecord.Exceptions;
 using Dovecord.Extensions.Services;
+using Dovecord.SignalR.Helpers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -60,8 +61,6 @@ public static class JoinServer
             
             serverToUpdate.Members.Add(member);
             
-            // Mapping not needed
-            //_mapper.Map(request.NewServerData, serverToUpdate);  
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }

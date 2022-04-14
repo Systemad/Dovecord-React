@@ -17,20 +17,16 @@ public static class AddUser
     {
         private readonly DoveDbContext _context;
         private readonly IMapper _mapper;
-        private ICurrentUserService _currentUserService;
 
-        public Handler(DoveDbContext context, IMapper mapper, ICurrentUserService currentUserService)
+        public Handler(DoveDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _currentUserService = currentUserService;
         }
         
         public async Task<UserDto> Handle(AddUserCommand request, CancellationToken cancellationToken)
         {
             var user = _mapper.Map<User>(request.UserToAdd);
-            user.Id = Guid.Parse(_currentUserService.UserId);
-            user.Username = _currentUserService.Username;
             _context.Users.Add(user);
             await _context.SaveChangesAsync(cancellationToken);
 

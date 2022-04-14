@@ -52,7 +52,7 @@ const ServerList = () => {
                         <ServerButton
                             onClick={() => setServer(server)}
                             key={server.id}
-                            selected={server.id === currentServer.id}
+                            selected={server.id === currentServer?.id}
                         />
                     ))
                 ) : null }

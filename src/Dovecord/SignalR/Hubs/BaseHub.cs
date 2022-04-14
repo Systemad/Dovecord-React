@@ -1,9 +1,7 @@
 ﻿using System.Security.Claims;
-using Dovecord.Domain.Entities;
 using Dovecord.Domain.Servers.Features;
-using Dovecord.Domain.Users.Dto;
 using Dovecord.Domain.Users.Features;
-using Dovecord.Domain.Users.Services;
+using Dovecord.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
@@ -16,12 +14,14 @@ namespace Dovecord.SignalR.Hubs;
 [RequiredScope("API.Access")]
 public class BaseHub : Hub<IBaseHub>
 {
-    private readonly IStatusService _statusService;
+    private static readonly ConnectionMap.ConnectionMapping<Guid> _connections = new();
+    
     private readonly IMediator _mediator;
-    public BaseHub(IStatusService statusService, IMediator mediator)
+    private readonly IEventQueue _eventQueue;
+    public BaseHub(IMediator mediator, IEventQueue eventQueue)
     {
-        _statusService = statusService;
         _mediator = mediator;
+        _eventQueue = eventQueue;
     }
 
     private string? Username => Context.User?.Identity?.Name; //?? "Unknown";
@@ -31,24 +31,29 @@ public class BaseHub : Hub<IBaseHub>
     {
         var userId = UserId;
         var username = Username;
-        Log.Information("SignalR: connected - connectionId {}", Context.ConnectionId);
+        Log.Information("SignalR: connected - ConnectionId {ConnectionId}", Context.ConnectionId);
         if (!(userId == Guid.Empty) && !string.IsNullOrEmpty(username))
         {   
             Log.Information("SignalR: starting session");
-            await _statusService.OnStartSession(UserId, Username);
+            IRequest type = new StartUserSessionHandler.StartUserSessionCommand(userId);
+            await _eventQueue.Queue(type);
             await SubscribeServers();
+            _connections.Add(userId, Context.ConnectionId);
         }
         await base.OnConnectedAsync();
     }
 
     public override async Task OnDisconnectedAsync(Exception? ex)
     {
-        Log.Information("SignalR: disconnected");
+        var userId = UserId;
+        Log.Information("SignalR: disconnected - ConnectionId {ConnectionId}", Context.ConnectionId);
         if (!(UserId == Guid.Empty) && !string.IsNullOrEmpty(Username))
         {
             Log.Information("SignalR: ending session");
-            await _statusService.OnStopSession(UserId);
+            IRequest type = new StopUserSessionHandler.StopUserSessionCommand(userId);
+            await _eventQueue.Queue(type);
             await UnSubscribeServers();
+            _connections.Remove(userId, Context.ConnectionId);
         }
         await base.OnDisconnectedAsync(ex);
     }
@@ -62,16 +67,16 @@ public class BaseHub : Hub<IBaseHub>
     //public async Task UserTyping(bool isTyping)
     //    => await Clients.Others.UserTyping(new ActorAction(Username, isTyping));
     
-    public async Task JoinChannel(Guid channelId)
+    public async Task JoinServer(Guid serverId)
     {
-        Log.Information("{} joined channel {}", Username, channelId);
-        await Groups.AddToGroupAsync(Context.ConnectionId, channelId.ToString());
+        Log.Information("{} joined channel {}", Username, serverId);
+        await Groups.AddToGroupAsync(Context.ConnectionId, serverId.ToString());
     }
-         
-    public async Task LeaveChannel(Guid channelId)
+    
+    public async Task LeaveServer(Guid serverId)
     {
-        Log.Information("{} left channel {}", Username, channelId);
-        await Groups.RemoveFromGroupAsync(Context.ConnectionId, channelId.ToString());
+        Log.Information("{} left channel {}", Username, serverId);
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, serverId.ToString());
     }
 
     private async Task SubscribeServers()

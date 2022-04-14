@@ -59,8 +59,8 @@ public class Startup
         services.AddAppAuthentication(_config);
         services.AddSignalRApplication();
         services.AddCorsService();
-        services.AddInfrastructure(_config, _env);
         services.AddApplication();
+        services.AddInfrastructure(_config, _env);
         services.AddHealthChecks();
         
         services.AddSpaStaticFiles(configuration => 

@@ -1,4 +1,5 @@
-﻿using Dovecord.Domain.Channels.Dto;
+﻿using System.Text.Json;
+using Dovecord.Domain.Channels.Dto;
 using Dovecord.Domain.Messages.Dto;
 using Dovecord.Domain.Servers.Dto;
 using Dovecord.SignalR.Hubs;
@@ -8,6 +9,30 @@ namespace Dovecord.SignalR.Helpers;
 
 public static class HubHelpers
 {
+    public static async Task SendHubData(string dataJson, IHubContext<BaseHub, IBaseHub> hubContext)
+    {
+        var data = JsonSerializer.Deserialize<PushData<object>>(dataJson);
+        switch (data._type)
+        {
+            case PushType.ServerCreateChannel:
+                break;
+            case PushType.ServerDeleteChannel:
+                break;
+            case PushType.ServerEditChannel:
+                break;
+            case PushType.UserJoinServer:
+                break;
+            case PushType.UserLeaveServer:
+                break;
+
+            case PushType.Login:
+                break;
+            case PushType.Logout:
+                break;
+            default:
+                break;
+        }
+    }
     // Switch case maybe?
     public static async Task SendMessageToTopic(ChannelMessageDto message, IHubContext<BaseHub, IBaseHub> hubContext)
     {

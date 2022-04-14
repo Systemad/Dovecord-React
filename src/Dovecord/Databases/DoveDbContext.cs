@@ -2,6 +2,7 @@
 using Dovecord.Domain.Messages;
 using Dovecord.Domain.Servers;
 using Dovecord.Domain.Users;
+using Dovecord.Domain.Users.Dto;
 using Dovecord.Extensions.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,7 @@ public class DoveDbContext : DbContext
     public DbSet<ChannelMessage> ChannelMessages { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Server> Servers { get; set; }
+    //public DbSet<UserDto> On
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -11,8 +11,8 @@ export const UserComponent = () => {
     const currentServer = useAppSelector(getCurrentServer);
     const serverId = currentServer?.id;
     const {data: users} = useServerGetUsersOfServerQuery(serverId ? {serverId: serverId} : skipToken);
-    const onlineUsers = users?.filter(user => user.isOnline == true);
-    const offlineUsers = users?.filter(user => user.isOnline == false);
+    const onlineUsers = users?.filter(user => user.isOnline === true);
+    const offlineUsers = users?.filter(user => user.isOnline === false);
 
     const {data: user} = useUserGetMeQuery();
     //const usersStatus = useAppSelector(selectUsersStatus)

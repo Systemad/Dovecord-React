@@ -135,9 +135,9 @@ public class ServerController : ControllerBase
         var command = new JoinServer.JoinServerCommand(serverId);
         await _mediator.Send(command);
         
-        var joinedServer = await _mediator.Send(new GetServerById.GetServerByIdGetQuery(serverId));
-        await HubHelpers.JoinedServer(joinedServer,
-            ControllerContext.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier), _hubContext);
+        //var joinedServer = await _mediator.Send(new GetServerById.GetServerByIdGetQuery(serverId));
+        //await HubHelpers.JoinedServer(joinedServer,
+        //    ControllerContext.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier), _hubContext);
             
         //public string? UserId => _httpContext.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         return NoContent();

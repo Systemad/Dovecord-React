@@ -14,6 +14,7 @@ public class User
     public bool Bot { get; set; }
     public bool? System { get; set; }
     public bool? AccentColor { get; set; }
+    public DateTime LastOnline { get; set; }
     
     public ICollection<Server>? Servers { get; set; }
     //[JsonIgnore]

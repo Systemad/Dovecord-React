@@ -8,4 +8,5 @@ public class UserDto
     public bool Bot { get; set; }
     public bool? System { get; set; }
     public bool? AccentColor { get; set; }
+    public DateTime LastOnline { get; set; }
 }

@@ -17,26 +17,7 @@ const ChannelData = () => {
     const channelId = currentChannel?.id;
     const {data: messages, isLoading} = useMessageGetMessagesFromChannelQuery(channelId ? {id: channelId} : skipToken);
     const [sendMessage] = useMessageSaveMessageMutation();
-
-    const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
-        event.preventDefault();
-        if(event.key === "Enter"){
-            const isMessageProvided = message && message !== '';
-
-            if (isMessageProvided) {
-                const newMessage =  {
-                    //channelId: currentChannel!.channel.id, // SET CURRENT CHANNEL
-                    content: message,
-                } as MessageManipulationDto;
-
-                await postMessage(newMessage);
-                setMessage('');
-                //props.sendMessage(user, message);
-            }
-        }
-
-    }
-
+    
     const Submit = async () => {
         const isMessageProvided = message && message !== '';
 

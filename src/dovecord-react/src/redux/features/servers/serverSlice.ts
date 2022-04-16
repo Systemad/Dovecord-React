@@ -3,6 +3,11 @@ import {RootState} from "../../store";
 import {ChannelDto, ServerDto} from "../../webApi";
 
 
+type serverState = {
+    server: ServerDto;
+    lastSelectedChannel: ChannelDto;
+}
+
 type CurrentState = {
     currentServer: ServerDto,
     currentChannel: ChannelDto

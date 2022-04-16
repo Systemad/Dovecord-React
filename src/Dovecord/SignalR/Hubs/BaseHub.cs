@@ -37,6 +37,7 @@ public class BaseHub : Hub<IBaseHub>
             Log.Information("SignalR: starting session");
             IRequest type = new StartUserSessionHandler.StartUserSessionCommand(userId);
             await _eventQueue.Queue(type);
+            await Groups.AddToGroupAsync(Context.ConnectionId, UserId.ToString());
             await SubscribeServers();
             _connections.Add(userId, Context.ConnectionId);
         }
@@ -52,6 +53,7 @@ public class BaseHub : Hub<IBaseHub>
             Log.Information("SignalR: ending session");
             IRequest type = new StopUserSessionHandler.StopUserSessionCommand(userId);
             await _eventQueue.Queue(type);
+            await Groups.AddToGroupAsync(Context.ConnectionId, UserId.ToString());
             await UnSubscribeServers();
             _connections.Remove(userId, Context.ConnectionId);
         }
@@ -67,10 +69,13 @@ public class BaseHub : Hub<IBaseHub>
     //public async Task UserTyping(bool isTyping)
     //    => await Clients.Others.UserTyping(new ActorAction(Username, isTyping));
     
+    // INVOKE THESE FROM CLIENT
     public async Task JoinServer(Guid serverId)
     {
         Log.Information("{} joined channel {}", Username, serverId);
         await Groups.AddToGroupAsync(Context.ConnectionId, serverId.ToString());
+        var joinedServer = await _mediator.Send(new GetServerById.GetServerByIdGetQuery(serverId));
+        await Clients.Group(UserId.ToString()).ServerAction(joinedServer);
     }
     
     public async Task LeaveServer(Guid serverId)

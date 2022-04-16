@@ -5,6 +5,7 @@ import {
     ServerDto,
     useServerGetServersQuery, useServerJoinServerMutation
 } from "../../redux/webApi";
+import connection from "../../redux/signalr";
 
 export const DiscoverView: React.FC = () => {
     const {data: servers} = useServerGetServersQuery();
@@ -13,6 +14,7 @@ export const DiscoverView: React.FC = () => {
         const server = serverClicked.id;
         if(server){
             addServer({serverId: server});
+            await connection.invoke("JoinServer", server)
         }
     }
     return (

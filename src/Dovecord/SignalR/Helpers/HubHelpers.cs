@@ -54,7 +54,7 @@ public static class HubHelpers
 
     public static async Task JoinedServer(ServerDto serverDto, string userId, IHubContext<BaseHub, IBaseHub> hubContext)
     {
-        await hubContext.Groups.AddToGroupAsync(userId, serverDto.Id.ToString());
-        await hubContext.Clients.User(userId).ServerAction(serverDto);
+        //await hubContext.Groups.AddToGroupAsync(hubContext., serverDto.Id.ToString());
+        await hubContext.Clients.Group(userId).ServerAction(serverDto);
     }
 }

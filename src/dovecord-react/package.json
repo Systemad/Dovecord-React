@@ -8,6 +8,7 @@
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@mantine/core": "^3.6.11",
+    "@mantine/form": "^4.1.4",
     "@mantine/hooks": "^3.6.11",
     "@microsoft/signalr": "^6.0.2",
     "@reduxjs/toolkit": "^1.8.0",

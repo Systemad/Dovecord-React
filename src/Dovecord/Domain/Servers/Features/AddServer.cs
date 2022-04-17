@@ -28,14 +28,31 @@ public static class AddServer
         
         public async Task<ServerDto> Handle(AddServerCommand request, CancellationToken cancellationToken)
         {
-            var newSever = _mapper.Map<Server>(request.ServerToAdd);
-            newSever.OwnerUserId = Guid.Parse(_currentUserService.UserId);
-            _context.Servers.Add(newSever);
+            var mapServer = _mapper.Map<Server>(request.ServerToAdd);
+            mapServer.OwnerUserId = Guid.Parse(_currentUserService.UserId);
+            _context.Servers.Add(mapServer);
             await _context.SaveChangesAsync(cancellationToken);
             
-            return await _context.Servers
+            var serverToUpdate = await _context.Servers
+                .Where(x => x.Id == mapServer.Id)
+                .Include(m => m.Members)
+                .AsTracking()
+                .FirstAsync(cancellationToken);
+
+            var member = await _context.Users
+                .AsTracking()
+                .FirstAsync(m => m.Id == Guid.Parse(_currentUserService.UserId), cancellationToken);
+            
+            serverToUpdate.Members.Add(member);
+            await _context.SaveChangesAsync(cancellationToken);
+            
+            var newServer = await _context.Servers
                 .ProjectTo<ServerDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(c => c.Id == newSever.Id, cancellationToken);
+                .FirstOrDefaultAsync(c => c.Id == mapServer.Id, cancellationToken);
+
+            return newServer;
+
+
         }
     }
 }

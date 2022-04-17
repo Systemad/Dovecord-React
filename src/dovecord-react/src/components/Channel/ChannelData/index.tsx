@@ -22,7 +22,7 @@ const ChannelData = () => {
         const isMessageProvided = message && message !== '';
 
         if (isMessageProvided) {
-            const newMessage =  {
+            const newMessage = {
                 channelId: currentChannel?.id,
                 content: message,
                 type: 0

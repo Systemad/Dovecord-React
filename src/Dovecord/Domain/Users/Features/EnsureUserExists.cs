@@ -8,7 +8,7 @@ namespace Dovecord.Domain.Users.Features;
 
 public static class EnsureUserExists
 {
-    public record EnsureUserExistCommand(Guid UserId) : IRequest;
+    public record EnsureUserExistCommand(Guid UserId, string Username) : IRequest;
 
     public class QueryHandler : IRequestHandler<EnsureUserExistCommand>
     {
@@ -35,6 +35,7 @@ public static class EnsureUserExists
             var addUser = new User
             {
                 Id = request.UserId,
+                Username = request.Username,
                 IsOnline = true,
                 Bot = false,
                 System = false,

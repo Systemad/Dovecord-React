@@ -1,4 +1,4 @@
-import React from "react";
+import React, {MouseEvent} from "react";
 
 import {
     Container,
@@ -14,9 +14,10 @@ import {UserDto} from "../../../redux/webApi";
 
 interface Props {
     user?: UserDto;
+    onClick(): void;  //(event: MouseEvent<HTMLButtonElement>) => void
 }
 
-const UserInfo: React.FC<Props> = ({user}) => {
+const UserInfo: React.FC<Props> = ({user, onClick}) => {
     return (
         <Container>
             <Profile>
@@ -30,7 +31,7 @@ const UserInfo: React.FC<Props> = ({user}) => {
             <Icons>
                 <MicIcon />
                 <HeadphoneIcon />
-                <SettingsIcon />
+                <SettingsIcon onClick={onClick} />
             </Icons>
         </Container>
     );

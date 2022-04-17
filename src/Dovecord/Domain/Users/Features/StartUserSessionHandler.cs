@@ -9,7 +9,7 @@ namespace Dovecord.Domain.Users.Features;
 
 public static class StartUserSessionHandler
 {
-    public record StartUserSessionCommand(Guid UserId) : IRequest, IEnsureUserExistsRequest;
+    public record StartUserSessionCommand(Guid UserId, string Username) : IRequest, IEnsureUserExistsRequest;
     
     public class Handler : IRequestHandler<StartUserSessionCommand>
     {

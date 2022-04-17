@@ -32,7 +32,7 @@ public class EventQueueProcessor : BackgroundService
                 if (queueItem is IEnsureUserExistsRequest userExistsRequest)
                 {
                     await mediator.Send(
-                        new EnsureUserExists.EnsureUserExistCommand(userExistsRequest.UserId),
+                        new EnsureUserExists.EnsureUserExistCommand(userExistsRequest.UserId, userExistsRequest.Username),
                         stoppingToken);
                 }
                 

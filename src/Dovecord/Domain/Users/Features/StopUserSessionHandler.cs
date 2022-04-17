@@ -8,7 +8,7 @@ namespace Dovecord.Domain.Users.Features;
 
 public static class StopUserSessionHandler
 {
-    public record StopUserSessionCommand(Guid UserId) : IRequest, IEnsureUserExistsRequest;
+    public record StopUserSessionCommand(Guid UserId, string Username) : IRequest, IEnsureUserExistsRequest;
     
     public class Handler : IRequestHandler<StopUserSessionCommand>
     {

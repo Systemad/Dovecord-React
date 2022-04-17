@@ -9,11 +9,13 @@ import {DiscoverButton} from "../../Discover/DiscoverButton/DsicoverButton";
 import {ServerDto, useServerGetServersOfUserQuery, webApi} from "../../../redux/webApi";
 import {getCurrentServer, setCurrentServer} from "../../../redux/features/servers/serverSlice";
 import {Skeleton} from "@mantine/core";
+import {useLocalStorageValue} from "@mantine/hooks";
 
 const ServerList = () => {
         const dispatch = useAppDispatch()
         const {data: servers, isLoading} = useServerGetServersOfUserQuery();
         const currentServer = useAppSelector(getCurrentServer);
+        //const [lastVisitedServerLocalStorage, setLastVisitedServerLocalStorage] = useLocalStorageValue({ key:currentServer.id });
     /*
     const whatevs = dispatch(webApi.util.updateQueryData("serverGetServersOfUser", undefined, (draft) => {
 
@@ -28,6 +30,7 @@ const ServerList = () => {
             if(server){
                 dispatch(setCurrentServer(server));
                 //dispatch(setCurrentChannel({id: "0"}));
+                //setLastVisitedServerLocalStorage(server.id);
                 navigate("/");
             }
        }

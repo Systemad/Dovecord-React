@@ -37,4 +37,5 @@ public class EventQueue : IEventQueue
 public interface IEnsureUserExistsRequest : IRequest
 {
     Guid UserId { get; }
+    string? Username { get; }
 }

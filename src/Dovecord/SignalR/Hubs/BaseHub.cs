@@ -35,7 +35,7 @@ public class BaseHub : Hub<IBaseHub>
         if (!(userId == Guid.Empty) && !string.IsNullOrEmpty(username))
         {   
             Log.Information("SignalR: starting session");
-            IRequest type = new StartUserSessionHandler.StartUserSessionCommand(userId);
+            IRequest type = new StartUserSessionHandler.StartUserSessionCommand(userId, username);
             await _eventQueue.Queue(type);
             await Groups.AddToGroupAsync(Context.ConnectionId, UserId.ToString());
             await SubscribeServers();
@@ -51,7 +51,7 @@ public class BaseHub : Hub<IBaseHub>
         if (!(UserId == Guid.Empty) && !string.IsNullOrEmpty(Username))
         {
             Log.Information("SignalR: ending session");
-            IRequest type = new StopUserSessionHandler.StopUserSessionCommand(userId);
+            IRequest type = new StopUserSessionHandler.StopUserSessionCommand(userId, Username);
             await _eventQueue.Queue(type);
             await Groups.AddToGroupAsync(Context.ConnectionId, UserId.ToString());
             await UnSubscribeServers();

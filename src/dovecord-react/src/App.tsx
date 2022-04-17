@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
-import Layout from "./components/Layout";
+import Layout from "./Pages/Layout";
 import GlobalStyles from "./styles/GlobalStyles";
 import './App.css';
 
@@ -17,6 +17,7 @@ import SignInSignOutButton from "./components/authentication/SignInSignOutButton
 import {LoginDisplay} from "./components/authentication/LoginDisplay/LoginDisplay";
 import styled from "styled-components";
 import {DiscoverView} from "./components/Discover";
+import SettingsPage from "./Pages/Settings";
 
 type AppProps = {
   pca: IPublicClientApplication
@@ -60,6 +61,12 @@ function Pages() {
                       <Route path="/discover" element={
                           <>
                               <DiscoverView/>
+                          </>
+                      }/>
+
+                      <Route path="/settings" element={
+                          <>
+                            <SettingsPage />
                           </>
                       }/>
                   </Routes>

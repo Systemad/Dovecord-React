@@ -4,23 +4,23 @@ import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import { useLocalStorageValue } from '@mantine/hooks';
 import {AccountInfo} from "@azure/msal-browser";
 import {loginRequest} from "../../auth/authConfig";
-import ServerComponent from "../Server";
-import ChannelInfo from "../Channel/ChannelInfo";
-import ChannelList from "../Channel/ChannelList";
-import ChannelData from "../Channel/ChannelData";
+import ServerComponent from "../../components/Server";
+import ChannelInfo from "../../components/Channel/ChannelInfo";
+import ChannelList from "../../components/Channel/ChannelList";
+import ChannelData from "../../components/Channel/ChannelData";
 import {useLocation} from "react-router-dom";
 import connection from "../../redux/signalr";
 import * as signalR from "@microsoft/signalr"
-import UserComponent from "../User";
+import UserComponent from "../../components/User";
 import {getCurrentServer} from "../../redux/features/servers/serverSlice";
-import Home from "../Home/index.ts";
+import Home from "../../components/Home/index.ts";
 
 const Layout: React.FC = () => {
     const dispatch = useAppDispatch();
     const { instance, accounts, inProgress } = useMsal();
     const account = useAccount(accounts[0] || {});
-    const [value, setValue] = useLocalStorageValue({ key: 'color-scheme', defaultValue: 'dark' });
     const currentServer = useAppSelector(getCurrentServer);
+
 
     const { pathname } = useLocation()
 

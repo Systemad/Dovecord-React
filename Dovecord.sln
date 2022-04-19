@@ -7,12 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DD69B216-286
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dovecord", "src\Dovecord\Dovecord.csproj", "{4C957828-71B1-4D39-82D8-22D002BD1ABD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8E1526EB-9182-4E1E-838A-4362BD72661C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "tests\IntegrationTests\IntegrationTests.csproj", "{AC9C9070-6514-47A6-B70C-02F043BC5755}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalTests", "tests\FunctionalTests\FunctionalTests.csproj", "{76C422ED-3E06-4CFE-900B-18FD19886F97}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,16 +20,8 @@ Global
 		{4C957828-71B1-4D39-82D8-22D002BD1ABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C957828-71B1-4D39-82D8-22D002BD1ABD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C957828-71B1-4D39-82D8-22D002BD1ABD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC9C9070-6514-47A6-B70C-02F043BC5755}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC9C9070-6514-47A6-B70C-02F043BC5755}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC9C9070-6514-47A6-B70C-02F043BC5755}.Release|Any CPU.Build.0 = Release|Any CPU
-		{76C422ED-3E06-4CFE-900B-18FD19886F97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{76C422ED-3E06-4CFE-900B-18FD19886F97}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76C422ED-3E06-4CFE-900B-18FD19886F97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4C957828-71B1-4D39-82D8-22D002BD1ABD} = {DD69B216-286E-47A4-AF18-EB7061766D8B}
-		{AC9C9070-6514-47A6-B70C-02F043BC5755} = {8E1526EB-9182-4E1E-838A-4362BD72661C}
-		{76C422ED-3E06-4CFE-900B-18FD19886F97} = {8E1526EB-9182-4E1E-838A-4362BD72661C}
 	EndGlobalSection
 EndGlobal

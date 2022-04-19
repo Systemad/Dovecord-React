@@ -9,7 +9,6 @@ public static class CorsServiceExtension
             options.AddPolicy("CorsPolicy",
                 builder =>
                 {
-                    // React and Blazor client
                     builder.AllowAnyOrigin()
                         .WithOrigins("https://localhost:44480")
                         .AllowAnyMethod()

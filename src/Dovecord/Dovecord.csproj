@@ -3,17 +3,14 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
-        <IsPackable>false</IsPackable>
+        <IsPackable>true</IsPackable>
         <SpaRoot>..\dovecord-react\</SpaRoot>
         <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
-        <SpaProxyServerUrl>https://localhost:44480</SpaProxyServerUrl>
-        <SpaProxyLaunchCommand>yarn start</SpaProxyLaunchCommand>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 
         <!-- Set this to true if you enable server-side prerendering 
         <BuildServerSideRenderer>false</BuildServerSideRenderer>
-        <UserSecretsId></UserSecretsId>
         <DockerfileContext>..\..</DockerfileContext>
         <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath> -->
       <UserSecretsId>01e8f67f-b700-4431-9bbb-b6139244f775</UserSecretsId>

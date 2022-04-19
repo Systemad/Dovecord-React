@@ -108,7 +108,7 @@ public class Startup
         {
             settings.OAuth2Client = new OAuth2ClientSettings
             {
-             ClientId = "5a1b9d68-aa2e-4fb7-b91b-7ea8c2cb0ace",
+             ClientId = _config["Swagger:ClientId"],
              AppName = "swagger-ui-client"
             };
         });

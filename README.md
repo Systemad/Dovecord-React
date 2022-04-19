@@ -1,18 +1,18 @@
-This is a Single Page App (SPA) chat application made with Angular and ASP.NET Core following the principles of Vertical Slice Architecture with CQRS.
+This is a Single Page App (SPA) chat application made with React (TypeScript) and ASP.NET Core following the principles of Vertical Slice Architecture with CQRS.
 
 NOTE: The project is in a very (very) early state!
 
 ## Technologies
 
-* [React with Typescript](https://reactjs.org/)
+* [React with Typescript, Redux Toolkit, Styled Components](https://reactjs.org/)
 * [ASP.NET Core 6](https://docs.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core?view=aspnetcore-6.0)
 * [Entity Framework Core 6](https://docs.microsoft.com/en-us/ef/core/)
 * [SignalR](https://dotnet.microsoft.com/en-us/apps/aspnet/signalr)
 * [MediatR](https://github.com/jbogard/MediatR)
 * [AutoMapper](https://automapper.org/)
-* [FluentValidation](https://fluentvalidation.net/)
 * [Docker](https://www.docker.com/)
 * [NUnit](https://nunit.org/)
+* [FluentValidation](https://fluentvalidation.net/)
 * [FluentAssertions](https://fluentassertions.com/)
 
 ## Getting it running
@@ -22,8 +22,8 @@ NOTE: The project is in a very (very) early state!
 3. Clone the project and cd into it
 4. Create EF migrations inside Dovecord project (scroll down)
 5. Go through Local Configuration step below
-6. Navigate to `src/Dovecord/dovecord-react` and run `yarn install`
-7. Navigate to `src/Dovecord/dovecord-react` and run `yarn start` to launch the front end (Angular)
+6. Navigate to `src/Dovecord/dovecord-react` and run `npm install`
+7. Navigate to `src/Dovecord/dovecord-react` and run `npm start` to launch the front end (Angular)
 8. Navigate to `src/Dovecord` and run `dotnet run` to launch the backend (ASP.NET Core Web API)
 
 ### Local Configuration
@@ -74,4 +74,3 @@ Coming soon
 ## Credits
 * JasonTaylorDev's [CleanArchitecture](https://github.com/jasontaylordev/CleanArchitecture)
 * [Discord like design from](https://github.com/gabrielfernans/discord-ui)
-* [Typescript generator for Open API](https://github.com/hosseinmd/swagger-typescript)

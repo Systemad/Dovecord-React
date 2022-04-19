@@ -112,5 +112,14 @@ public class Startup
              AppName = "swagger-ui-client"
             };
         });
+        
+        app.UseSpa(spa =>
+        {
+            spa.Options.SourcePath = "../dovecord-react";
+            if (env.IsDevelopment())
+            {
+                spa.UseProxyToSpaDevelopmentServer("https://localhost:44480");
+            }
+        });
     }
 }

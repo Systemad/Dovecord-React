@@ -2,6 +2,7 @@
 using Dovecord.Domain.Messages.Dto;
 using Dovecord.Domain.Servers.Dto;
 using Dovecord.Domain.Users.Dto;
+using Dovecord.Orleans.User;
 
 namespace Dovecord.SignalR.Hubs;
 
@@ -18,4 +19,6 @@ public interface IBaseHub
     Task ChannelDeleted(ChannelDto channelDto);
     Task ServerAction(ServerDto serverDto);
     Task ServerLeft(ServerDto serverDto);
+
+    Task UserStatusChange(Guid userId, PresenceStatus status);
 }

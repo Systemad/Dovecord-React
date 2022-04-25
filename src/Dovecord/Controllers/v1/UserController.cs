@@ -2,6 +2,7 @@ using Dovecord.Domain.Channels.Dto;
 using Dovecord.Domain.Channels.Features;
 using Dovecord.Domain.Users.Dto;
 using Dovecord.Domain.Users.Features;
+using Dovecord.Extensions.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +19,13 @@ public class UserController : ControllerBase
 {
     private readonly ILogger<UserController> _logger;
     private readonly IMediator _mediator;
+    private readonly ICurrentUserService _currentUserService;
     
-    public UserController(ILogger<UserController> logger, IMediator mediator)
+    public UserController(ILogger<UserController> logger, IMediator mediator, ICurrentUserService currentUserService)
     {
         _logger = logger;
         _mediator = mediator;
+        _currentUserService = currentUserService;
     }   
     
     [ProducesResponseType(typeof(IEnumerable<UserDto>), 200)]
@@ -97,5 +100,16 @@ public class UserController : ControllerBase
         var commandResponse = await _mediator.Send(command);
         return Ok(commandResponse);
         //return CreatedAtAction(nameof(GetChannel), new {commandResponse.Id}, commandResponse);
+    }
+    
+    [ProducesResponseType(200)]
+    [Produces("application/json")]
+    [HttpPut("me/setting", Name = "UpdateUserSettings")]
+    public async Task<IActionResult> UpdateUserSettings(UserSettingsManipulationDto user)
+    {
+        var userId = Guid.Parse(_currentUserService.UserId);
+        var command = new UpdateUserSettings.UpdateUserSettingsCommand(userId, user);
+        var updatesSettings = await _mediator.Send(command);
+        return Ok(updatesSettings);
     }
 }

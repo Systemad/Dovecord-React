@@ -1,11 +1,13 @@
 ﻿using System.Security.Claims;
 using Dovecord.Domain.Servers.Features;
 using Dovecord.Domain.Users.Features;
+using Dovecord.Orleans.User;
 using Dovecord.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
+using Orleans;
 using Serilog;
 
 namespace Dovecord.SignalR.Hubs;
@@ -18,10 +20,12 @@ public class BaseHub : Hub<IBaseHub>
     
     private readonly IMediator _mediator;
     private readonly IEventQueue _eventQueue;
-    public BaseHub(IMediator mediator, IEventQueue eventQueue)
+    private readonly IClusterClient _client;
+    public BaseHub(IMediator mediator, IEventQueue eventQueue, IClusterClient client)
     {
         _mediator = mediator;
         _eventQueue = eventQueue;
+        _client = client;
     }
 
     private string? Username => Context.User?.Identity?.Name; //?? "Unknown";
@@ -33,29 +37,19 @@ public class BaseHub : Hub<IBaseHub>
         var username = Username;
         Log.Information("SignalR: connected - ConnectionId {ConnectionId}", Context.ConnectionId);
         if (!(userId == Guid.Empty) && !string.IsNullOrEmpty(username))
-        {   
-            Log.Information("SignalR: starting session");
-            IRequest type = new StartUserSessionHandler.StartUserSessionCommand(userId, username);
-            await _eventQueue.Queue(type);
-            await Groups.AddToGroupAsync(Context.ConnectionId, UserId.ToString());
-            await SubscribeServers();
-            _connections.Add(userId, Context.ConnectionId);
+        {
+            await StartUserSession();
         }
         await base.OnConnectedAsync();
     }
 
     public override async Task OnDisconnectedAsync(Exception? ex)
     {
-        var userId = UserId;
         Log.Information("SignalR: disconnected - ConnectionId {ConnectionId}", Context.ConnectionId);
         if (!(UserId == Guid.Empty) && !string.IsNullOrEmpty(Username))
         {
             Log.Information("SignalR: ending session");
-            IRequest type = new StopUserSessionHandler.StopUserSessionCommand(userId, Username);
-            await _eventQueue.Queue(type);
-            await Groups.AddToGroupAsync(Context.ConnectionId, UserId.ToString());
-            await UnSubscribeServers();
-            _connections.Remove(userId, Context.ConnectionId);
+            await StopUserSession();
         }
         await base.OnDisconnectedAsync(ex);
     }
@@ -84,6 +78,17 @@ public class BaseHub : Hub<IBaseHub>
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, serverId.ToString());
     }
 
+    private async Task StartUserSession()
+    {
+        // Merge and simplify this and un/subscribe
+        Log.Information("SignalR: starting session");
+        await Groups.AddToGroupAsync(Context.ConnectionId, UserId.ToString());
+        await SubscribeServers();
+        _connections.Add(UserId, Context.ConnectionId);
+        var userGrain = _client.GetGrain<IUserGrain>(UserId.ToString());
+        await userGrain.SetUserStatus(PresenceStatus.Online);
+    }
+    
     private async Task SubscribeServers()
     {
         var query = new GetServersOfUser.GetServersOfUserQuery();
@@ -93,12 +98,19 @@ public class BaseHub : Hub<IBaseHub>
         {
             Console.WriteLine("adding to server");
             await Groups.AddToGroupAsync(Context.ConnectionId, server.Id.ToString());
-            // TODO: Send to all server with userDto
-            // await Groups.AddToGroupAsync(Context.ConnectionId, server.Id.ToString());
-            // await HubHelpers.SendUserActivity(serverId, _hubContext, user);
         }
     }
     
+    private async Task StopUserSession()
+    {
+        Log.Information("SignalR: starting session");
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, UserId.ToString());
+        await UnSubscribeServers();
+        _connections.Remove(UserId, Context.ConnectionId);
+            
+        var userGrain = _client.GetGrain<IUserGrain>(UserId.ToString());
+        await userGrain.SetUserStatus(PresenceStatus.Offline);
+    }
     private async Task UnSubscribeServers()
     {
         var query = new GetServersOfUser.GetServersOfUserQuery();

@@ -13,5 +13,7 @@ public enum PushType : byte
     UserLeaveServer = 4,
     
     Login = 5,
-    Logout = 6
+    Logout = 6,
+    
+    PresenceUpdate = 7,
 }

@@ -94,7 +94,7 @@ public class Startup
 
         app.UseAuthentication(); 
         app.UseAuthorization();
-
+        
         app.UseSerilogRequestLogging();
         app.UseEndpoints(endpoints =>
         {

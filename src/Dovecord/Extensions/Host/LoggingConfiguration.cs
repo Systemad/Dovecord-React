@@ -18,6 +18,8 @@ public static class LoggingConfiguration
             .MinimumLevel.Override("System", LogEventLevel.Warning)
             .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
             .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
+            .MinimumLevel.Override("Orleans.Runtime.Management.ManagementGrain", LogEventLevel.Warning)
+            .MinimumLevel.Override("Orleans.Runtime.SiloControl", LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .Enrich.WithProperty("EnvironmentName", env.EnvironmentName)
             .Enrich.WithProperty("ApplicationName", env.ApplicationName)

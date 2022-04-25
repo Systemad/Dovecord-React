@@ -33,13 +33,13 @@ public static class AddMessage
             var currentUserId = _currentUserService.UserId;
             
             var message = _mapper.Map<ChannelMessage>(request.MessageToAdd);
-            message.AuthorId = Guid.Parse(currentUserId ?? string.Empty);
-            message.CreatedBy = currentUserName ?? null;
+            message.AuthorId = Guid.Parse(currentUserId);
+            message.CreatedBy = currentUserName;
             message.CreatedOn = DateTime.Now;
             
             var channel = await _context.Channels
                 .Where(x => x.Id == request.MessageToAdd.ChannelId)
-                .FirstOrDefaultAsync(cancellationToken);
+                .FirstAsync(cancellationToken);
 
             if (channel is null)
                 throw new NotFoundException("Channel", channel.Id);
@@ -54,12 +54,12 @@ public static class AddMessage
                 message.ServerId = serverId;
             }
 
-            await _context.ChannelMessages.AddAsync(message, cancellationToken);
+            await _context.AddAsync(message, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
             var returnmessage = await _context.ChannelMessages
                 .ProjectTo<ChannelMessageDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(c => c.Id == message.Id, cancellationToken);
+                .FirstAsync(c => c.Id == message.Id, cancellationToken);
 
             return returnmessage;
         }

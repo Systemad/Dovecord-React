@@ -37,13 +37,7 @@ public static class JoinServer
                 new UserManipulationDto { IsOnline = true });
             var userExist = await _mediator.Send(updateUser);
             if (!userExist)
-            {
-                var addUser = new AddUser.AddUserCommand(new UserCreationDto
-                {
-                    IsOnline = true
-                });
-                await _mediator.Send(addUser);
-            }
+                return false;
             
             var serverToUpdate = await _context.Servers
                 .Where(x => x.Id == request.ServerId)

@@ -10,17 +10,15 @@ namespace Dovecord.Databases;
 
 public class DoveDbContext : DbContext
 {
-    private readonly ICurrentUserService _currentUserService;
-    public DoveDbContext(DbContextOptions<DoveDbContext> options, ICurrentUserService currentUserService) : base(options)
+    public DoveDbContext(DbContextOptions<DoveDbContext> options) : base(options)
     {
-        _currentUserService = currentUserService;
     }
 
     public DbSet<Channel> Channels { get; set; }
     public DbSet<ChannelMessage> ChannelMessages { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Server> Servers { get; set; }
-    //public DbSet<UserDto> On
+    public DbSet<UserSettings> UserSettings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

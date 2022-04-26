@@ -13,45 +13,34 @@ namespace Dovecord.Domain.Servers.Features;
 
 public static class JoinServer
 {
-    public record JoinServerCommand(Guid ServerId) : IRequest<bool>;
+    public record JoinServerCommand(Guid ServerId, string UserId) : IRequest<bool>;
     
     public class Query : IRequestHandler<JoinServerCommand, bool>
     {
         private readonly DoveDbContext _context;
-        private readonly IMapper _mapper;
-        private readonly ICurrentUserService _currentUserService;
-        private readonly IMediator _mediator;
-        
-        public Query(DoveDbContext context, IMapper mapper, ICurrentUserService currentUserService, IMediator mediator)
+
+        public Query(DoveDbContext context)
         {
             _context = context;
-            _mapper = mapper;
-            _currentUserService = currentUserService;
-            _mediator = mediator;
         }
 
         public async Task<bool> Handle(JoinServerCommand request, CancellationToken cancellationToken)
         {
-            var updateUser = new UpdateUser.UpdateUserCommand(
-                Guid.Parse(_currentUserService.UserId),
-                new UserManipulationDto { IsOnline = true });
-            var userExist = await _mediator.Send(updateUser);
-            if (!userExist)
-                return false;
-            
             var serverToUpdate = await _context.Servers
                 .Where(x => x.Id == request.ServerId)
                 .Include(m => m.Members)
                 .AsTracking()
                 .FirstAsync(cancellationToken);
-                //.SingleOrDefaultAsync(cancellationToken);
-                
+
             var member = await _context.Users
                 .AsTracking()
-                .FirstAsync(m => m.Id == Guid.Parse(_currentUserService.UserId), cancellationToken);
+                .FirstAsync(m => m.Id == Guid.Parse(request.UserId), cancellationToken);
+            
+            if (member is null)
+                throw new NotFoundException("Member", member);
             
             if (serverToUpdate is null)
-                throw new NotFoundException("Server", member);
+                throw new NotFoundException("Server", serverToUpdate);
             
             serverToUpdate.Members.Add(member);
             

@@ -11,7 +11,7 @@ await Host.CreateDefaultBuilder()
     .UseOrleans(
         builder => builder
             .UseLocalhostClustering()
-            .AddMemoryGrainStorage("AccountState")
+            .AddMemoryGrainStorage("UserState")
             .AddSimpleMessageStreamProvider("Chat")
             .ConfigureApplicationParts(parts => parts
                 .AddApplicationPart(typeof(UserGrain).Assembly)

@@ -86,7 +86,6 @@
 
     <ItemGroup>
       <Folder Include="Controllers\v1" />
-      <Folder Include="Orleans" />
     </ItemGroup>
 
     <ItemGroup>

@@ -8,6 +8,7 @@ using Serilog;
 using Dovecord.Extensions.Application;
 using Dovecord.Extensions.Host;
 using Dovecord.Extensions.Services;
+using Dovecord.Orleans;
 using Dovecord.SignalR.Hubs;
 using NSwag;
 using NSwag.AspNetCore;
@@ -62,7 +63,7 @@ public class Startup
         services.AddApplication();
         services.AddInfrastructure(_config, _env);
         services.AddHealthChecks();
-        
+        services.AddOrleans();
         services.AddSpaStaticFiles(configuration => 
             configuration.RootPath = "dovecord-react/dist");
 

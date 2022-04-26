@@ -25,7 +25,7 @@ public static class StopUserSessionHandler
         {
             Log.Information("StartUserSession handler");
             var updateUser =
-                new UpdateUser.UpdateUserCommand(request.UserId, new UserManipulationDto { IsOnline = false });
+                new UpdateUser.UpdateUserCommand(request.UserId, new UserManipulationDto {  });
             await _mediator.Send(updateUser, cancellationToken);
             //IRequest 
             /*if (!userExist)

@@ -26,7 +26,7 @@ public static class StartUserSessionHandler
         {
             Log.Information("StartUserSession handler");
             var updateUser =
-                new UpdateUser.UpdateUserCommand(request.UserId, new UserManipulationDto { IsOnline = true });
+                new UpdateUser.UpdateUserCommand(request.UserId, new UserManipulationDto { });
             var userExist = await _mediator.Send(updateUser, cancellationToken);
             //IRequest type = IEns
             /*if (!userExist)

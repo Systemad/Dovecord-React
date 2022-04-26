@@ -3,6 +3,7 @@ using Dovecord.Domain.Channels.Features;
 using Dovecord.Domain.Servers.Dto;
 using Dovecord.Domain.Servers.Features;
 using Dovecord.Domain.Users.Dto;
+using Dovecord.Extensions.Services;
 using Dovecord.SignalR.Helpers;
 using Dovecord.SignalR.Hubs;
 using MediatR;
@@ -23,12 +24,14 @@ public class ServerController : ControllerBase
     private readonly ILogger<ServerController> _logger;
     private readonly IMediator _mediator;
     private readonly IHubContext<BaseHub, IBaseHub> _hubContext;
+    private readonly ICurrentUserService _currentUserService;
     
-    public ServerController(ILogger<ServerController> logger, IMediator mediator, IHubContext<BaseHub, IBaseHub> hubContext)
+    public ServerController(ILogger<ServerController> logger, IMediator mediator, IHubContext<BaseHub, IBaseHub> hubContext, ICurrentUserService currentUserService)
     {
         _logger = logger;
         _mediator = mediator;
         _hubContext = hubContext;
+        _currentUserService = currentUserService;
     }   
 
     [ProducesResponseType(typeof(IEnumerable<ServerDto>), 200)]
@@ -130,7 +133,7 @@ public class ServerController : ControllerBase
     [HttpPost("join/{serverId:guid}", Name = "JoinServer")]
     public async Task<IActionResult> JoinServer(Guid serverId)
     {
-        var command = new JoinServer.JoinServerCommand(serverId);
+        var command = new JoinServer.JoinServerCommand(serverId, _currentUserService.UserId);
         await _mediator.Send(command);
         
         //var joinedServer = await _mediator.Send(new GetServerById.GetServerByIdGetQuery(serverId));
@@ -145,7 +148,7 @@ public class ServerController : ControllerBase
     [HttpPost("leave/{serverId:guid}", Name = "LeaveServer")]
     public async Task<IActionResult> LeaveServer(Guid serverId)
     {
-        var command = new LeaveServer.LeaveServerCommand(serverId);
+        var command = new LeaveServer.LeaveServerCommand(serverId, _currentUserService.UserId);
         await _mediator.Send(command);
 
         // TODO: Leave error message, if leaver is owner, tell them to delete server within server settings

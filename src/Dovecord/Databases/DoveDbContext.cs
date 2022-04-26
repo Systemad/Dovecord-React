@@ -2,8 +2,6 @@
 using Dovecord.Domain.Messages;
 using Dovecord.Domain.Servers;
 using Dovecord.Domain.Users;
-using Dovecord.Domain.Users.Dto;
-using Dovecord.Extensions.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dovecord.Databases;

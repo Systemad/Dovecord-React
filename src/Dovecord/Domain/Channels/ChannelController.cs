@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 
-namespace Dovecord.Controllers.v1;
+namespace Dovecord.Domain.Channels;
 
 [Authorize]
 [RequiredScope("API.Access")]

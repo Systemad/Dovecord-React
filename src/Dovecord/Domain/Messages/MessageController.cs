@@ -1,7 +1,6 @@
 using Dovecord.Domain.Messages.Dto;
 using Dovecord.Domain.Messages.Features;
 using Dovecord.Extensions.Services;
-using Dovecord.SignalR;
 using Dovecord.SignalR.Helpers;
 using Dovecord.SignalR.Hubs;
 using MediatR;
@@ -10,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
 
-namespace Dovecord.Controllers.v1;
+namespace Dovecord.Domain.Messages;
 
 [Authorize]
 [RequiredScope("API.Access")]

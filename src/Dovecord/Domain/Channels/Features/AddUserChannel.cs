@@ -2,11 +2,6 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Dovecord.Databases;
 using Dovecord.Domain.Channels.Dto;
-using Dovecord.Domain.Servers;
-using Dovecord.Domain.Servers.Features;
-using Dovecord.Domain.Users;
-using Dovecord.Domain.Users.Features;
-using Dovecord.Exceptions;
 using Dovecord.Extensions.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +30,7 @@ public static class AddUserChannel
             var currentUser = await _context.Users.FirstAsync(x => x.Id == Guid.Parse(_currentUserService.UserId), cancellationToken);
             var receiptUser = await _context.Users.FirstAsync(x => x.Id == request.recipientId, cancellationToken);
 
-            var userList = new List<User>
+            var userList = new List<Users.User>
             {
                 currentUser,
                 receiptUser

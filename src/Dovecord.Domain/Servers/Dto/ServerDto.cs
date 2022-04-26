@@ -1,8 +1,3 @@
-using Dovecord.Domain.Channels;
-using Dovecord.Domain.Channels.Dto;
-using Dovecord.Domain.Users;
-using Dovecord.Domain.Users.Dto;
-
 namespace Dovecord.Domain.Servers.Dto;
 
 public class ServerDto

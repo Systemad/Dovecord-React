@@ -1,8 +1,8 @@
 ﻿using Dovecord.Domain.Channels.Dto;
 using Dovecord.Domain.Messages.Dto;
 using Dovecord.Domain.Servers.Dto;
+using Dovecord.Domain.Users;
 using Dovecord.Domain.Users.Dto;
-using Dovecord.Orleans.User;
 
 namespace Dovecord.SignalR.Hubs;
 

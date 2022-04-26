@@ -1,7 +1,7 @@
-﻿using Dovecord.Domain.Servers.Dto;
+﻿using Dovecord.Domain.Users;
 using Dovecord.Domain.Users.Dto;
 
-namespace Dovecord.Orleans.User;
+namespace Dovecord.Orleans.Interfaces.User;
 
 [Serializable]
 public record UserAccountState

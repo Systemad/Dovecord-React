@@ -1,5 +1,4 @@
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Dovecord.Databases;
 using Dovecord.Domain.Channels.Dto;
 using MediatR;

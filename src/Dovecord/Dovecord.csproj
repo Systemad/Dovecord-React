@@ -52,14 +52,8 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
         <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
         <PackageReference Include="Microsoft.Identity.Web" Version="1.24.0" />
-        <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.6.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
         <PackageReference Include="Microsoft.Orleans.Core" Version="3.6.2" />
-        <PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="3.6.2" />
         <PackageReference Include="Microsoft.Orleans.Runtime.Abstractions" Version="3.6.2" />
-        <PackageReference Include="Microsoft.Orleans.Server" Version="3.6.2" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="Npgsql" Version="6.0.4" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.4" />
@@ -88,6 +82,25 @@
         <Content Update="appsettings.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Controllers\v1" />
+      <Folder Include="Orleans" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Orleans_CodeGenInputs Remove="Domain\Users\Dto\UserCreationDto.cs" />
+      <Orleans_CodeGenInputs Remove="Domain\Users\Dto\UserDto.cs" />
+      <Orleans_CodeGenInputs Remove="Domain\Users\Dto\UserManipulationDto.cs" />
+      <Orleans_CodeGenInputs Remove="Domain\Users\Dto\UserSettingsManipulationDto.cs" />
+      <Orleans_CodeGenInputs Remove="Domain\Channels\Dto\ChannelDto.cs" />
+      <Orleans_CodeGenInputs Remove="Domain\Channels\Dto\ChannelManipulationDto.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Dovecord.Domain\Dovecord.Domain.csproj" />
+      <ProjectReference Include="..\Dovecord.Orleans.Interfaces\Dovecord.Orleans.Interfaces.csproj" />
     </ItemGroup>
     <!-- 
   <Target Name="NSwag" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Debug' ">

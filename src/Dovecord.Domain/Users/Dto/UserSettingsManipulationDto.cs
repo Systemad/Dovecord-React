@@ -1,5 +1,3 @@
-using Dovecord.Orleans.User;
-
 namespace Dovecord.Domain.Users.Dto;
 
 public class UserSettingsManipulationDto

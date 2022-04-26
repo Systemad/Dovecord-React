@@ -1,8 +1,6 @@
-using System.Runtime.Serialization;
 using Dovecord.Domain.Messages;
 using Dovecord.Domain.Servers;
 using Dovecord.Domain.Users;
-using Newtonsoft.Json;
 
 namespace Dovecord.Domain.Channels;
 

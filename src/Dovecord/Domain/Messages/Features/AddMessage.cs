@@ -4,7 +4,6 @@ using Dovecord.Databases;
 using Dovecord.Domain.Messages.Dto;
 using Dovecord.Exceptions;
 using Dovecord.Extensions.Services;
-using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

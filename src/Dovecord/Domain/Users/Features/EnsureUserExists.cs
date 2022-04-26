@@ -36,7 +36,6 @@ public static class EnsureUserExists
             {
                 Id = request.UserId,
                 Username = request.Username,
-                IsOnline = true,
                 Bot = false,
                 System = false,
                 AccentColor = null,

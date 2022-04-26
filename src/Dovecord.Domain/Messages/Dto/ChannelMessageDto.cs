@@ -1,4 +1,3 @@
-using Dovecord.Domain.Users;
 using Dovecord.Domain.Users.Dto;
 
 namespace Dovecord.Domain.Messages.Dto;

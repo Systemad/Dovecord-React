@@ -1,7 +1,5 @@
-using System.Security.Claims;
 using Dovecord.Domain.Channels.Dto;
 using Dovecord.Domain.Channels.Features;
-using Dovecord.Domain.Servers;
 using Dovecord.Domain.Servers.Dto;
 using Dovecord.Domain.Servers.Features;
 using Dovecord.Domain.Users.Dto;
@@ -13,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
 
-namespace Dovecord.Controllers.v1;
+namespace Dovecord.Domain.Servers;
 
 [Authorize]
 [RequiredScope("API.Access")]

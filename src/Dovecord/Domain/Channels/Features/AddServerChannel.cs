@@ -2,8 +2,6 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Dovecord.Databases;
 using Dovecord.Domain.Channels.Dto;
-using Dovecord.Domain.Servers;
-using Dovecord.Domain.Servers.Features;
 using Dovecord.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

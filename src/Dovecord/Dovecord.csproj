@@ -85,10 +85,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\v1" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Orleans_CodeGenInputs Remove="Domain\Users\Dto\UserCreationDto.cs" />
       <Orleans_CodeGenInputs Remove="Domain\Users\Dto\UserDto.cs" />
       <Orleans_CodeGenInputs Remove="Domain\Users\Dto\UserManipulationDto.cs" />
@@ -98,6 +94,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
       <ProjectReference Include="..\Dovecord.Domain\Dovecord.Domain.csproj" />
       <ProjectReference Include="..\Dovecord.Orleans.Interfaces\Dovecord.Orleans.Interfaces.csproj" />
     </ItemGroup>

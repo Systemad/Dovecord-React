@@ -23,9 +23,9 @@ public class UserSettings
 
     public string? Bio { get; set; }
     //public string? Locale { get; set; }
-    public PresenceStatus PresenceStatus { get; set; }
-    public Guid CustomStatusId { get; set; }
-    public CustomStatus? CustomStatus { get; set; }
+    //public PresenceStatus PresenceStatus { get; set; }
+    //public Guid CustomStatusId { get; set; }
+    //public CustomStatus? CustomStatus { get; set; }
     //public List<Guid>? GuildPositions { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; }

@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
-using Dovecord.Databases;
 using Dovecord.Extensions.Services;
 
 // TODO: Split up

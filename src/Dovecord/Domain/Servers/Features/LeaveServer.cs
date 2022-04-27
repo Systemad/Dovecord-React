@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Dovecord.Databases;
+using DataAccess.Database;
 using Dovecord.Domain.Servers.Dto;
 using Dovecord.Domain.Users.Dto;
 using Dovecord.Domain.Users.Features;
@@ -18,7 +18,7 @@ public static class LeaveServer
     {
         private readonly DoveDbContext _context;
 
-        public Query(DoveDbContext context, IMediator mediator)
+        public Query(DoveDbContext context)
         {
             _context = context;
         }

@@ -4,7 +4,7 @@ using Dovecord.Domain.Servers;
 using Dovecord.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
-namespace Dovecord.Databases;
+namespace DataAccess.Database;
 
 public class DoveDbContext : DbContext
 {

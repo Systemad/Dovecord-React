@@ -1,5 +1,5 @@
 using AutoBogus;
-using Dovecord.Databases;
+using DataAccess.Database;
 using Dovecord.Domain.Channels;
 
 namespace Dovecord.Seeders;

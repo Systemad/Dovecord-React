@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using Dovecord.Orleans;
-using Dovecord.Orleans.Interfaces.User;
+using Dovecord.Domain;
+using Dovecord.Domain.Servers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Orleans;
@@ -11,11 +11,11 @@ await Host.CreateDefaultBuilder()
     .UseOrleans(
         builder => builder
             .UseLocalhostClustering()
-            .AddMemoryGrainStorage("UserState")
-            .AddSimpleMessageStreamProvider("Chat")
+            .AddMemoryGrainStorage("PubSubStorage")
+            .AddSimpleMessageStreamProvider(Constants.InMemoryStream)
             .ConfigureApplicationParts(parts => parts
-                .AddApplicationPart(typeof(UserGrain).Assembly)
-                .AddApplicationPart(typeof(IUserGrain).Assembly))
+                .AddApplicationPart(typeof(ServerGrain).Assembly)
+                .AddApplicationPart(typeof(IServerGrain).Assembly))
             .UseDashboard())
     .ConfigureLogging(
         builder => builder

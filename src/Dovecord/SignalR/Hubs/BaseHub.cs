@@ -70,6 +70,9 @@ public class BaseHub : Hub<IBaseHub>
         await Groups.AddToGroupAsync(Context.ConnectionId, serverId.ToString());
         var joinedServer = await _mediator.Send(new GetServerById.GetServerByIdGetQuery(serverId));
         await Clients.Group(UserId.ToString()).ServerAction(joinedServer);
+        
+        //var userGrain = _client.GetGrain<IUserGrain>(UserId);
+        //await userGrain.SetUserStatus(PresenceStatus.Online);
     }
     
     public async Task LeaveServer(Guid serverId)
@@ -85,8 +88,8 @@ public class BaseHub : Hub<IBaseHub>
         await Groups.AddToGroupAsync(Context.ConnectionId, UserId.ToString());
         await SubscribeServers();
         _connections.Add(UserId, Context.ConnectionId);
-        var userGrain = _client.GetGrain<IUserGrain>(UserId.ToString());
-        await userGrain.SetUserStatus(PresenceStatus.Online);
+        //var userGrain = _client.GetGrain<IUserGrain>(UserId);
+        //await userGrain.SetUserStatus(PresenceStatus.Online);
     }
     
     private async Task SubscribeServers()
@@ -108,8 +111,8 @@ public class BaseHub : Hub<IBaseHub>
         await UnSubscribeServers();
         _connections.Remove(UserId, Context.ConnectionId);
             
-        var userGrain = _client.GetGrain<IUserGrain>(UserId.ToString());
-        await userGrain.SetUserStatus(PresenceStatus.Offline);
+        //var userGrain = _client.GetGrain<IUserGrain>(UserId);
+        //await userGrain.SetUserStatus(PresenceStatus.Offline);
     }
     private async Task UnSubscribeServers()
     {

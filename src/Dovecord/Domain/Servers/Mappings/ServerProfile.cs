@@ -10,6 +10,6 @@ public class ServerProfile : Profile
     public ServerProfile()
     {
         CreateMap<Server, ServerDto>().ReverseMap();
-        CreateMap<ServerManipulationDto, Server>().ReverseMap();
+        CreateMap<CreateServerModel, Server>().ReverseMap();
     }
 }

@@ -8,7 +8,7 @@ public class CreateServerValidator : AbstractValidator<AddServer.AddServerComman
 {
     public CreateServerValidator()
     {
-        RuleFor(x => x.ServerToAdd.Name).NotEmpty();
-        RuleFor(x => x.ServerToAdd.Name).Length(3, 15);
+        RuleFor(x => x.CreateServerToAdd.Name).NotEmpty();
+        RuleFor(x => x.CreateServerToAdd.Name).Length(3, 15);
     }
 }

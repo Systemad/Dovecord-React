@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
+using Orleans;
 
 namespace Dovecord.Domain.Users;
 
@@ -20,12 +21,14 @@ public class UserController : ControllerBase
     private readonly ILogger<UserController> _logger;
     private readonly IMediator _mediator;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IClusterClient _client;
     
-    public UserController(ILogger<UserController> logger, IMediator mediator, ICurrentUserService currentUserService)
+    public UserController(ILogger<UserController> logger, IMediator mediator, ICurrentUserService currentUserService, IClusterClient client)
     {
         _logger = logger;
         _mediator = mediator;
         _currentUserService = currentUserService;
+        _client = client;
     }   
     
     [ProducesResponseType(typeof(IEnumerable<UserDto>), 200)]

@@ -1,7 +1,8 @@
-﻿using Orleans;
+﻿using Dovecord.Domain;
+using Orleans;
 using Orleans.Hosting;
 
-namespace Dovecord.Orleans;
+namespace Dovecord.Extensions.Host;
 
 public class ClusterClientHostedService : IHostedService
 {
@@ -11,7 +12,7 @@ public class ClusterClientHostedService : IHostedService
     {
         Client = new ClientBuilder()
             .UseLocalhostClustering()
-            .AddSimpleMessageStreamProvider("Chat")
+            .AddSimpleMessageStreamProvider(Constants.InMemoryStream)
             .ConfigureLogging(builder => builder.AddProvider(loggerProvider))
             .Build();
     }

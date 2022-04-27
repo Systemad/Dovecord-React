@@ -18,4 +18,10 @@
         <PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="3.6.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Channel" />
+      <Folder Include="Server" />
+      <Folder Include="User" />
+    </ItemGroup>
+
 </Project>

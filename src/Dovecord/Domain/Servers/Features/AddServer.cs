@@ -1,6 +1,6 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Dovecord.Databases;
+using DataAccess.Database;
 using Dovecord.Domain.Channels;
 using Dovecord.Domain.Servers.Dto;
 using Dovecord.Extensions.Services;
@@ -11,7 +11,7 @@ namespace Dovecord.Domain.Servers.Features;
 
 public static class AddServer
 {
-    public record AddServerCommand(ServerManipulationDto ServerToAdd) : IRequest<ServerDto>;
+    public record AddServerCommand(CreateServerModel CreateServerToAdd) : IRequest<ServerDto>;
 
     public class Handler : IRequestHandler<AddServerCommand, ServerDto>
     {
@@ -28,7 +28,7 @@ public static class AddServer
         
         public async Task<ServerDto> Handle(AddServerCommand request, CancellationToken cancellationToken)
         {
-            var mapServer = _mapper.Map<Server>(request.ServerToAdd);
+            var mapServer = _mapper.Map<Server>(request.CreateServerToAdd);
             mapServer.OwnerUserId = Guid.Parse(_currentUserService.UserId);
             _context.Servers.Add(mapServer);
             await _context.SaveChangesAsync(cancellationToken);

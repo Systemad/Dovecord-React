@@ -1,5 +1,5 @@
 using AutoMapper;
-using Dovecord.Databases;
+using DataAccess.Database;
 using Dovecord.Domain.Channels.Dto;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

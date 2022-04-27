@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
+using Orleans;
 
 namespace Dovecord.Domain.Servers;
 
@@ -25,13 +26,15 @@ public class ServerController : ControllerBase
     private readonly IMediator _mediator;
     private readonly IHubContext<BaseHub, IBaseHub> _hubContext;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IClusterClient _client;
     
-    public ServerController(ILogger<ServerController> logger, IMediator mediator, IHubContext<BaseHub, IBaseHub> hubContext, ICurrentUserService currentUserService)
+    public ServerController(ILogger<ServerController> logger, IMediator mediator, IHubContext<BaseHub, IBaseHub> hubContext, ICurrentUserService currentUserService, IClusterClient client)
     {
         _logger = logger;
         _mediator = mediator;
         _hubContext = hubContext;
         _currentUserService = currentUserService;
+        _client = client;
     }   
 
     [ProducesResponseType(typeof(IEnumerable<ServerDto>), 200)]
@@ -88,12 +91,12 @@ public class ServerController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost(Name = "AddServer")]
-    public async Task<IActionResult> AddServer([FromBody] ServerManipulationDto serverForCreation)
+    public IActionResult AddServer([FromBody] CreateServerModel createServerModel)
     {
-        var command = new AddServer.AddServerCommand(serverForCreation);
-        var commandResponse = await _mediator.Send(command);
-        return Ok(commandResponse);
-        //return CreatedAtAction(nameof(GetServerById), new {commandResponse.Id}, commandResponse);
+        var serverId = new Guid();
+        var server = _client.GetGrain<IServerGrain>(serverId);
+        server.CreateAsync(new CreateServerCommand(serverId, createServerModel.Name));
+        return Ok(); // Created() // TODO Handle return //(nameof(GetServerById), new {serverId}, commandResponse);
     }
     
     [ProducesResponseType(typeof(ChannelDto), 200)]
@@ -122,9 +125,9 @@ public class ServerController : ControllerBase
     [ProducesResponseType(204)]
     [Produces("application/json")]
     [HttpPut("{id:guid}", Name = "UpdateServer")]
-    public async Task<IActionResult> UpdateServer(Guid id, ServerManipulationDto server)
+    public async Task<IActionResult> UpdateServer(Guid id, CreateServerModel createServer)
     {
-        var command = new UpdateServer.UpdateServerCommand(id, server);
+        var command = new UpdateServer.UpdateServerCommand(id, createServer);
         await _mediator.Send(command);
         return NoContent();
     }

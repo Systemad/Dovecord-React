@@ -1,5 +1,6 @@
 using System.Text.Json;
-using Dovecord.Databases;
+using DataAccess;
+using DataAccess.Database;
 using Dovecord.Seeders;
 using Dovecord.SignalR;
 using Microsoft.AspNetCore.Mvc;
@@ -61,7 +62,7 @@ public class Startup
         services.AddSignalRApplication();
         services.AddCorsService();
         services.AddApplication();
-        services.AddInfrastructure(_config, _env);
+        services.AddInfrastructure(_config, _env.IsDevelopment());
         services.AddHealthChecks();
         services.AddOrleans();
         services.AddSpaStaticFiles(configuration => 

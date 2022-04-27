@@ -1,5 +1,5 @@
 using AutoMapper;
-using Dovecord.Databases;
+using DataAccess.Database;
 using Dovecord.Domain.Servers.Dto;
 using Dovecord.Exceptions;
 using MediatR;
@@ -9,7 +9,7 @@ namespace Dovecord.Domain.Servers.Features;
 
 public static class UpdateServer
 {
-    public record UpdateServerCommand(Guid Id, ServerManipulationDto NewServerData) : IRequest<bool>;
+    public record UpdateServerCommand(Guid Id, CreateServerModel NewCreateServerData) : IRequest<bool>;
     
     public class Query : IRequestHandler<UpdateServerCommand, bool>
     {
@@ -32,7 +32,7 @@ public static class UpdateServer
             if (serverToUpdate is null)
                 throw new NotFoundException("Server", request.Id);
             
-            _mapper.Map(request.NewServerData, serverToUpdate);  
+            _mapper.Map(request.NewCreateServerData, serverToUpdate);  
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }

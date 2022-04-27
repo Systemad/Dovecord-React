@@ -1,9 +1,8 @@
-﻿using Dovecord.Domain.Users;
-using Orleans;
+﻿using Orleans;
 
-namespace Dovecord.Orleans.Interfaces.User;
+namespace Dovecord.Domain.Users;
 
-public interface IUserGrain : IGrainWithStringKey
+public interface IUserGrain : IGrainWithGuidKey
 {
     Task SetInitialServerGuid(List<Guid> serverGuids);
     Task<PresenceStatus> GetCurrentUserStatus();

@@ -8,7 +8,7 @@ public class UpdateServerValidator : AbstractValidator<UpdateServer.UpdateServer
 {
     public UpdateServerValidator()
     {
-        RuleFor(x => x.NewServerData.Name).NotEmpty();
-        RuleFor(x => x.NewServerData.Name).Length(3, 15);
+        RuleFor(x => x.NewCreateServerData.Name).NotEmpty();
+        RuleFor(x => x.NewCreateServerData.Name).Length(3, 15);
     }
 }

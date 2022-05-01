@@ -1,6 +1,6 @@
 using AutoBogus;
-using Infrastructure.Database;
 using Domain.Channels;
+using Infrastructure.Database;
 
 namespace Dovecord.Seeders;
 

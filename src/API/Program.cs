@@ -1,6 +1,6 @@
 using Autofac.Extensions.DependencyInjection;
-using Serilog;
 using Dovecord.Extensions.Host;
+using Serilog;
 
 namespace Dovecord;
 

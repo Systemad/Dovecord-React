@@ -9,3 +9,5 @@ public class Constants
     public const string ChannelNamespace = "ChannelNamespace";
     public const string UserNamespace = "UserNamespace";
 }
+
+public record StreamConfig(string Name, string Namespace);

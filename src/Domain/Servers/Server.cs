@@ -1,4 +1,8 @@
-﻿namespace Domain.Servers;
+﻿using Domain.Channels;
+using Domain.Users;
+using Orleans;
+
+namespace Domain.Servers;
 
 public class Server
 {
@@ -7,6 +11,11 @@ public class Server
     public string? IconUrl { get; set; }
     public Guid OwnerUserId { get; set; }
     
-    public ICollection<Channels.Channel>? Channels { get; set; }
-    public ICollection<Users.User>? Members { get; set; }
+    public ICollection<Channel>? Channels { get; set; }
+    public ICollection<User>? Members { get; set; }
+}
+
+
+public interface ISubscriberGrain : IGrainWithGuidKey
+{
 }

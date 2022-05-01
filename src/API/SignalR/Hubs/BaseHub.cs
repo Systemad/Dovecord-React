@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using Dovecord.Domain.Servers.Features;
+using Application.Servers.Features;
 using Dovecord.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

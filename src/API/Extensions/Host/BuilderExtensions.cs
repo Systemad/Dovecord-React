@@ -1,9 +1,4 @@
-using System.Reflection;
-using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Web;
-using Dovecord.Extensions.Services;
+
 
 // TODO: Split up
 namespace Dovecord.Extensions.Host;

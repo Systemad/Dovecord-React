@@ -1,4 +1,5 @@
-﻿using Domain.Channels;
+﻿using Application;
+using Domain.Channels;
 using Domain.Messages;
 using Domain.Servers;
 using Domain.Users;
@@ -6,18 +7,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database;
 
-public class DoveDbContext : DbContext
+public class DoveDbContext : DbContext, IDoveDbContext
 {
     public DoveDbContext(DbContextOptions<DoveDbContext> options) : base(options)
     {
     }
-
+    
     public DbSet<Channel> Channels { get; set; }
     public DbSet<ChannelMessage> ChannelMessages { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Server> Servers { get; set; }
     public DbSet<UserSettings> UserSettings { get; set; }
 
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        return await base.SaveChangesAsync(cancellationToken);
+    }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("uuid-ossp");

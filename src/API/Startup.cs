@@ -1,13 +1,14 @@
-using Infrastructure;
-using Infrastructure.Database;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Serilog;
+using Application;
 using Dovecord.Extensions.Application;
 using Dovecord.Extensions.Host;
 using Dovecord.Extensions.Services;
 using Dovecord.SignalR.Hubs;
+using Infrastructure;
+using Infrastructure.Database;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using NSwag.AspNetCore;
+using Serilog;
 
 namespace Dovecord;
 
@@ -51,14 +52,14 @@ public class Startup
             options.LowercaseUrls = true;
             options.LowercaseQueryStrings = true;
         });
-        
+        services.AddOrleans();
         services.AddAppAuthentication(_config);
         services.AddSignalRApplication();
         services.AddCorsService();
         services.AddApplication();
+        services.AddApiServices();
         services.AddInfrastructure(_config, _env.IsDevelopment());
         services.AddHealthChecks();
-        services.AddOrleans();
         services.AddSpaStaticFiles(configuration => 
             configuration.RootPath = "dovecord-react/dist");
 

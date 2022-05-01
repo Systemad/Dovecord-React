@@ -3,6 +3,7 @@
 using Dovecord.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using ValidationException = FluentValidation.ValidationException;
 
 namespace Dovecord.Middleware;
 
@@ -15,8 +16,8 @@ public class ErrorHandlerFilterAttribute : ExceptionFilterAttribute
         // Register known exception types and handlers.
         _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
             {
-                { typeof(FluentValidation.ValidationException), HandleFluentValidationException },
-                { typeof(ValidationException), HandleValidationException },
+                { typeof(ValidationException), HandleFluentValidationException },
+                { typeof(Exceptions.ValidationException), HandleValidationException },
                 { typeof(NotFoundException), HandleNotFoundException },
             };
     }
@@ -48,16 +49,16 @@ public class ErrorHandlerFilterAttribute : ExceptionFilterAttribute
 
     private void HandleValidationException(ExceptionContext context)
     {
-        var exception = (ValidationException)context.Exception;
+        var exception = (Exceptions.ValidationException)context.Exception;
         HandleErrors(context, exception.Errors);
     }
     
     private void HandleFluentValidationException(ExceptionContext context)
     {
-        var exception = (FluentValidation.ValidationException)context.Exception;
+        var exception = (ValidationException)context.Exception;
         var failures = exception.Errors
             .ToList();
-        var proper = new ValidationException(failures);
+        var proper = new Exceptions.ValidationException(failures);
         
         HandleErrors(context, proper.Errors);
     }

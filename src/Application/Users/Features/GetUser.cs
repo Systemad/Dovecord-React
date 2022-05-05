@@ -1,5 +1,4 @@
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Application.Database;
 using Domain.Users.Dto;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,26 +11,32 @@ public static class GetUser
 
     public class QueryHandler : IRequestHandler<GetUserQuery, UserDto>
     {
-        private readonly IDoveDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly DoveDbContext _context;
 
-        public QueryHandler(IDoveDbContext context, IMapper mapper)
+        public QueryHandler(DoveDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<UserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            var result = await _context.Users
-                .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
+            var query = await _context.Users
+                .Where(user => user.Id == request.Id)
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Username = u.Username,
+                    Bot = u.Bot,
+                    System = u.System,
+                    AccentColor = u.AccentColor,
+                    LastOnline = u.LastOnline,
+                })
+                .FirstOrDefaultAsync(cancellationToken);
 
-            if (result is null)
-                //return null;
+            if(query is null)
                 throw new NotFoundException("User", request.Id);
-
-            return result;
+            
+            return query;
         }
     }
 }

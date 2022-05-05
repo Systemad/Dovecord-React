@@ -1,28 +1,22 @@
-﻿using Application;
-using Domain.Channels;
+﻿using Domain.Channels;
 using Domain.Messages;
 using Domain.Servers;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Database;
+namespace Application.Database;
 
-public class DoveDbContext : DbContext, IDoveDbContext
+public class DoveDbContext : DbContext
 {
     public DoveDbContext(DbContextOptions<DoveDbContext> options) : base(options)
     {
     }
-    
-    public DbSet<Channel> Channels { get; set; }
-    public DbSet<ChannelMessage> ChannelMessages { get; set; }
-    public DbSet<User> Users { get; set; }
-    public DbSet<Server> Servers { get; set; }
-    public DbSet<UserSettings> UserSettings { get; set; }
 
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
-    {
-        return await base.SaveChangesAsync(cancellationToken);
-    }
+    public DbSet<Channel> Channels => Set<Channel>();
+    public DbSet<ChannelMessage> ChannelMessages => Set<ChannelMessage>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<Server> Servers => Set<Server>();
+    public DbSet<UserSettings> UserSettings => Set<UserSettings>();
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

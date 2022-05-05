@@ -1,5 +1,4 @@
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Application.Database;
 using Domain.Channels;
 using Domain.Channels.Dto;
 using MediatR;
@@ -7,42 +6,44 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Channels.Features;
 
+// CreateServerCommand
 public static class AddServerChannel
 {
-    public record AddServerChannelCommand(ChannelManipulationDto ChannelToAdd, Guid serverId) : IRequest<ChannelDto>;
+    public record AddServerChannelCommand(Channel Channel) : IRequest<ChannelDto>;
 
     public class Handler : IRequestHandler<AddServerChannelCommand, ChannelDto>
     {
-        private readonly IDoveDbContext _context;
-        private readonly IMapper _mapper;
-        private readonly IMediator _mediator;
-
-        public Handler(IDoveDbContext context, IMapper mapper, IMediator mediator)
+        private readonly DoveDbContext _context;
+        
+        public Handler(DoveDbContext context)
         {
             _context = context;
-            _mapper = mapper;
-            _mediator = mediator;
         }
         
         public async Task<ChannelDto> Handle(AddServerChannelCommand request, CancellationToken cancellationToken)
         {
-            var channel = _mapper.Map<Channel>(request.ChannelToAdd);
-            channel.ServerId = request.serverId;
-            
             var serverToUpdate = await _context.Servers
-                .Where(x => x.Id == channel.ServerId)
+                .Where(x => x.Id == request.Channel.ServerId)
                 .FirstOrDefaultAsync(cancellationToken);
             
             if (serverToUpdate is null)
-                throw new NotFoundException("Server", request.serverId);
+                throw new NotFoundException("Server", request.Channel);
             
-            _context.Channels.Add(channel);
+            _context.Channels.Add(request.Channel);
             await _context.SaveChangesAsync(cancellationToken);
-            
-            var newChannel = await _context.Channels
-                .ProjectTo<ChannelDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(c => c.Id == channel.Id, cancellationToken);
-            return newChannel;
+
+            var query = await _context.Channels
+                .Where(x => x.Id == request.Channel.Id)
+                .Select(chn => new ChannelDto
+                {
+                    Id = chn.Id,
+                    Type = chn.Type,
+                    Name = chn.Name,
+                    Topic = chn.Topic,
+                    ServerId = chn.ServerId
+                }).FirstOrDefaultAsync(cancellationToken);
+
+            return query;
         }
     }
 }

@@ -23,3 +23,9 @@ public class ChannelMessage
     public Guid AuthorId { get; set; }
     public User Author { get; set; }
 }
+
+public record CreateMessageModel(string Content,
+    string CreatedBy, DateTime CreatedOn,
+    bool IsEdit, DateTime LastModifiedOn,
+    int Type, Guid ChannelId,
+    Guid? ServerId, Guid AuthorId);

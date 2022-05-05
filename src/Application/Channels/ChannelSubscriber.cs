@@ -1,21 +1,23 @@
-﻿using Application.Servers.Features;
+﻿using Application.Channels.Features;
+using Application.Servers.Features;
 using Domain;
+using Domain.Channels;
 using Domain.Servers;
 using MediatR;
 using Orleans;
 using Orleans.Streams;
 
-namespace Application.Servers;
+namespace Application.Channels;
 
 
-[ImplicitStreamSubscription(Constants.ServerNamespace)]
-public class ServerSubscriber : Grain, ISubscriberGrain
+[ImplicitStreamSubscription(Constants.ChannelNamespace)]
+public class ChannelSubscriber : Grain, ISubscriberGrain
 {
     private StreamSubscriptionHandle<object>? _sub;
     private IStreamProvider? StreamProvider;
     private readonly IMediator _mediator;
 
-    public ServerSubscriber(IMediator mediator)
+    public ChannelSubscriber(IMediator mediator)
     {
         _mediator = mediator;
     }
@@ -40,28 +42,25 @@ public class ServerSubscriber : Grain, ISubscriberGrain
     {
         switch (evt)
         {
-            case ServerCreatedEvent obj:
-                return await Handle(obj);
-            case ChannelAddedEvent obj:
+            case ChannelCreatedEvent obj:
                 return await Handle(obj);
             default:
                 return false;
         }
     }
 
-    private async Task<bool> Handle(ServerCreatedEvent evt)
+    private async Task<bool> Handle(ChannelCreatedEvent evt)
     {
         // Send the server object to persistence store
-        var command = new AddServer.AddServerCommand(evt.Server);
+        var command = new AddServerChannel.AddServerChannelCommand(evt.Channel);
         var commandResponse = await _mediator.Send(command);
-        // send it to next event
-        return true;
-    }
-    
-    private async Task<bool> Handle(ChannelAddedEvent evt)
-    {
-        // Send the server object to persistence store
-        // SEND IT TO SIGNALR??
+        if (commandResponse.Type == 0)
+        {
+            var serverGrain = GrainFactory.GetGrain<IServerGrain>(commandResponse.ServerId!.Value);
+            await serverGrain.AddChannelAsync(new AddChannelCommand(commandResponse));
+        }
+        // Setup SignalR Hub and subscribe to ServerEvents, and if it detects ChannelAddedEvent
+        // send DTO to clients
         // send it to next event
         return true;
     }

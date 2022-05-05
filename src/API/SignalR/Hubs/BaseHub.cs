@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Application.Servers.Features;
+using Application.Users.Features;
 using Dovecord.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -81,6 +82,7 @@ public class BaseHub : Hub<IBaseHub>
 
     private async Task StartUserSession()
     {
+        await _mediator.Send(new EnsureUserExists.EnsureUserExistCommand(UserId, Username));
         // Merge and simplify this and un/subscribe
         Log.Information("SignalR: starting session");
         await Groups.AddToGroupAsync(Context.ConnectionId, UserId.ToString());

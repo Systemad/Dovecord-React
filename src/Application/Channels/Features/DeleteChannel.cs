@@ -1,3 +1,4 @@
+using Application.Database;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,8 +10,8 @@ public static class DeleteChannel
     
     public class Handler : IRequestHandler<DeleteChannelCommand, bool>
     {
-        private readonly IDoveDbContext _context;
-        public Handler(IDoveDbContext context)
+        private readonly DoveDbContext _context;
+        public Handler(DoveDbContext context)
         {
             _context = context;
         }

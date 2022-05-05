@@ -1,3 +1,4 @@
+using Application.Database;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,8 +10,8 @@ public static class DeleteUser
     
     public class Handler : IRequestHandler<DeleteUserCommand, bool>
     {
-        private readonly IDoveDbContext _context;
-        public Handler(IDoveDbContext context)
+        private readonly DoveDbContext _context;
+        public Handler(DoveDbContext context)
         {
             _context = context;
         }
@@ -22,7 +23,6 @@ public static class DeleteUser
 
             if (user is null)
                 throw new NotFoundException("User", request.Id);
-
             
             _context.Users.Remove(user);
             await _context.SaveChangesAsync(cancellationToken);

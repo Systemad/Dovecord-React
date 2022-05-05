@@ -1,5 +1,4 @@
-using AutoMapper;
-using Domain.Channels.Dto;
+using Application.Database;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,17 +6,15 @@ namespace Application.Channels.Features;
 
 public static class UpdateChannel
 {
-    public record UpdateChannelCommand(Guid Id, ChannelManipulationDto NewChannelData) : IRequest<bool>;
+    public record UpdateChannelCommand(Guid Id, string Name, string Topic) : IRequest<bool>;
     
     public class Query : IRequestHandler<UpdateChannelCommand, bool>
     {
-        private readonly IDoveDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly DoveDbContext _context;
         
-        public Query(IDoveDbContext context, IMapper mapper)
+        public Query(DoveDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<bool> Handle(UpdateChannelCommand request, CancellationToken cancellationToken)
@@ -25,12 +22,14 @@ public static class UpdateChannel
             var channelToUpdate = await _context.Channels
                 .Where(x => x.Id == request.Id)
                 .AsTracking()
-                .SingleOrDefaultAsync(cancellationToken);
+                .FirstOrDefaultAsync(cancellationToken);
             
             if (channelToUpdate is null)
                 throw new NotFoundException("Channel", request.Id);
             
-            _mapper.Map(request.NewChannelData, channelToUpdate);  
+            channelToUpdate.Name = request.Name;
+            channelToUpdate.Topic = request.Topic;
+
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }

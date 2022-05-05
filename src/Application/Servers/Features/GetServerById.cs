@@ -1,6 +1,7 @@
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Application.Database;
+using Domain.Channels.Dto;
 using Domain.Servers.Dto;
+using Domain.Users.Dto;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,27 +13,27 @@ public static class GetServerById
 
     public class QueryHandler : IRequestHandler<GetServerByIdGetQuery, ServerDto>
     {
-        private readonly IDoveDbContext _context;
-        private readonly IMapper _mapper;
-
-        public QueryHandler(IDoveDbContext context, IMapper mapper)
+        private readonly DoveDbContext _context;
+        public QueryHandler(DoveDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<ServerDto> Handle(GetServerByIdGetQuery request, CancellationToken cancellationToken)
         {
             var result = await _context.Servers
-                .Include(channels => channels.Channels)
-                .Include(members => members.Members)
-                .ProjectTo<ServerDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
-
+                .Where(s => s.Id == request.Id)
+                .Select(x => new ServerDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    IconUrl = x.IconUrl,
+                    OwnerUserId = x.OwnerUserId
+                }).FirstOrDefaultAsync(cancellationToken);
+            
             if (result is null)
                 throw new NotFoundException("Server", request.Id);
-
-            //return _mapper.Map<ServerDto>(result);
+            
             return result;
         }
     }

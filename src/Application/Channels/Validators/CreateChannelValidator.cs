@@ -7,9 +7,7 @@ public class CreateChannelValidator : AbstractValidator<AddServerChannel.AddServ
 {
     public CreateChannelValidator()
     {
-        RuleFor(x => x.ChannelToAdd.Name).NotEmpty();
-        RuleFor(x => x.ChannelToAdd.Name).Length(3, 15);
-        
-        //RuleFor(x => x.ChannelToAdd.ServerId).NotEmpty();
+        RuleFor(x => x.Channel.Name).NotEmpty();
+        RuleFor(x => x.Channel.Name).Length(3, 15);
     }
 }

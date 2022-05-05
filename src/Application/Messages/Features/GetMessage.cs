@@ -1,5 +1,4 @@
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Application.Database;
 using Domain.Messages.Dto;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,25 +11,31 @@ public static class GetMessage
 
     public class QueryHandler : IRequestHandler<MessageQuery, ChannelMessageDto>
     {
-        private readonly IDoveDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly DoveDbContext _context;
 
-        public QueryHandler(IDoveDbContext context, IMapper mapper)
+        public QueryHandler(DoveDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<ChannelMessageDto> Handle(MessageQuery request, CancellationToken cancellationToken)
         {
-            var result = await _context.ChannelMessages
-                .ProjectTo<ChannelMessageDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
-
-            if (result is null)
-                throw new NotFoundException("Message", request.Id);
-
-            return result;
+            var query = await _context.ChannelMessages.Where(m => m.Id == request.Id)
+                .Select(msg => new ChannelMessageDto
+                {
+                    Id = msg.Id,
+                    CreatedOn = msg.CreatedOn,
+                    CreatedBy = msg.CreatedBy,
+                    IsEdit = msg.IsEdit,
+                    LastModifiedOn = msg.LastModifiedOn,
+                    Type = msg.Type,
+                    Content = msg.Content,
+                    //Author = msg.Author,
+                    ChannelId = msg.ChannelId,
+                    ServerId = msg.ServerId
+                }).FirstOrDefaultAsync(cancellationToken);
+            
+            return query;
         }
     }
 }

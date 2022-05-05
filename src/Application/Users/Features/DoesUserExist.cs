@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.Database;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Users.Features;
@@ -9,13 +10,11 @@ public static class DoesUserExist
 
     public class QueryHandler : IRequestHandler<DoesUserExistCommand, bool>
     {
-        private readonly IDoveDbContext _context;
-        private readonly IMediator _mediator;
+        private readonly DoveDbContext _context;
 
-        public QueryHandler(IDoveDbContext context, IMediator mediator)
+        public QueryHandler(DoveDbContext context)
         {
             _context = context;
-            _mediator = mediator;
         }
 
         public async Task<bool> Handle(DoesUserExistCommand request, CancellationToken cancellationToken)

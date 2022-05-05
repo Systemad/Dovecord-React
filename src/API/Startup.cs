@@ -3,8 +3,6 @@ using Dovecord.Extensions.Application;
 using Dovecord.Extensions.Host;
 using Dovecord.Extensions.Services;
 using Dovecord.SignalR.Hubs;
-using Infrastructure;
-using Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using NSwag.AspNetCore;
@@ -52,13 +50,13 @@ public class Startup
             options.LowercaseUrls = true;
             options.LowercaseQueryStrings = true;
         });
+        services.AddInfrastructure(_config, _env.IsDevelopment());
         services.AddOrleans();
         services.AddAppAuthentication(_config);
         services.AddSignalRApplication();
         services.AddCorsService();
         services.AddApplication();
         services.AddApiServices();
-        services.AddInfrastructure(_config, _env.IsDevelopment());
         services.AddHealthChecks();
         services.AddSpaStaticFiles(configuration => 
             configuration.RootPath = "dovecord-react/dist");
@@ -70,8 +68,8 @@ public class Startup
     {
         if (_env.IsDevelopment())
         {
-            using var context = app.ApplicationServices.GetService<DoveDbContext>();
-            context.Database.EnsureCreated();
+            //using var context = app.ApplicationServices.GetRequiredService<DoveDbContext>();
+            //context.Database.EnsureCreated();
             //ChannelSeeder.SeedSampleChannels(app.ApplicationServices.GetService<DoveDbContext>());
         }
         else

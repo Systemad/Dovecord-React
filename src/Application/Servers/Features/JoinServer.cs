@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.Database;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Servers.Features;
@@ -9,9 +10,9 @@ public static class JoinServer
     
     public class Query : IRequestHandler<JoinServerCommand, bool>
     {
-        private readonly IDoveDbContext _context;
+        private readonly DoveDbContext _context;
 
-        public Query(IDoveDbContext context)
+        public Query(DoveDbContext context)
         {
             _context = context;
         }
@@ -28,12 +29,13 @@ public static class JoinServer
                 .AsTracking()
                 .FirstAsync(m => m.Id == request.UserId, cancellationToken);
             
+            /*
             if (member is null)
                 throw new NotFoundException("Member", member);
             
             if (serverToUpdate is null)
                 throw new NotFoundException("Server", serverToUpdate);
-            
+            */
             serverToUpdate.Members.Add(member);
             
             await _context.SaveChangesAsync(cancellationToken);

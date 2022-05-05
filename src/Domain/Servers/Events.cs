@@ -1,6 +1,11 @@
-﻿namespace Domain.Servers;
+﻿using Domain.Channels;
+using Domain.Channels.Dto;
+using Domain.Servers.Dto;
 
-public record ServerCreatedEvent(Guid ServerId, string Name, Guid InvokerUserId);
-public record ChannelCreatedCEvent(Guid ChannelId, Guid ServerId, string Name);
+namespace Domain.Servers;
+
+public record ServerCreatedEvent(Server Server);
+public record ChannelAddedEvent(ChannelDto Channel);
+public record ChannelRemovedEvent(Guid ServerId, Guid ChannelId);
 public record UserAddedEvent(Guid ServerId, Guid UserId);
 public record UserRemovedEvent(Guid ServerId, Guid UserId);

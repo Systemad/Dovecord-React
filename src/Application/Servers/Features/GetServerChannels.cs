@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Database;
 using Domain.Channels.Dto;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -11,23 +11,32 @@ public static class GetServerChannels
 
     public class QueryHandler : IRequestHandler<GetServerChannelsQuery, List<ChannelDto>>
     {
-        private readonly IDoveDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly DoveDbContext _context;
 
-        public QueryHandler(IDoveDbContext context, IMapper mapper)
+        public QueryHandler(DoveDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<List<ChannelDto>> Handle(GetServerChannelsQuery request, CancellationToken cancellationToken)
         {
             var filteredServer = await _context.Servers
                 .Where(server => server.Id == request.serverId)
-                .Select(servers => servers.Channels)
-                .FirstOrDefaultAsync(cancellationToken);
-            
-            return _mapper.Map<List<ChannelDto>>(filteredServer);
+                .Select(servers => servers.Channels
+                    .Select(chn => new ChannelDto
+                    {
+                        Id = chn.Id,
+                        Type = chn.Type,
+                        Name = chn.Name,
+                        Topic = chn.Topic,
+                        ServerId = chn.ServerId,
+                        //Server = null,
+                        //Messages = null,
+                        //Recipients = null
+                    }).ToList()
+                ).FirstOrDefaultAsync(cancellationToken);
+
+            return filteredServer;
         }
     }
 }

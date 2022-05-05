@@ -1,4 +1,5 @@
 using Application.Messages.Features;
+using Domain.Messages;
 using Domain.Messages.Dto;
 using Dovecord.Extensions.Services;
 using Dovecord.SignalR.Helpers;
@@ -38,12 +39,11 @@ public class MessageController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost(Name = "AddMessage")]
-    public async Task<ActionResult<ChannelMessageDto>> SaveMessage([FromBody] MessageManipulationDto message)
+    public IActionResult SaveMessage([FromBody] CreateMessageModel message)
     {
-        var command = new AddMessage.AddMessageCommand(message);
-        var commandResponse = await _mediator.Send(command);
-        await HubHelpers.SendMessageToTopic(commandResponse, _hubContext);
-        return CreatedAtAction(nameof(GetMessage), new {commandResponse.Id}, commandResponse);
+        var messageId = Guid.NewGuid();
+        
+        return Ok();
     }
     
     [ProducesResponseType(204)]

@@ -1,5 +1,4 @@
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Application.Database;
 using Domain.Servers;
 using Domain.Servers.Dto;
 using MediatR;
@@ -9,46 +8,46 @@ namespace Application.Servers.Features;
 
 public static class AddServer
 {
-    public record AddServerCommand(ServerCreatedEvent ServerCreatedEvent) : IRequest<ServerDto>;
+    public record AddServerCommand(Server Server) : IRequest<ServerDto>;
 
     public class Handler : IRequestHandler<AddServerCommand, ServerDto>
     {
-        private readonly IDoveDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly DoveDbContext _context;
 
-        public Handler(IDoveDbContext context, IMapper mapper)
+        public Handler(DoveDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
         
         public async Task<ServerDto> Handle(AddServerCommand request, CancellationToken cancellationToken)
         {
-            var mapServer = _mapper.Map<Server>(request.ServerCreatedEvent);
-            mapServer.OwnerUserId = request.ServerCreatedEvent.InvokerUserId;
-            _context.Servers.Add(mapServer);
+
+            _context.Servers.Add(request.Server);
             await _context.SaveChangesAsync(cancellationToken);
             
             var serverToUpdate = await _context.Servers
-                .Where(x => x.Id == mapServer.Id)
+                .Where(x => x.Id == request.Server.Id)
                 .Include(m => m.Members)
                 .AsTracking()
                 .FirstAsync(cancellationToken);
 
             var member = await _context.Users
                 .AsTracking()
-                .FirstAsync(m => m.Id == request.ServerCreatedEvent.InvokerUserId, cancellationToken);
+                .FirstAsync(m => m.Id == request.Server.OwnerUserId, cancellationToken);
             
             serverToUpdate.Members.Add(member);
             await _context.SaveChangesAsync(cancellationToken);
+
+            var query = await _context.Servers.Where(s => s.Id == request.Server.Id)
+                .Select(sv => new ServerDto
+                {
+                    Id = sv.Id,
+                    Name = sv.Name,
+                    IconUrl = sv.IconUrl,
+                    OwnerUserId = sv.OwnerUserId
+                }).SingleOrDefaultAsync(cancellationToken);
             
-            var newServer = await _context.Servers
-                .ProjectTo<ServerDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(c => c.Id == mapServer.Id, cancellationToken);
-
-            return newServer;
-
-
+            return query;
         }
     }
 }

@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Database;
 using Domain.Servers.Dto;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -11,13 +11,11 @@ public static class UpdateServer
     
     public class Query : IRequestHandler<UpdateServerCommand, bool>
     {
-        private readonly IDoveDbContext _context;
-        private readonly IMapper _mapper;
-        
-        public Query(IDoveDbContext context, IMapper mapper)
+        private readonly DoveDbContext _context;
+
+        public Query(DoveDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<bool> Handle(UpdateServerCommand request, CancellationToken cancellationToken)
@@ -29,8 +27,7 @@ public static class UpdateServer
             
             if (serverToUpdate is null)
                 throw new NotFoundException("Server", request.Id);
-            
-            _mapper.Map(request.NewCreateServerData, serverToUpdate);  
+            serverToUpdate.Name = request.NewCreateServerData.Name;
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }

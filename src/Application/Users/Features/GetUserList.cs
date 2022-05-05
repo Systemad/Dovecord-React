@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Database;
 using Domain.Users.Dto;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -11,20 +11,27 @@ public static class GetUserList
 
     public class QueryHandler : IRequestHandler<UserListQuery, List<UserDto>>
     {
-        private readonly IDoveDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly DoveDbContext _context;
 
-        public QueryHandler(IDoveDbContext context, IMapper mapper)
+        public QueryHandler(DoveDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
         
         public async Task<List<UserDto>> Handle(UserListQuery request, CancellationToken cancellationToken)
         {
-            var users = await _context.Users.ToListAsync(cancellationToken);
-            //return users;
-            return _mapper.Map<List<UserDto>>(users);
+            var query = await _context.Users
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Username = u.Username,
+                    Bot = u.Bot,
+                    System = u.System,
+                    AccentColor = u.AccentColor,
+                    LastOnline = u.LastOnline,
+                })
+                .ToListAsync(cancellationToken);
+            return query;
         }
     }
 }

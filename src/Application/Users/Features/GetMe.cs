@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Database;
 using Domain.Users.Dto;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -11,23 +11,30 @@ public static class GetMe
 
     public class QueryHandler : IRequestHandler<GetMeQuery, UserDto>
     {
-        private readonly IDoveDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly DoveDbContext _context;
 
-        public QueryHandler(IDoveDbContext context, IMapper mapper)
+        public QueryHandler(DoveDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<UserDto> Handle(GetMeQuery request, CancellationToken cancellationToken)
         {
             var currentUserId = request.UserId;
-            var filteredServer = await _context.Users
+            var query = await _context.Users
                 .Where(user => user.Id == currentUserId)
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Username = u.Username,
+                    Bot = u.Bot,
+                    System = u.System,
+                    AccentColor = u.AccentColor,
+                    LastOnline = u.LastOnline,
+                })
                 .FirstOrDefaultAsync(cancellationToken);
             
-            return _mapper.Map<UserDto>(filteredServer);
+            return query;
         }
     }
 }

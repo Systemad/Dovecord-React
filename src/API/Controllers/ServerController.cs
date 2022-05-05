@@ -1,5 +1,6 @@
 using Application.Channels.Features;
 using Application.Servers.Features;
+using Domain.Channels;
 using Domain.Channels.Dto;
 using Domain.Servers;
 using Domain.Servers.Dto;
@@ -104,12 +105,13 @@ public class ServerController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost("{serverId:guid}/channels", Name = "AddServerChannel")]
-    public async Task<IActionResult> AddServerChannel([FromBody] ChannelManipulationDto channelForCreation, Guid serverId)
+    public ActionResult AddServerChannel(Guid serverId, [FromBody] CreateChannelModel channelModel)
     {
-        var command = new AddServerChannel.AddServerChannelCommand(channelForCreation, serverId);
-        var commandResponse = await _mediator.Send(command);
-        await HubHelpers.SendChannelCreated(commandResponse, _hubContext);
-        return Ok(commandResponse);
+        var channelId = Guid.NewGuid();
+        var channel = _client.GetGrain<IChannelGrain>(channelId);
+        channel.CreateAsync(new CreateChannelCommand(serverId, channelId, channelModel.Name, channelModel.Topic,
+            channelModel.Type));
+        return Ok();
         //return CreatedAtAction(nameof(GetChannel), new {commandResponse.Id}, commandResponse);
     }
     

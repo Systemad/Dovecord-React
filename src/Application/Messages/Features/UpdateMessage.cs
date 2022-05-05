@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Database;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,13 +10,11 @@ public static class UpdateMessage
     
     public class Query : IRequestHandler<UpdateMessageCommand, bool>
     {
-        private readonly IDoveDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly DoveDbContext _context;
 
-        public Query(IDoveDbContext context, IMapper mapper)
+        public Query(DoveDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<bool> Handle(UpdateMessageCommand request, CancellationToken cancellationToken)
@@ -32,8 +30,11 @@ public static class UpdateMessage
             
             if (request.InvokerUserId != messageToUpdate.Author.Id)
                 return false;
-            
-            _mapper.Map(request.NewMessageData, messageToUpdate);  
+
+            messageToUpdate.IsEdit = true;
+            messageToUpdate.LastModifiedOn = DateTime.Now;
+            messageToUpdate.Content = request.NewMessageData;
+
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }

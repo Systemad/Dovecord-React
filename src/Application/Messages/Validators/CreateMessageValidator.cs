@@ -7,8 +7,8 @@ public class CreateMessageValidator : AbstractValidator<AddMessage.AddMessageCom
 {
     public CreateMessageValidator()
     {
-        RuleFor(x => x.MessageToAdd.ChannelId).NotEmpty();
-        RuleFor(x => x.MessageToAdd.Content).NotEmpty();
-        RuleFor(x => x.MessageToAdd.Content).Length(1, 200);
+        RuleFor(x => x.ChannelId).NotEmpty();
+        RuleFor(x => x.Content).NotEmpty();
+        RuleFor(x => x.Content).Length(1, 200);
     }
 }

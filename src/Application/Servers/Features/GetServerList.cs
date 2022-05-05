@@ -1,4 +1,4 @@
-using AutoMapper;
+using Application.Database;
 using Domain.Servers.Dto;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -11,24 +11,26 @@ public static class GetServerList
 
     public class QueryHandler : IRequestHandler<ServerListQuery, List<ServerDto>>
     {
-        private readonly IDoveDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly DoveDbContext _context;
 
-        public QueryHandler(IDoveDbContext context, IMapper mapper)
+        public QueryHandler(DoveDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
         
         public async Task<List<ServerDto>> Handle(ServerListQuery request, CancellationToken cancellationToken)
         {
             var servers = await _context.Servers
-                //.Include(x => 
-                //    x.Members.Select(u => u.Id == currentUser))
+                .Select(s => new ServerDto
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    IconUrl = s.IconUrl,
+                    OwnerUserId = s.OwnerUserId
+                })
                 .ToListAsync(cancellationToken);
-            
-            return _mapper.Map<List<ServerDto>>(servers);
-            //return servers;
+
+            return servers;
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using Application.Database;
+using Domain.Users;
+using Domain.Users.Dto;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Servers.Features;
@@ -9,9 +12,9 @@ public static class LeaveServer
     
     public class Query : IRequestHandler<LeaveServerCommand, bool>
     {
-        private readonly IDoveDbContext _context;
+        private readonly DoveDbContext _context;
 
-        public Query(IDoveDbContext context)
+        public Query(DoveDbContext context)
         {
             _context = context;
         }
@@ -28,12 +31,13 @@ public static class LeaveServer
                 .AsTracking()
                 .FirstAsync(m => m.Id == request.UserId, cancellationToken);
             
+            /*
             if(member is null)
-                throw new NotFoundException("User", member);
+                throw new NotFoundException(nameof(member), member);
             
             if (serverToUpdate is null)
                 throw new NotFoundException("Server", serverToUpdate);
-            
+            */
             serverToUpdate.Members.Remove(member);
             
             await _context.SaveChangesAsync(cancellationToken);

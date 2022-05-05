@@ -1,5 +1,6 @@
-using Autofac.Extensions.DependencyInjection;
+using Application.Database;
 using Dovecord.Extensions.Host;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Dovecord;
@@ -10,6 +11,25 @@ public class Program
     {
         var host = CreateHostBuilder(args).Build();
         host.AddLoggingConfiguration();
+        
+        
+        using (var scope = host.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+            try
+            {
+                var context = services.GetRequiredService<DoveDbContext>();
+                await context.Database.MigrateAsync();
+                //context.Database.EnsureCreated();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
+        }
+
         try
         {
             Log.Information("Starting application");
@@ -30,7 +50,6 @@ public class Program
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .UseSerilog()
-            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();

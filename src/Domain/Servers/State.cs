@@ -5,6 +5,7 @@ public partial class ServerState
     public Guid Id { get; set; }
     public bool Created { get; set; }
     public string Name { get; set; }
+    public Guid OwnerId { get; set; }
     public List<Guid> Users { get; set; }
     public List<Guid> Channels { get; set; }
 
@@ -15,12 +16,16 @@ public partial class ServerState
         Channels = new List<Guid>();
     }
 
-    public void Apply(ServerCreatedEvent serverCreatedEvent)
+    public void Apply(ServerCreatedEvent evt)
     {
-        Id = serverCreatedEvent.ServerId;
-        Name = serverCreatedEvent.Name;
+        Id = evt.Server.Id;
+        Name = evt.Server.Name;
+        OwnerId = evt.Server.OwnerUserId;
     }
-
-    public void Apply(UserAddedEvent userAddedEvent) => Users.Add(userAddedEvent.UserId);
-    public void Apply(UserRemovedEvent userRemovedEvent) => Users.Remove(userRemovedEvent.UserId);
+    
+    public void Apply(ChannelAddedEvent evt) => Channels.Add(evt.Channel.Id);
+    public void Apply(ChannelRemovedEvent evt) => Channels.Remove(evt.ChannelId);
+    
+    public void Apply(UserAddedEvent evt) => Users.Add(evt.UserId);
+    public void Apply(UserRemovedEvent evt) => Users.Remove(evt.UserId);
 }

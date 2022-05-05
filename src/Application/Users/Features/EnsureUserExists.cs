@@ -1,4 +1,5 @@
-﻿using Domain.Users;
+﻿using Application.Database;
+using Domain.Users;
 using MediatR;
 
 namespace Application.Users.Features;
@@ -9,10 +10,10 @@ public static class EnsureUserExists
 
     public class QueryHandler : IRequestHandler<EnsureUserExistCommand>
     {
-        private readonly IDoveDbContext _context;
+        private readonly DoveDbContext _context;
         private readonly IMediator _mediator;
 
-        public QueryHandler(IDoveDbContext context, IMediator mediator)
+        public QueryHandler(DoveDbContext context, IMediator mediator)
         {
             _context = context;
             _mediator = mediator;

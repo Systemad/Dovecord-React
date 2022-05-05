@@ -1,5 +1,4 @@
 ﻿using Domain;
-using Domain.Servers;
 using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
@@ -20,11 +19,12 @@ public class ClusterClientHostedService : IHostedService, IAsyncDisposable, IDis
                 options.ClusterId = "dev";
                 options.ServiceId = "dovecord-service";
             })
-            .ConfigureLogging(builder => builder.AddProvider(loggerProvider))
             .AddSimpleMessageStreamProvider(Constants.InMemoryStream)
-            .ConfigureApplicationParts(parts => 
-                parts.AddApplicationPart(typeof(IServerGrain).Assembly)
-                .AddApplicationPart(typeof(ISubscriberGrain).Assembly))
+            .ConfigureApplicationParts(parts => parts.AddFromDependencyContext().WithReferences())
+            .ConfigureLogging(
+                log => log
+                    .AddFilter("Orleans.Runtime.Management.ManagementGrain", LogLevel.Warning)
+                    .AddFilter("Orleans.Runtime.SiloControl", LogLevel.Warning))
             .Build();
     }
 

@@ -3,14 +3,15 @@ This is a Single Page App (SPA) chat application made with React (TypeScript) an
 NOTE: The project is in a very (very) early state!
 
 ## Technologies
-
-* [React with Typescript, Redux Toolkit, Styled Components](https://reactjs.org/)
+* [React with Typescript, Redux Toolkit (Query), Styled Components](https://reactjs.org/)
 * [ASP.NET Core 6](https://docs.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core?view=aspnetcore-6.0)
 * [Entity Framework Core 6](https://docs.microsoft.com/en-us/ef/core/)
-* [SignalR](https://dotnet.microsoft.com/en-us/apps/aspnet/signalr)
-* [MediatR](https://github.com/jbogard/MediatR)
-* [AutoMapper](https://automapper.org/)
+* [Orleans](https://github.com/dotnet/orleans)
 * [Docker](https://www.docker.com/)
+* [SignalR](https://dotnet.microsoft.com/en-us/apps/aspnet/signalr)
+
+## Libraries
+* [MediatR](https://github.com/jbogard/MediatR)
 * [NUnit](https://nunit.org/)
 * [FluentValidation](https://fluentvalidation.net/)
 * [FluentAssertions](https://fluentassertions.com/)
@@ -55,22 +56,31 @@ To disable Docker in Visual Studio, right-click on the **docker-compose** file i
 InMemory Database is used by default in testing/debugging.
 For production, the project is configured to use InMemory database for production by default, but alternatively can be switched to PostgreSQL in appsettings.json.
 
-To use `dotnet-ef` for your migrations you need to cd into src/Dovecord project and run the following;
-`dotnet ef migrations add "InitialMigration"`
-`dotnet ef database update`
+To use `dotnet-ef` for your migrations you need to cd into root of the project and run the following;
+`dotnet ef migrations add "Initial" --project .\src\Application --startup-project .\src\API --output-dir Migrations`
 
 ## Overview
 
-### Dovecord
-Contains the backend written in ASP.NET
+### API
+Contains the controller and Orleans client to interact with the Silo(Host).
+
+### Applications
+Contains MediatR handlers, services, the database context and Orleans grains.
+This is only intended to interact with the database.
+
+## Orleans.Silo
+Contains Orleans Silo (host).
+
+### Domain
+Contains the Entities and DTOs.
 
 ### Dovecord-react
 Contains React project, seperated from backend 
-## License
 
+## License
 Coming soon
+
 ### TODO:
 
 ## Credits
-* JasonTaylorDev's [CleanArchitecture](https://github.com/jasontaylordev/CleanArchitecture)
 * [Discord like design from](https://github.com/gabrielfernans/discord-ui)

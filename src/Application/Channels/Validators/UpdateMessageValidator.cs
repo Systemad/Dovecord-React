@@ -7,7 +7,7 @@ public class UpdateChannelValidator : AbstractValidator<UpdateChannel.UpdateChan
 {
     public UpdateChannelValidator()
     {
-        RuleFor(x => x.NewChannelData.Name).NotEmpty();
-        RuleFor(x => x.NewChannelData.Name).Length(3, 15);
+        RuleFor(x => x.Name).NotEmpty();
+        RuleFor(x => x.Topic).Length(3, 15);
     }
 }

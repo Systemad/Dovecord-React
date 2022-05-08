@@ -1,8 +1,11 @@
 ﻿using System.Net;
 using System.Reflection;
+using Application.Channels;
 using Application.Database;
 using Application.Servers;
+using Application.Users;
 using Domain;
+using Domain.Channels;
 using Domain.Servers;
 using FluentValidation;
 using MediatR;
@@ -39,16 +42,23 @@ var silo = new SiloHostBuilder()
             .AddFilter("Orleans.Runtime.SiloControl", LogLevel.Warning))
     .ConfigureServices(services =>
     {
-        /*
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        services.AddMediatR(Assembly.GetExecutingAssembly());
-        */
+        // -- Server
         services.AddValidatorsFromAssemblyContaining(typeof(ServerGrain));
         services.AddMediatR(typeof(ServerGrain).Assembly);
         
         services.AddValidatorsFromAssemblyContaining(typeof(ServerSubscriber));
         services.AddMediatR(typeof(ServerSubscriber).Assembly);
+        
+        // --- Channel
+        services.AddValidatorsFromAssemblyContaining(typeof(ChannelGrain));
+        services.AddMediatR(typeof(ChannelSubscriber).Assembly);
+        
+        // -- User
+        services.AddValidatorsFromAssemblyContaining(typeof(UserSubscriber));
+        services.AddMediatR(typeof(UserSubscriber).Assembly);
+        
+        services.AddValidatorsFromAssemblyContaining(typeof(UserManageSaga));
+        services.AddMediatR(typeof(UserManageSaga).Assembly);
         
         services.AddDbContext<DoveDbContext>(options =>
         {

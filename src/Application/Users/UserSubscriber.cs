@@ -2,27 +2,28 @@
 using Application.Users.Features;
 using Domain;
 using Domain.Servers;
+using Domain.Users;
 using MediatR;
 using Orleans;
 using Orleans.Streams;
 
-namespace Application.Servers;
+namespace Application.Users;
 
 
-[ImplicitStreamSubscription(Constants.ServerNamespace)]
-public class ServerSubscriber : Grain, ISubscriberGrain
+[ImplicitStreamSubscription(Constants.UserNamespace)]
+public class UserSubscriber : Grain, ISubscriberGrain
 {
     private StreamSubscriptionHandle<object>? _sub;
     private IStreamProvider? StreamProvider;
     private readonly IMediator _mediator;
 
-    public ServerSubscriber(IMediator mediator)
+    public UserSubscriber(IMediator mediator)
     {
         _mediator = mediator;
     }
     public override async Task OnActivateAsync()
     {
-        Console.WriteLine("ServerSubscribe activated");
+        Console.WriteLine("UserSubscriber activated");
         StreamProvider = GetStreamProvider(Constants.InMemoryStream);
 
         _sub = await StreamProvider
@@ -41,37 +42,27 @@ public class ServerSubscriber : Grain, ISubscriberGrain
     {
         switch (evt)
         {
-            case ServerCreatedEvent obj:
+            case ServerJoinedEvent obj:
                 return await Handle(obj);
-            case ChannelAddedEvent obj:
-                return await Handle(obj);
-            case UserAddedEvent obj:
+            case UserCreatedEvent obj:
                 return await Handle(obj);
             default:
                 return false;
         }
     }
 
-    private async Task<bool> Handle(ServerCreatedEvent evt)
+    private async Task<bool> Handle(ServerJoinedEvent evt)
     {
-        // Send the server object to persistence store
-        var command = new AddServer.AddServerCommand(evt.Server);
-        var commandResponse = await _mediator.Send(command);
-        // send it to next event??
-        return true;
-    }
-    
-    private async Task<bool> Handle(ChannelAddedEvent evt)
-    {
+        var command = new AddUserToServer.AddUserToServerCommand(evt.ServerId, evt.ServerId);
+        await _mediator.Send(command);
         // Send the server object to persistence store
         // SEND IT TO SIGNALR??
         // send it to next event
         return true;
     }
-    
-    private async Task<bool> Handle(UserAddedEvent evt)
+    private async Task<bool> Handle(UserCreatedEvent evt)
     {
-        var command = new AddUserToServer.AddUserToServerCommand(evt.ServerId, evt.UserId);
+        var command = new AddUser.AddUserCommand(evt.Id, evt.Name);
         await _mediator.Send(command);
         // Send the server object to persistence store
         // SEND IT TO SIGNALR??

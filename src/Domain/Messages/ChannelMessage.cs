@@ -1,4 +1,5 @@
-﻿using Domain.Channels;
+﻿using System.ComponentModel.DataAnnotations;
+using Domain.Channels;
 using Domain.Servers;
 using Domain.Users;
 
@@ -9,8 +10,14 @@ public class ChannelMessage
     public Guid Id { get; set; }
     public string? Content { get; set; }
     public string? CreatedBy { get; set; }
+    
+    [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd-ss}")]
     public DateTime CreatedOn { get; set; }
     public bool IsEdit { get; set; }
+    
+    [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd-ss}")]
     public DateTime? LastModifiedOn { get; set; }
     public int Type { get; set; } // 0 Channel message, 1 PM
     

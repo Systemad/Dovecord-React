@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 using Application.Servers.Features;
-using Application.Users.Features;
+using Domain.Users;
 using Dovecord.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +15,7 @@ namespace Dovecord.SignalR.Hubs;
 [RequiredScope("API.Access")]
 public class BaseHub : Hub<IBaseHub>
 {
-    private static readonly ConnectionMap.ConnectionMapping<Guid> _connections = new();
+    private static readonly ConnectionMap.ConnectionMapping<Guid> Connections = new();
     
     private readonly IMediator _mediator;
     private readonly IEventQueue _eventQueue;
@@ -80,16 +80,19 @@ public class BaseHub : Hub<IBaseHub>
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, serverId.ToString());
     }
 
-    private async Task StartUserSession()
+    private Task StartUserSession()
     {
-        await _mediator.Send(new EnsureUserExists.EnsureUserExistCommand(UserId, Username));
+        var userGrain = _client.GetGrain<IUserGrain>(UserId);
+        userGrain.CreateAsync(new CreateUserCommand(UserId, Username));
+        //await _mediator.Send(new EnsureUserExists.EnsureUserExistCommand(UserId, Username));
         // Merge and simplify this and un/subscribe
         Log.Information("SignalR: starting session");
-        await Groups.AddToGroupAsync(Context.ConnectionId, UserId.ToString());
-        await SubscribeServers();
-        _connections.Add(UserId, Context.ConnectionId);
+        //await Groups.AddToGroupAsync(Context.ConnectionId, UserId.ToString());
+        //await SubscribeServers();
+        Connections.Add(UserId, Context.ConnectionId);
         //var userGrain = _client.GetGrain<IUserGrain>(UserId);
         //await userGrain.SetUserStatus(PresenceStatus.Online);
+        return Task.CompletedTask;
     }
     
     private async Task SubscribeServers()
@@ -109,7 +112,7 @@ public class BaseHub : Hub<IBaseHub>
         Log.Information("SignalR: starting session");
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, UserId.ToString());
         await UnSubscribeServers();
-        _connections.Remove(UserId, Context.ConnectionId);
+        Connections.Remove(UserId, Context.ConnectionId);
             
         //var userGrain = _client.GetGrain<IUserGrain>(UserId);
         //await userGrain.SetUserStatus(PresenceStatus.Offline);

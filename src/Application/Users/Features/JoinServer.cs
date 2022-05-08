@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Servers.Features;
+namespace Application.Users.Features;
 
 public static class JoinServer
 {
@@ -19,15 +19,15 @@ public static class JoinServer
 
         public async Task<bool> Handle(JoinServerCommand request, CancellationToken cancellationToken)
         {
-            var serverToUpdate = await _context.Servers
-                .Where(x => x.Id == request.ServerId)
-                .Include(m => m.Members)
+            var userToUpdate = await _context.Users
+                .Where(x => x.Id == request.UserId)
+                .Include(m => m.Servers)
                 .AsTracking()
                 .FirstAsync(cancellationToken);
 
-            var member = await _context.Users
+            var server = await _context.Servers
                 .AsTracking()
-                .FirstAsync(m => m.Id == request.UserId, cancellationToken);
+                .FirstAsync(m => m.Id == request.ServerId, cancellationToken);
             
             /*
             if (member is null)
@@ -36,7 +36,7 @@ public static class JoinServer
             if (serverToUpdate is null)
                 throw new NotFoundException("Server", serverToUpdate);
             */
-            serverToUpdate.Members.Add(member);
+            userToUpdate.Servers.Add(server);
             
             await _context.SaveChangesAsync(cancellationToken);
             return true;

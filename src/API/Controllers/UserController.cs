@@ -68,9 +68,9 @@ public class UserController : ControllerBase
     [HttpPost(Name = "AddUser")]
     public async Task<ActionResult> AddUser([FromBody] UserCreationDto userForCreation)
     {
-        var command = new AddUser.AddUserCommand(userForCreation);
-        var commandResponse = await _mediator.Send(command);
-        return CreatedAtAction(nameof(GetUser), new {commandResponse.Id}, commandResponse);
+        //var command = new AddUser.AddUserCommand(userForCreation);
+        //var commandResponse = await _mediator.Send(command);
+        return Ok();
     }
     
     [ProducesResponseType(204)]
@@ -88,8 +88,8 @@ public class UserController : ControllerBase
     [HttpPut("{id:guid}", Name = "UpdateUser")]
     public async Task<IActionResult> UpdateUser(Guid id, UserManipulationDto user)
     {
-        var command = new UpdateUser.UpdateUserCommand(id, user);
-        await _mediator.Send(command);
+        //var command = new UpdateUser.UpdateUserCommand(id, user);
+        //await _mediator.Send(command);
         return NoContent();
     }
     
@@ -99,9 +99,9 @@ public class UserController : ControllerBase
     [HttpPost("me/channels", Name = "AddUserChannel")]
     public async Task<IActionResult> AddUserChannel([FromBody]Guid recipientId)
     {
-        var command = new AddUserChannel.AddUserChannelCommand(recipientId, _currentUserService.UserId);
-        var commandResponse = await _mediator.Send(command);
-        return Ok(commandResponse);
+        //var command = new AddUserChannel.AddUserChannelCommand(recipientId, _currentUserService.UserId);
+        //var commandResponse = await _mediator.Send(command);
+        return Ok();
         //return CreatedAtAction(nameof(GetChannel), new {commandResponse.Id}, commandResponse);
     }
     
@@ -110,8 +110,8 @@ public class UserController : ControllerBase
     [HttpPut("me/setting", Name = "UpdateUserSettings")]
     public async Task<IActionResult> UpdateUserSettings(UserSettingsManipulationDto user)
     {
-        var command = new UpdateUserSettings.UpdateUserSettingsCommand(_currentUserService.UserId, user);
-        var updatesSettings = await _mediator.Send(command);
-        return Ok(updatesSettings);
+        //var command = new UpdateUserSettings.UpdateUserSettingsCommand(_currentUserService.UserId, user);
+        //var updatesSettings = await _mediator.Send(command);
+        return Ok();
     }
 }

@@ -18,7 +18,7 @@ public class ChannelGrain : JournaledGrain<ChannelState>, IChannelGrain
     public override Task OnActivateAsync()
     {
         var streamProvider = GetStreamProvider(Constants.InMemoryStream);
-        _stream = streamProvider.GetStream<object>(this.GetPrimaryKey(), Constants.ServerNamespace);
+        _stream = streamProvider.GetStream<object>(this.GetPrimaryKey(), Constants.ChannelNamespace);
         return base.OnActivateAsync();
     }
 

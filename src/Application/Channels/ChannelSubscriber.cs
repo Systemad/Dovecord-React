@@ -23,11 +23,11 @@ public class ChannelSubscriber : Grain, ISubscriberGrain
     }
     public override async Task OnActivateAsync()
     {
-        Console.WriteLine("ServerSubscribe activated");
+        Console.WriteLine("ChannelSubcsriber activated");
         StreamProvider = GetStreamProvider(Constants.InMemoryStream);
 
         _sub = await StreamProvider
-            .GetStream<object>(this.GetPrimaryKey(), Constants.ServerNamespace)
+            .GetStream<object>(this.GetPrimaryKey(), Constants.ChannelNamespace)
             .SubscribeAsync(HandleAsync);
         await base.OnActivateAsync();
     }
@@ -57,7 +57,7 @@ public class ChannelSubscriber : Grain, ISubscriberGrain
         if (commandResponse.Type == 0)
         {
             var serverGrain = GrainFactory.GetGrain<IServerGrain>(commandResponse.ServerId!.Value);
-            await serverGrain.AddChannelAsync(new AddChannelCommand(commandResponse));
+            serverGrain.AddChannelAsync(new AddChannelCommand(commandResponse));
         }
         // Setup SignalR Hub and subscribe to ServerEvents, and if it detects ChannelAddedEvent
         // send DTO to clients

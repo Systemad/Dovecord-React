@@ -25,7 +25,7 @@ public class UserGrain : JournaledGrain<UserState>, IUserGrain
     public override Task OnActivateAsync()
     {
         var streamProvider = GetStreamProvider(Constants.InMemoryStream);
-        _stream = streamProvider.GetStream<object>(this.GetPrimaryKey(), Constants.ServerNamespace);
+        _stream = streamProvider.GetStream<object>(this.GetPrimaryKey(), Constants.UserNamespace);
         Console.WriteLine("Grain activated");
         return base.OnActivateAsync();
     }

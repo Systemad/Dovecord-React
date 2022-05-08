@@ -1,9 +1,11 @@
 using Application.Channels.Features;
 using Application.Servers.Features;
+using Application.Users.Features;
 using Domain.Channels;
 using Domain.Channels.Dto;
 using Domain.Servers;
 using Domain.Servers.Dto;
+using Domain.Users;
 using Domain.Users.Dto;
 using Dovecord.Extensions.Services;
 using Dovecord.SignalR.Helpers;
@@ -93,8 +95,10 @@ public class ServerController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost(Name = "AddServer")]
-    public IActionResult AddServer([FromBody] CreateServerModel createServerModel)
+    public async Task<IActionResult> AddServer([FromBody] CreateServerModel createServerModel)
     {
+        await _mediator.Send(
+            new EnsureUserExists.EnsureUserExistCommand(_currentUserService.UserId, _currentUserService.Username));
         var serverId = Guid.NewGuid();
         var server = _client.GetGrain<IServerGrain>(serverId);
         server.CreateAsync(new CreateServerCommand(serverId, createServerModel.Name, _currentUserService.UserId));
@@ -137,22 +141,16 @@ public class ServerController : ControllerBase
     
     [ProducesResponseType(204)]
     [HttpPost("join/{serverId:guid}", Name = "JoinServer")]
-    public async Task<IActionResult> JoinServer(Guid serverId)
+    public IActionResult AddUser([FromRoute] Guid serverId)
     {
-        var command = new JoinServer.JoinServerCommand(serverId, _currentUserService.UserId);
-        await _mediator.Send(command);
-        
-        //var joinedServer = await _mediator.Send(new GetServerById.GetServerByIdGetQuery(serverId));
-        //await HubHelpers.JoinedServer(joinedServer,
-        //    ControllerContext.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier), _hubContext);
-            
-        //public string? UserId => _httpContext.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        var server = _client.GetGrain<IServerGrain>(serverId);
+        server.AddUserAsync(new AddUserCommand(serverId, _currentUserService.UserId));
         return NoContent();
     }
     
     [ProducesResponseType(204)]
     [HttpPost("leave/{serverId:guid}", Name = "LeaveServer")]
-    public async Task<IActionResult> LeaveServer(Guid serverId)
+    public async Task<IActionResult> RemoveUser(Guid serverId)
     {
         var command = new LeaveServer.LeaveServerCommand(serverId, _currentUserService.UserId);
         await _mediator.Send(command);

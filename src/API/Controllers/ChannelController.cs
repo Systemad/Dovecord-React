@@ -70,10 +70,10 @@ public class ChannelController : ControllerBase
     [ProducesResponseType(204)]
     [Produces("application/json")]
     [HttpPut("{id:guid}", Name = "UpdateChannel")]
-    public async Task<IActionResult> UpdateChannel(Guid id, ChannelManipulationDto channel)
+    public async Task<IActionResult> UpdateChannel(Guid id, CreateChannelModel model)
     {
-        var command = new UpdateChannel.UpdateChannelCommand(id, channel);
-        await _mediator.Send(command);
+        //var channelId = Guid.NewGuid();
+        //await _mediator.Send(command);
         return NoContent();
     }
 }

@@ -8,10 +8,10 @@ namespace Application.Messages.Features;
 
 public static class AddMessage
 {
-    public record AddMessageCommand(Guid Id, Guid UserId, string Username, string Content, int Type, Guid ChannelId, Guid ServerId)
+    public record AddMessageCommandM(ChannelMessage Message)
         : IRequest<ChannelMessageDto>;
 
-    public class Handler : IRequestHandler<AddMessageCommand, ChannelMessageDto>
+    public class Handler : IRequestHandler<AddMessageCommandM, ChannelMessageDto>
     {
         private readonly DoveDbContext _context;
         
@@ -20,37 +20,22 @@ public static class AddMessage
             _context = context;
         }
         
-        public async Task<ChannelMessageDto> Handle(AddMessageCommand request, CancellationToken cancellationToken)
+        public async Task<ChannelMessageDto> Handle(AddMessageCommandM request, CancellationToken cancellationToken)
         {
-
-            var message = new ChannelMessage
-            {
-                Id = request.Id,
-                Content = request.Content,
-                CreatedBy = request.Username,
-                CreatedOn = DateTime.Now,
-                IsEdit = false,
-                LastModifiedOn = null,
-                Type = request.Type,
-                ChannelId = request.ChannelId,
-                ServerId = request.ServerId,
-                AuthorId = request.UserId,
-            };
-            
-            if (message.Type == 0)
+            if (request.Message.Type == 0)
             {
                 var serverId =
                     await _context.Servers
                         .Where(server => server.Channels != null && server.Channels
-                            .Any(ch => ch.Id == request.ChannelId)).Select(i => i.Id)
+                            .Any(ch => ch.Id == request.Message.ChannelId)).Select(i => i.Id)
                         .FirstAsync(cancellationToken);
-                message.ServerId = serverId;
+                request.Message.ServerId = serverId;
             }
 
-            await _context.ChannelMessages.AddAsync(message, cancellationToken);
+            await _context.ChannelMessages.AddAsync(request.Message, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            var query = await _context.ChannelMessages.Where(m => m.Id == request.Id)
+            var query = await _context.ChannelMessages.Where(m => m.Id == request.Message.Id)
                 .Select(msg => new ChannelMessageDto
                 {
                     Id = msg.Id,

@@ -11,34 +11,16 @@ namespace Application.Users;
 
 
 [ImplicitStreamSubscription(Constants.UserNamespace)]
-public class UserSubscriber : Grain, ISubscriberGrain
+public class UserSubscriber : SubscriberGrain
 {
-    private StreamSubscriptionHandle<object>? _sub;
-    private IStreamProvider? StreamProvider;
     private readonly IMediator _mediator;
 
-    public UserSubscriber(IMediator mediator)
+    public UserSubscriber(IMediator mediator) : base(Constants.InMemoryStream, Constants.UserNamespace)
     {
         _mediator = mediator;
     }
-    public override async Task OnActivateAsync()
-    {
-        Console.WriteLine("UserSubscriber activated");
-        StreamProvider = GetStreamProvider(Constants.InMemoryStream);
-
-        _sub = await StreamProvider
-            .GetStream<object>(this.GetPrimaryKey(), Constants.ServerNamespace)
-            .SubscribeAsync(HandleAsync);
-        await base.OnActivateAsync();
-    }
     
-    public override async Task OnDeactivateAsync()
-    {
-        await _sub!.UnsubscribeAsync();
-        await base.OnDeactivateAsync();
-    }
-
-    private async Task<bool> HandleAsync(object evt, StreamSequenceToken token)
+    public override async Task<bool> HandleAsync(object evt, StreamSequenceToken token)
     {
         switch (evt)
         {

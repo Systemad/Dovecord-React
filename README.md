@@ -53,7 +53,6 @@ Then open http://localhost:5000 on your browser.
 To disable Docker in Visual Studio, right-click on the **docker-compose** file in the **Solution Explorer** and select **Unload Project**.
 
 ### Database Migrations
-InMemory Database is used by default in testing/debugging.
 For production, the project is configured to use InMemory database for production by default, but alternatively can be switched to PostgreSQL in appsettings.json.
 
 To use `dotnet-ef` for your migrations you need to cd into root of the project and run the following;
@@ -65,8 +64,8 @@ To use `dotnet-ef` for your migrations you need to cd into root of the project a
 Contains the controller and Orleans client to interact with the Silo(Host).
 
 ### Applications
-Contains MediatR handlers, services, the database context and Orleans grains.
-This is only intended to interact with the database.
+Contains MediatR handlers, services, database and Orleans grains.
+This is only intended to interact with the database for persistence!
 
 ## Orleans.Silo
 Contains Orleans Silo (host).

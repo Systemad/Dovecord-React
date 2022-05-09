@@ -14,8 +14,3 @@ public class Server
     public ICollection<Channel>? Channels { get; set; }
     public ICollection<User>? Members { get; set; }
 }
-
-
-public interface ISubscriberGrain : IGrainWithGuidKey
-{
-}

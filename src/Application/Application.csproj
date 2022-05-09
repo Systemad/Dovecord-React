@@ -42,6 +42,9 @@
       <Orleans_CodeGenInputs Remove="Channels\Mappings\ChannelProfile.cs" />
       <Orleans_CodeGenInputs Remove="Messages\Mappings\MessageProfile.cs" />
       <Orleans_CodeGenInputs Remove="Users\Mappings\UserProfile.cs" />
+      <Orleans_CodeGenInputs Remove="Migrations\20220503141858_Initial.cs" />
+      <Orleans_CodeGenInputs Remove="Migrations\20220503141858_Initial.Designer.cs" />
+      <Orleans_CodeGenInputs Remove="Migrations\DoveDbContextModelSnapshot.cs" />
     </ItemGroup>
 
 </Project>

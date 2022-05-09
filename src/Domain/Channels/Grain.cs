@@ -1,4 +1,5 @@
-﻿using Orleans;
+﻿using Domain.Messages;
+using Orleans;
 using Orleans.EventSourcing;
 using Orleans.Streams;
 
@@ -11,16 +12,9 @@ public interface IChannelGrain : IGrainWithGuidKey
     Task<bool> ChannelExist();
 }
 
-public class ChannelGrain : JournaledGrain<ChannelState>, IChannelGrain
+public class ChannelGrain : EventSourceGrain<ChannelState>, IChannelGrain
 {
-    private IAsyncStream<object> _stream = null!;
-
-    public override Task OnActivateAsync()
-    {
-        var streamProvider = GetStreamProvider(Constants.InMemoryStream);
-        _stream = streamProvider.GetStream<object>(this.GetPrimaryKey(), Constants.ChannelNamespace);
-        return base.OnActivateAsync();
-    }
+    public ChannelGrain() : base(Constants.ServerNamespace, Constants.ChannelNamespace){}
 
     public async Task CreateAsync(CreateChannelCommand command)
     {
@@ -38,12 +32,26 @@ public class ChannelGrain : JournaledGrain<ChannelState>, IChannelGrain
         };
         var evt = new ChannelCreatedEvent(newChannel);
         RaiseEvent(evt);
-        await _stream.OnNextAsync(evt);
+        await PublishEventAsync(evt);
     }
 
-    public Task AddMessageAsync(AddMessageCommand command)
+    public async Task AddMessageAsync(AddMessageCommand command)
     {
-        throw new NotImplementedException();
+        var newMsg = new ChannelMessage
+        {
+            Id = command.MessageId,
+            Content = command.Content,
+            CreatedBy = command.CreatedBy,
+            CreatedOn = command.CreatedOn,
+            IsEdit = command.IsEdit,
+            LastModifiedOn = command.LastModifiedOn,
+            Type = command.Type,
+            ChannelId = command.ChannelId,
+            ServerId = command.ServerId,
+            AuthorId = command.AuthorId,
+        };
+        var newEvent = new MessageAddedEvent(newMsg);
+        await PublishEventAsync(newEvent);
     }
 
     public Task<bool> ChannelExist() => Task.FromResult(State.Created);

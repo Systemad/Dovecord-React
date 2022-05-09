@@ -1,5 +1,5 @@
 ﻿using Application.Channels.Features;
-using Application.Servers.Features;
+using Application.Messages.Features;
 using Domain;
 using Domain.Channels;
 using Domain.Servers;
@@ -9,40 +9,23 @@ using Orleans.Streams;
 
 namespace Application.Channels;
 
-
 [ImplicitStreamSubscription(Constants.ChannelNamespace)]
-public class ChannelSubscriber : Grain, ISubscriberGrain
+public class ChannelSubscriber : SubscriberGrain
 {
-    private StreamSubscriptionHandle<object>? _sub;
-    private IStreamProvider? StreamProvider;
     private readonly IMediator _mediator;
 
-    public ChannelSubscriber(IMediator mediator)
+    public ChannelSubscriber(IMediator mediator) : base(Constants.InMemoryStream, Constants.ChannelNamespace)
     {
         _mediator = mediator;
     }
-    public override async Task OnActivateAsync()
-    {
-        Console.WriteLine("ChannelSubcsriber activated");
-        StreamProvider = GetStreamProvider(Constants.InMemoryStream);
-
-        _sub = await StreamProvider
-            .GetStream<object>(this.GetPrimaryKey(), Constants.ChannelNamespace)
-            .SubscribeAsync(HandleAsync);
-        await base.OnActivateAsync();
-    }
     
-    public override async Task OnDeactivateAsync()
-    {
-        await _sub!.UnsubscribeAsync();
-        await base.OnDeactivateAsync();
-    }
-
-    private async Task<bool> HandleAsync(object evt, StreamSequenceToken token)
+    public override async Task<bool> HandleAsync(object evt, StreamSequenceToken token)
     {
         switch (evt)
         {
             case ChannelCreatedEvent obj:
+                return await Handle(obj);
+            case MessageAddedEvent obj:
                 return await Handle(obj);
             default:
                 return false;
@@ -59,6 +42,18 @@ public class ChannelSubscriber : Grain, ISubscriberGrain
             var serverGrain = GrainFactory.GetGrain<IServerGrain>(commandResponse.ServerId!.Value);
             serverGrain.AddChannelAsync(new AddChannelCommand(commandResponse));
         }
+        // Setup SignalR Hub and subscribe to ServerEvents, and if it detects ChannelAddedEvent
+        // send DTO to clients
+        // send it to next event
+        return true;
+    }
+    
+    private async Task<bool> Handle(MessageAddedEvent evt)
+    {
+        // Send the server object to persistence store
+        var command = new AddMessage.AddMessageCommandM(evt.Message);
+        var commandResponse = await _mediator.Send(command);
+
         // Setup SignalR Hub and subscribe to ServerEvents, and if it detects ChannelAddedEvent
         // send DTO to clients
         // send it to next event

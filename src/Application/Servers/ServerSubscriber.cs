@@ -10,34 +10,16 @@ namespace Application.Servers;
 
 
 [ImplicitStreamSubscription(Constants.ServerNamespace)]
-public class ServerSubscriber : Grain, ISubscriberGrain
+public class ServerSubscriber : SubscriberGrain
 {
-    private StreamSubscriptionHandle<object>? _sub;
-    private IStreamProvider? StreamProvider;
     private readonly IMediator _mediator;
 
-    public ServerSubscriber(IMediator mediator)
+    public ServerSubscriber(IMediator mediator) : base(Constants.InMemoryStream, Constants.ServerNamespace)
     {
         _mediator = mediator;
     }
-    public override async Task OnActivateAsync()
-    {
-        Console.WriteLine("ServerSubscribe activated");
-        StreamProvider = GetStreamProvider(Constants.InMemoryStream);
 
-        _sub = await StreamProvider
-            .GetStream<object>(this.GetPrimaryKey(), Constants.ServerNamespace)
-            .SubscribeAsync(HandleAsync);
-        await base.OnActivateAsync();
-    }
-    
-    public override async Task OnDeactivateAsync()
-    {
-        await _sub!.UnsubscribeAsync();
-        await base.OnDeactivateAsync();
-    }
-
-    private async Task<bool> HandleAsync(object evt, StreamSequenceToken token)
+    public override async Task<bool> HandleAsync(object evt, StreamSequenceToken token)
     {
         switch (evt)
         {

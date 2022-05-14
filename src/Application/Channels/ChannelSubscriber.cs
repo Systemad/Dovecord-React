@@ -34,29 +34,20 @@ public class ChannelSubscriber : SubscriberGrain
 
     private async Task<bool> Handle(ChannelCreatedEvent evt)
     {
-        // Send the server object to persistence store
         var command = new AddServerChannel.AddServerChannelCommand(evt.Channel);
-        var commandResponse = await _mediator.Send(command);
-        if (commandResponse.Type == 0)
+        await _mediator.Send(command);
+        if (evt.Channel.Type == 0)
         {
-            var serverGrain = GrainFactory.GetGrain<IServerGrain>(commandResponse.ServerId!.Value);
-            serverGrain.AddChannelAsync(new AddChannelCommand(commandResponse));
+            var serverGrain = GrainFactory.GetGrain<IServerGrain>(evt.Channel.ServerId!.Value);
+            serverGrain.AddChannelAsync(new AddChannelCommand(evt.Channel, evt.Channel.ServerId.Value, evt.InvokerUserId));
         }
-        // Setup SignalR Hub and subscribe to ServerEvents, and if it detects ChannelAddedEvent
-        // send DTO to clients
-        // send it to next event
         return true;
     }
     
     private async Task<bool> Handle(MessageAddedEvent evt)
     {
-        // Send the server object to persistence store
         var command = new AddMessage.AddMessageCommandM(evt.Message);
-        var commandResponse = await _mediator.Send(command);
-
-        // Setup SignalR Hub and subscribe to ServerEvents, and if it detects ChannelAddedEvent
-        // send DTO to clients
-        // send it to next event
+        await _mediator.Send(command);
         return true;
     }
 }

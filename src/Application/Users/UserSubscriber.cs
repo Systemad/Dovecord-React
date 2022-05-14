@@ -37,18 +37,12 @@ public class UserSubscriber : SubscriberGrain
     {
         var command = new AddUserToServer.AddUserToServerCommand(evt.ServerId, evt.ServerId);
         await _mediator.Send(command);
-        // Send the server object to persistence store
-        // SEND IT TO SIGNALR??
-        // send it to next event
         return true;
     }
     private async Task<bool> Handle(UserCreatedEvent evt)
     {
         var command = new AddUser.AddUserCommand(evt.Id, evt.Name);
         await _mediator.Send(command);
-        // Send the server object to persistence store
-        // SEND IT TO SIGNALR??
-        // send it to next event
         return true;
     }
 }

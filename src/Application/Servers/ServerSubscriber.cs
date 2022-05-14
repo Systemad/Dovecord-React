@@ -36,7 +36,6 @@ public class ServerSubscriber : SubscriberGrain
 
     private async Task<bool> Handle(ServerCreatedEvent evt)
     {
-        // Send the server object to persistence store
         var command = new AddServer.AddServerCommand(evt.Server);
         var commandResponse = await _mediator.Send(command);
         // send it to next event??
@@ -45,6 +44,7 @@ public class ServerSubscriber : SubscriberGrain
     
     private async Task<bool> Handle(ChannelAddedEvent evt)
     {
+        
         // Send the server object to persistence store
         // SEND IT TO SIGNALR??
         // send it to next event
@@ -53,7 +53,7 @@ public class ServerSubscriber : SubscriberGrain
     
     private async Task<bool> Handle(UserAddedEvent evt)
     {
-        var command = new AddUserToServer.AddUserToServerCommand(evt.ServerId, evt.UserId);
+        var command = new AddUserToServer.AddUserToServerCommand(evt.ServerId, evt.InvokerUserId);
         await _mediator.Send(command);
         // Send the server object to persistence store
         // SEND IT TO SIGNALR??

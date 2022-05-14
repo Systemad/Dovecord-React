@@ -14,7 +14,7 @@ public abstract class EventSourceGrain<TState>: JournaledGrain<TState> where TSt
     protected EventSourceGrain(string memoryStream, string ns)
     {
        _memoryStream = memoryStream;
-        _namespace = ns;
+       _namespace = ns;
     }
 
     public override Task OnActivateAsync()

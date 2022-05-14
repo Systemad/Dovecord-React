@@ -13,7 +13,7 @@ namespace Dovecord.SignalR.Hubs;
 
 [Authorize]
 [RequiredScope("API.Access")]
-public class BaseHub : Hub<IBaseHub>
+public class BaseHub : Hub
 {
     private static readonly ConnectionMap.ConnectionMapping<Guid> Connections = new();
     
@@ -63,6 +63,7 @@ public class BaseHub : Hub<IBaseHub>
     //    => await Clients.Others.UserTyping(new ActorAction(Username, isTyping));
     
     // INVOKE THESE FROM CLIENT
+    /*
     public async Task JoinServer(Guid serverId)
     {
         Log.Information("{} joined channel {}", Username, serverId);
@@ -79,6 +80,7 @@ public class BaseHub : Hub<IBaseHub>
         Log.Information("{} left channel {}", Username, serverId);
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, serverId.ToString());
     }
+    */
 
     private Task StartUserSession()
     {

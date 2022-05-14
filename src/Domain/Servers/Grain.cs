@@ -19,7 +19,6 @@ public class ServerGrain : EventSourceGrain<ServerState>, IServerGrain
     public ServerGrain() : base(Constants.InMemoryStream, Constants.ServerNamespace) { }
     public async Task CreateAsync(CreateServerCommand createServerCommand)
     {
-        Console.WriteLine("CreateAsyncCalled");
         var newServer = new Server
         {
             Id = createServerCommand.ServerId,
@@ -27,35 +26,31 @@ public class ServerGrain : EventSourceGrain<ServerState>, IServerGrain
             IconUrl = null,
             OwnerUserId = createServerCommand.InvokerUserId,
         };
-        var serverCreatedEvent = new ServerCreatedEvent(newServer);
-        
-        var serverExist = State.Created;
-        if (serverExist)
-            await PublishErrorAsync(serverCreatedEvent);
-        
-        await PublishEventAsync(serverCreatedEvent);
+        var serverCreatedEvent = new ServerCreatedEvent(newServer, createServerCommand.InvokerUserId);
+        var task = State.Created ? PublishEventAsync(serverCreatedEvent) : PublishErrorAsync(serverCreatedEvent);
+        await task;
     }
 
     public async Task AddChannelAsync(AddChannelCommand addChannelCommand)
     {
         var channelGrain = GrainFactory.GetGrain<IChannelGrain>(addChannelCommand.Channel.Id);
         var exist = await channelGrain.ChannelExist();
-        var channelAddedEvent = new ChannelAddedEvent(addChannelCommand.Channel);
-        if (exist && !State.Created)
-                await PublishErrorAsync(channelAddedEvent);
-        await PublishEventAsync(channelAddedEvent);
+        var channelAddedEvent = new ChannelAddedEvent(addChannelCommand.Channel, addChannelCommand.InvokerUserId);
+        var valid = exist && !State.Created;
+        
+        var task = valid ? PublishEventAsync(channelAddedEvent) : PublishErrorAsync(channelAddedEvent);
+        await task;
     }
 
     public async Task AddUserAsync(AddUserCommand addUserCommand)
     {
-        var userAddedEvent = new UserAddedEvent(addUserCommand.ServerId, addUserCommand.UserId);
-        var userGrain = GrainFactory.GetGrain<IUserGrain>(addUserCommand.UserId);
+        var userAddedEvent = new UserAddedEvent(addUserCommand.ServerId, addUserCommand.InvokerUserId);
+        var userGrain = GrainFactory.GetGrain<IUserGrain>(addUserCommand.InvokerUserId);
         var exist = await userGrain.UserExists();
-        var alreadyAdded = State.Users.Contains(addUserCommand.UserId);
-        if (!exist || alreadyAdded)
-            await PublishErrorAsync(userAddedEvent);
+        var valid = !exist || State.Users.Contains(addUserCommand.InvokerUserId);;
 
-        await PublishEventAsync(userAddedEvent);
+        var task = valid ? PublishEventAsync(userAddedEvent) : PublishErrorAsync(userAddedEvent);
+        await task;
     }
 
     public Task<bool> ServerExist() => Task.FromResult(State.Created);

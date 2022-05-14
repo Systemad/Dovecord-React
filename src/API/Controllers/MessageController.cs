@@ -3,12 +3,9 @@ using Domain.Channels;
 using Domain.Messages;
 using Domain.Messages.Dto;
 using Dovecord.Extensions.Services;
-using Dovecord.SignalR.Helpers;
-using Dovecord.SignalR.Hubs;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
 using Orleans;
 
@@ -24,18 +21,15 @@ public class MessageController : ControllerBase
     private readonly ILogger<MessageController> _logger;
     private readonly IMediator _mediator;
     private readonly ICurrentUserService _currentUserService;
-    private readonly IHubContext<BaseHub, IBaseHub> _hubContext;
     private readonly IClusterClient _clusterClient;
 
     public MessageController(ILogger<MessageController> logger,
         IMediator mediator,
-        ICurrentUserService currentUserService,
-        IHubContext<BaseHub, IBaseHub> hubContext, IClusterClient clusterClient)
+        ICurrentUserService currentUserService, IClusterClient clusterClient)
     {
         _logger = logger;
         _mediator = mediator;
         _currentUserService = currentUserService;
-        _hubContext = hubContext;
         _clusterClient = clusterClient;
     }
 
@@ -100,7 +94,6 @@ public class MessageController : ControllerBase
     {
         var message = await _mediator.Send(new GetMessage.MessageQuery(id));
         await _mediator.Send(new DeleteMessage.DeleteMessageCommand(id, _currentUserService.UserId));
-        await _hubContext.Clients.All.DeleteMessageReceived(message.ChannelId.ToString(), message.Id.ToString());
         return NoContent();
     }
 }

@@ -40,6 +40,7 @@ var silo = new SiloHostBuilder()
         log => log
             .AddFilter("Orleans.Runtime.Management.ManagementGrain", LogLevel.Warning)
             .AddFilter("Orleans.Runtime.SiloControl", LogLevel.Warning))
+    .ConfigureApplicationParts(parts => parts.AddFromDependencyContext().WithReferences())
     .ConfigureServices(services =>
     {
         // -- Server

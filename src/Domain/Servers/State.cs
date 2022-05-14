@@ -26,6 +26,6 @@ public partial class ServerState
     public void Apply(ChannelAddedEvent evt) => Channels.Add(evt.Channel.Id);
     public void Apply(ChannelRemovedEvent evt) => Channels.Remove(evt.ChannelId);
     
-    public void Apply(UserAddedEvent evt) => Users.Add(evt.UserId);
-    public void Apply(UserRemovedEvent evt) => Users.Remove(evt.UserId);
+    public void Apply(UserAddedEvent evt) => Users.Add(evt.InvokerUserId);
+    public void Apply(UserRemovedEvent evt) => Users.Remove(evt.InvokerUserId);
 }

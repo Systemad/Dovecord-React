@@ -3,10 +3,11 @@ using Domain.Channels.Dto;
 
 namespace Domain.Servers;
 
-public record CreateServerCommand(Guid ServerId, string Name, Guid InvokerUserId);
+public record CreateServerCommand(Guid ServerId, string Name, Guid InvokerUserId) : IEvent;
 
-public record AddChannelCommand(ChannelDto Channel);
-public record DeleteChannelCommand(Guid ChannelId, Guid ServerId);
+public record AddChannelCommand(Channel Channel, Guid ServerId, Guid InvokerUserId) : IEvent;
 
-public record AddUserCommand(Guid ServerId, Guid UserId);
-public record RemoveUserCommand(Guid ServerId, Guid UserId);
+public record DeleteChannelCommand(Guid ChannelId, Guid ServerId, Guid InvokerUserId) : IEvent;
+
+public record AddUserCommand(Guid ServerId, Guid InvokerUserId) : IEvent;
+public record RemoveUserCommand(Guid ServerId, Guid InvokerUserId) : IEvent;

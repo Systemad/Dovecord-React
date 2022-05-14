@@ -4,8 +4,11 @@ using Domain.Servers.Dto;
 
 namespace Domain.Servers;
 
-public record ServerCreatedEvent(Server Server);
-public record ChannelAddedEvent(ChannelDto Channel);
-public record ChannelRemovedEvent(Guid ServerId, Guid ChannelId);
-public record UserAddedEvent(Guid ServerId, Guid UserId);
-public record UserRemovedEvent(Guid ServerId, Guid UserId);
+public record ServerCreatedEvent(Server Server, Guid InvokerUserId);
+
+public record ChannelAddedEvent(Channel Channel, Guid InvokerUserId);
+
+public record ChannelRemovedEvent(Guid ServerId, Guid ChannelId, Guid InvokerUserId);
+
+public record UserAddedEvent(Guid ServerId, Guid InvokerUserId);
+public record UserRemovedEvent(Guid ServerId, Guid InvokerUserId);

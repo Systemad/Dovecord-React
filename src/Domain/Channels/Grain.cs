@@ -14,14 +14,12 @@ public interface IChannelGrain : IGrainWithGuidKey
 
 public class ChannelGrain : EventSourceGrain<ChannelState>, IChannelGrain
 {
-    public ChannelGrain() : base(Constants.ServerNamespace, Constants.ChannelNamespace){}
+    public ChannelGrain() : base(Constants.InMemoryStream, Constants.ChannelNamespace){}
 
     public async Task CreateAsync(CreateChannelCommand command)
     {
         var channelExist = State.Created;
-        if (channelExist)
-            return; // Send error event
-        
+
         var newChannel = new Channel
         {
             Id = command.ChannelId,
@@ -30,9 +28,9 @@ public class ChannelGrain : EventSourceGrain<ChannelState>, IChannelGrain
             Topic = command.Topic,
             ServerId = command.ServerId,
         };
-        var evt = new ChannelCreatedEvent(newChannel);
-        RaiseEvent(evt);
-        await PublishEventAsync(evt);
+        var evt = new ChannelCreatedEvent(newChannel, command.InvokerUserId);
+        var task = channelExist ? PublishEventAsync(evt) : PublishErrorAsync(evt);
+        await task;
     }
 
     public async Task AddMessageAsync(AddMessageCommand command)
@@ -48,9 +46,9 @@ public class ChannelGrain : EventSourceGrain<ChannelState>, IChannelGrain
             Type = command.Type,
             ChannelId = command.ChannelId,
             ServerId = command.ServerId,
-            AuthorId = command.AuthorId,
+            AuthorId = command.InvokerUserId,
         };
-        var newEvent = new MessageAddedEvent(newMsg);
+        var newEvent = new MessageAddedEvent(newMsg, command.InvokerUserId);
         await PublishEventAsync(newEvent);
     }
 

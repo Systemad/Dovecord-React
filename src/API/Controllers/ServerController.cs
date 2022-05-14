@@ -5,15 +5,11 @@ using Domain.Channels;
 using Domain.Channels.Dto;
 using Domain.Servers;
 using Domain.Servers.Dto;
-using Domain.Users;
 using Domain.Users.Dto;
 using Dovecord.Extensions.Services;
-using Dovecord.SignalR.Helpers;
-using Dovecord.SignalR.Hubs;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
 using Orleans;
 
@@ -28,15 +24,15 @@ public class ServerController : ControllerBase
 {
     private readonly ILogger<ServerController> _logger;
     private readonly IMediator _mediator;
-    private readonly IHubContext<BaseHub, IBaseHub> _hubContext;
+    //private readonly IHubContext<BaseHub, IBaseHub> _hubContext;
     private readonly ICurrentUserService _currentUserService;
     private readonly IClusterClient _client;
     
-    public ServerController(ILogger<ServerController> logger, IMediator mediator, IHubContext<BaseHub, IBaseHub> hubContext, ICurrentUserService currentUserService, IClusterClient client)
+    public ServerController(ILogger<ServerController> logger, IMediator mediator /*, IHubContext<BaseHub, IBaseHub> hubContext*/, ICurrentUserService currentUserService, IClusterClient client)
     {
         _logger = logger;
         _mediator = mediator;
-        _hubContext = hubContext;
+        //_hubContext = hubContext;
         _currentUserService = currentUserService;
         _client = client;
     }   
@@ -114,7 +110,7 @@ public class ServerController : ControllerBase
         var channelId = Guid.NewGuid();
         var channel = _client.GetGrain<IChannelGrain>(channelId);
         channel.CreateAsync(new CreateChannelCommand(serverId, channelId, channelModel.Name, channelModel.Topic,
-            channelModel.Type));
+            channelModel.Type, _currentUserService.UserId));
         return Ok();
         //return CreatedAtAction(nameof(GetChannel), new {commandResponse.Id}, commandResponse);
     }

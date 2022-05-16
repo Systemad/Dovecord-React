@@ -63,8 +63,14 @@ To use `dotnet-ef` for your migrations you need to cd into root of the project a
 ### API
 Contains the controller and Orleans client to interact with the Silo(Host).
 
+CQRS, Projections and Event sourcing
+
+
+Realtime Communication with Signalr (Websockets)
+
+
 ### Applications
-Contains MediatR handlers, services, database and Orleans grains.
+Contains MediatR handlers, services, database and Orleans subscribers.
 This is only intended to interact with the database for persistence!
 
 ## Orleans.Silo
@@ -83,3 +89,4 @@ Coming soon
 
 ## Credits
 * [Discord like design from](https://github.com/gabrielfernans/discord-ui)
+* [Orleans.Tournament](https://github.com/pmorelli92/Orleans.Tournament)

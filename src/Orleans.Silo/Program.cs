@@ -77,26 +77,5 @@ builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 
-//var dbcontext = app.Services.GetRequiredService<DoveDbContext>();
-//dbcontext.Database.EnsureDeleted();
-//dbcontext.Database.EnsureCreated();
-/*
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        var context = services.GetRequiredService<DoveDbContext>();
-        context.Database.EnsureDeleted();
-        context.Database.EnsureCreated();
-    }
-    catch (Exception e)
-    {
-        Console.WriteLine(e);
-        throw;
-    }
-    
-}
-*/
 await silo.StartAsync();
 await app.RunAsync();

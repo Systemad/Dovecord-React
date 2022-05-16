@@ -51,7 +51,7 @@ public class Startup
             options.LowercaseQueryStrings = true;
         });
         services.AddInfrastructure(_config, _env.IsDevelopment());
-        services.AddOrleans();
+        //services.AddOrleans();
         services.AddAppAuthentication(_config);
         services.AddSignalRApplication();
         services.AddCorsService();

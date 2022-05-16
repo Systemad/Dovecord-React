@@ -2,8 +2,8 @@
   "x-generator": "NSwag v13.15.10.0 (NJsonSchema v10.6.10.0 (Newtonsoft.Json v13.0.0.0))",
   "openapi": "3.0.0",
   "info": {
-    "title": "Dovecord API",
-    "description": "Backend API for Dovecord",
+    "title": "API API",
+    "description": "Backend API for API",
     "version": "v1"
   },
   "servers": [
@@ -12,45 +12,6 @@
     }
   ],
   "paths": {
-    "/weatherforecast": {
-      "get": {
-        "tags": [
-          "WeatherForecast"
-        ],
-        "operationId": "WeatherForecast_Get",
-        "parameters": [
-          {
-            "name": "api-version",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
     "/api/v1/channels/{channelId}/messages": {
       "get": {
         "tags": [
@@ -173,11 +134,11 @@
           }
         ],
         "requestBody": {
-          "x-name": "channel",
+          "x-name": "model",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ChannelManipulationDto"
+                "$ref": "#/components/schemas/CreateChannelModel"
               }
             }
           },
@@ -207,7 +168,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MessageManipulationDto"
+                "$ref": "#/components/schemas/CreateMessageModel"
               }
             }
           },
@@ -408,11 +369,11 @@
         ],
         "operationId": "Server_AddServer",
         "requestBody": {
-          "x-name": "serverForCreation",
+          "x-name": "createServerModel",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ServerManipulationDto"
+                "$ref": "#/components/schemas/CreateServerModel"
               }
             }
           },
@@ -596,20 +557,20 @@
               "type": "string",
               "format": "guid"
             },
-            "x-position": 2
+            "x-position": 1
           }
         ],
         "requestBody": {
-          "x-name": "channelForCreation",
+          "x-name": "channelModel",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ChannelManipulationDto"
+                "$ref": "#/components/schemas/CreateChannelModel"
               }
             }
           },
           "required": true,
-          "x-position": 1
+          "x-position": 2
         },
         "responses": {
           "200": {
@@ -677,11 +638,11 @@
           }
         ],
         "requestBody": {
-          "x-name": "server",
+          "x-name": "createServer",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ServerManipulationDto"
+                "$ref": "#/components/schemas/CreateServerModel"
               }
             }
           },
@@ -705,7 +666,7 @@
         "tags": [
           "Server"
         ],
-        "operationId": "Server_JoinServer",
+        "operationId": "Server_AddUser",
         "parameters": [
           {
             "name": "serverId",
@@ -735,7 +696,7 @@
         "tags": [
           "Server"
         ],
-        "operationId": "Server_LeaveServer",
+        "operationId": "Server_RemoveUser",
         "parameters": [
           {
             "name": "serverId",
@@ -751,6 +712,34 @@
         "responses": {
           "204": {
             "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users/me": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_GetMe",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDto"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -966,32 +955,40 @@
           }
         ]
       }
+    },
+    "/api/v1/users/me/setting": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_UpdateUserSettings",
+        "requestBody": {
+          "x-name": "user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSettingsManipulationDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
-      "WeatherForecast": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "temperatureC": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "temperatureF": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "summary": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
       "ChannelMessageDto": {
         "type": "object",
         "additionalProperties": false,
@@ -1050,8 +1047,62 @@
             "type": "string",
             "nullable": true
           },
-          "isOnline": {
+          "bot": {
+            "type": "boolean"
+          },
+          "system": {
             "type": "boolean",
+            "nullable": true
+          },
+          "accentColor": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "lastOnline": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userSettings": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/UserSettings"
+              }
+            ]
+          }
+        }
+      },
+      "UserSettings": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "bio": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "username": {
+            "type": "string",
             "nullable": true
           },
           "bot": {
@@ -1064,6 +1115,164 @@
           "accentColor": {
             "type": "boolean",
             "nullable": true
+          },
+          "lastOnline": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userSettings": {
+            "$ref": "#/components/schemas/UserSettings"
+          },
+          "servers": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Server"
+            }
+          }
+        }
+      },
+      "Server": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "iconUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "ownerUserId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "channels": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Channel"
+            }
+          },
+          "members": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "Channel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "type": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "topic": {
+            "type": "string",
+            "nullable": true
+          },
+          "serverId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "server": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Server"
+              }
+            ]
+          },
+          "messages": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ChannelMessage"
+            }
+          },
+          "recipients": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "ChannelMessage": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date"
+          },
+          "isEdit": {
+            "type": "boolean"
+          },
+          "lastModifiedOn": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "type": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "channelId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "channel": {
+            "$ref": "#/components/schemas/Channel"
+          },
+          "serverId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "server": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Server"
+              }
+            ]
+          },
+          "authorId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "author": {
+            "$ref": "#/components/schemas/User"
           }
         }
       },
@@ -1094,37 +1303,57 @@
           }
         }
       },
-      "ChannelManipulationDto": {
+      "CreateChannelModel": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "name": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
+          },
+          "topic": {
+            "type": "string"
           },
           "type": {
             "type": "integer",
             "format": "int32"
-          },
-          "topic": {
-            "type": "string",
-            "nullable": true
           }
         }
       },
-      "MessageManipulationDto": {
+      "CreateMessageModel": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "content": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdOn": {
             "type": "string",
-            "nullable": true
+            "format": "date-time"
+          },
+          "isEdit": {
+            "type": "boolean"
+          },
+          "lastModifiedOn": {
+            "type": "string",
+            "format": "date-time"
           },
           "type": {
             "type": "integer",
             "format": "int32"
           },
           "channelId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "serverId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "authorId": {
             "type": "string",
             "format": "guid"
           }
@@ -1148,48 +1377,103 @@
           "ownerUserId": {
             "type": "string",
             "format": "guid"
-          },
-          "channels": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ChannelDto"
-            }
-          },
-          "members": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/UserDto"
-            }
           }
         }
       },
-      "ServerManipulationDto": {
+      "CreateServerModel": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "name": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           }
         }
       },
       "UserCreationDto": {
         "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "isOnline": {
-            "type": "boolean",
-            "nullable": true
-          }
-        }
+        "additionalProperties": false
       },
       "UserManipulationDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "isOnline": {
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "bot": {
+            "type": "boolean"
+          },
+          "system": {
             "type": "boolean",
             "nullable": true
+          },
+          "accentColor": {
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "UserSettingsManipulationDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "bio": {
+            "type": "string",
+            "nullable": true
+          },
+          "presenceStatus": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PresenceStatus"
+              }
+            ]
+          },
+          "customStatus": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CustomStatus"
+              }
+            ]
+          }
+        }
+      },
+      "PresenceStatus": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Offline",
+          "Away",
+          "Online",
+          "Invisible"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "CustomStatus": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "nowPlaying": {
+            "type": "string",
+            "nullable": true
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "userId": {
+            "type": "string",
+            "format": "guid"
           }
         }
       }

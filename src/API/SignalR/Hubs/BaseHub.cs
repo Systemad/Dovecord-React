@@ -1,5 +1,8 @@
 ﻿using System.Security.Claims;
 using Application.Servers.Features;
+using Domain;
+using Domain.Channels;
+using Domain.Messages;
 using Domain.Users;
 using Dovecord.Services;
 using MediatR;
@@ -7,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web.Resource;
 using Orleans;
+using Orleans.Streams;
 using Serilog;
 
 namespace Dovecord.SignalR.Hubs;
@@ -17,13 +21,10 @@ public class BaseHub : Hub
 {
     private static readonly ConnectionMap.ConnectionMapping<Guid> Connections = new();
     
-    private readonly IMediator _mediator;
-    private readonly IEventQueue _eventQueue;
     private readonly IClusterClient _client;
-    public BaseHub(IMediator mediator, IEventQueue eventQueue, IClusterClient client)
+    private StreamSubscriptionHandle<object> _sub;
+    public BaseHub(IClusterClient client)
     {
-        _mediator = mediator;
-        _eventQueue = eventQueue;
         _client = client;
     }
 
@@ -33,100 +34,45 @@ public class BaseHub : Hub
     public override async Task OnConnectedAsync()
     {
         var userId = UserId;
-        var username = Username;
-        Log.Information("SignalR: connected - ConnectionId {ConnectionId}", Context.ConnectionId);
-        if (!(userId == Guid.Empty) && !string.IsNullOrEmpty(username))
-        {
-            await StartUserSession();
-        }
+        _sub = await _client.GetStreamProvider(Constants.InMemoryStream)
+            .GetStream<object>(userId, Constants.SignalRNameSpace)
+            .SubscribeAsync(HandleAsync);
+
         await base.OnConnectedAsync();
     }
 
     public override async Task OnDisconnectedAsync(Exception? ex)
     {
-        Log.Information("SignalR: disconnected - ConnectionId {ConnectionId}", Context.ConnectionId);
-        if (!(UserId == Guid.Empty) && !string.IsNullOrEmpty(Username))
-        {
-            Log.Information("SignalR: ending session");
-            await StopUserSession();
-        }
+
         await base.OnDisconnectedAsync(ex);
     }
-
-    /*
-    public async Task DeleteMessageById(string messageId)
-    {
-        await Clients.All.DeleteMessageReceived(messageId);
-    }
-    */
-    //public async Task UserTyping(bool isTyping)
-    //    => await Clients.Others.UserTyping(new ActorAction(Username, isTyping));
     
-    // INVOKE THESE FROM CLIENT
-    /*
-    public async Task JoinServer(Guid serverId)
+    private async Task<bool> HandleAsync(object evt, StreamSequenceToken token)
     {
-        Log.Information("{} joined channel {}", Username, serverId);
-        await Groups.AddToGroupAsync(Context.ConnectionId, serverId.ToString());
-        var joinedServer = await _mediator.Send(new GetServerById.GetServerByIdGetQuery(serverId));
-        await Clients.Group(UserId.ToString()).ServerAction(joinedServer);
-        
-        //var userGrain = _client.GetGrain<IUserGrain>(UserId);
-        //await userGrain.SetUserStatus(PresenceStatus.Online);
-    }
-    
-    public async Task LeaveServer(Guid serverId)
-    {
-        Log.Information("{} left channel {}", Username, serverId);
-        await Groups.RemoveFromGroupAsync(Context.ConnectionId, serverId.ToString());
-    }
-    */
-
-    private Task StartUserSession()
-    {
-        var userGrain = _client.GetGrain<IUserGrain>(UserId);
-        userGrain.CreateAsync(new CreateUserCommand(UserId, Username));
-        //await _mediator.Send(new EnsureUserExists.EnsureUserExistCommand(UserId, Username));
-        // Merge and simplify this and un/subscribe
-        Log.Information("SignalR: starting session");
-        //await Groups.AddToGroupAsync(Context.ConnectionId, UserId.ToString());
-        //await SubscribeServers();
-        Connections.Add(UserId, Context.ConnectionId);
-        //var userGrain = _client.GetGrain<IUserGrain>(UserId);
-        //await userGrain.SetUserStatus(PresenceStatus.Online);
-        return Task.CompletedTask;
-    }
-    
-    private async Task SubscribeServers()
-    {
-        var query = new GetServersOfUser.GetServersOfUserQuery(UserId);
-        var result = await _mediator.Send(query);
-        
-        foreach (var server in result)
+        switch (evt)
         {
-            Console.WriteLine("adding to server");
-            await Groups.AddToGroupAsync(Context.ConnectionId, server.Id.ToString());
-        }
-    }
-    
-    private async Task StopUserSession()
-    {
-        Log.Information("SignalR: starting session");
-        await Groups.RemoveFromGroupAsync(Context.ConnectionId, UserId.ToString());
-        await UnSubscribeServers();
-        Connections.Remove(UserId, Context.ConnectionId);
+            case ChannelMessage obj:
+                return await Handle(obj);
+                
+            case Channel obj:
+                return await Handle(obj);
             
-        //var userGrain = _client.GetGrain<IUserGrain>(UserId);
-        //await userGrain.SetUserStatus(PresenceStatus.Offline);
-    }
-    private async Task UnSubscribeServers()
-    {
-        var query = new GetServersOfUser.GetServersOfUserQuery(UserId);
-        var result = await _mediator.Send(query);
-        
-        foreach (var server in result)
-        {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, server.Id.ToString());
+            default:
+                return true;
         }
+    }
+    
+    private async Task<bool> Handle(ChannelMessage message)
+    {
+        var actor =  _client.GetGrain<IActorGrain>(UserId);
+        await actor.ChannelMessage(message);
+        return true;
+    }
+    
+    private async Task<bool> Handle(Channel channel)
+    {
+        var actor = _client.GetGrain<IActorGrain>(UserId);
+        await actor.ChannelCreated(channel);
+        return true;
     }
 }

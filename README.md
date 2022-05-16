@@ -64,9 +64,11 @@ To use `dotnet-ef` for your migrations you need to cd into root of the project a
 Contains the controller and Orleans client to interact with the Silo(Host).
 
 CQRS, Projections and Event sourcing
+![doveccord drawio (1)](https://user-images.githubusercontent.com/8531546/168687731-4470522c-a72a-4e42-9efd-322697c11f30.png)
 
 
 Realtime Communication with Signalr (Websockets)
+![dovecord-2webs drawio](https://user-images.githubusercontent.com/8531546/168687719-9a24541b-a625-4ad9-b295-e22c57eb8aea.png)
 
 
 ### Applications
